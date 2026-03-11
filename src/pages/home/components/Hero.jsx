@@ -2,6 +2,8 @@ import { memo } from "react";
 import { Box, Typography } from "@mui/material";
 import BANNER_VIDEO from "../../../assets/banner-video.mp4";
 import BANNER_IMAGE from "../../../assets/optimized/tnc.webp";
+import BANNER_IMAGE_528 from "../../../assets/optimized/tnc-528.webp";
+import BANNER_IMAGE_320 from "../../../assets/optimized/tnc-320.webp";
 import theme from "../../../theme";
 
 // ?? swap to the Framer version
@@ -20,12 +22,15 @@ function Hero() {
     >
       {/* Background Video */}
       <img
-        src={BANNER_IMAGE} // Replace with your image path
+        src={BANNER_IMAGE_528}
+        srcSet={`${BANNER_IMAGE_320} 320w, ${BANNER_IMAGE_528} 528w, ${BANNER_IMAGE} 780w`}
+        sizes="(max-width: 600px) 100vw, 528px"
         alt="Background"
         fetchPriority="high"
+        loading="eager"
         decoding="async"
-        width="1920"
-        height="1080"
+        width="528"
+        height="352"
         style={{
           position: "absolute",
           width: "100%",
