@@ -1,0 +1,22 @@
+# robots.txt for Go Airport Parking
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+
+# Block certain paths if needed
+Disallow: /admin
+Disallow: /private
+Disallow: /api/
+
+# Allow specific important files
+Allow: /sitemap.xml
+Allow: /robots.txt
+Allow: /favicon.ico
+Allow: /manifest.json
+
+# Sitemap location
+Sitemap: https://www.goairportparking.com/sitemap.xml
+
+# Crawl-delay (optional - 1 second between requests)
+Crawl-delay: 1

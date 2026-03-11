@@ -1,0 +1,17 @@
+import HeroSection from "../../components/reusable/HeroSection";
+import AIRPORT_PARKING from "../../assets/airport-parking.png";
+import Why from "./components/Why";
+import AirportList from "./components/AirportList";
+import ParkingOptions from "./components/ParkingOptions";
+
+export default function AirportParking() {
+  return (
+    <>
+      <HeroSection title="Airport Parking" breadcrumb image={AIRPORT_PARKING} />
+
+      <Why />
+      <AirportList />
+      <ParkingOptions />
+    </>
+  );
+}
