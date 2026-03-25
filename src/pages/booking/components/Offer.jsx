@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -7,12 +7,14 @@ import {
   Switch,
   Paper,
   Chip,
-  Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
 } from '@mui/material';
 import {
   Security as SecurityIcon,
-  Sms as SmsIcon,
-  CheckCircle as CheckIcon,
 } from '@mui/icons-material';
 import theme from '../../../theme';
 import { formatPrice } from '../../../utils/calculateTotalBookingAmount';
@@ -24,25 +26,19 @@ const Offer = ({
   updateBooking,
   selectedProduct = null,
 }) => {
+
+  const [open, setOpen] = useState(false);
+
   // Get pricing from product data
   const getCancellationPrice = () => {
-    if (!selectedProduct) return 0;
+    if (!selectedProduct) return 2; // fallback £2
     if (selectedProduct.payment?.cancellation_charges) {
       return parseFloat(selectedProduct.payment.cancellation_charges);
     }
-    return parseFloat(selectedProduct.cancellation_charges || 0);
-  };
-
-  const getSmsPrice = () => {
-    if (!selectedProduct) return 0;
-    if (selectedProduct.payment?.sms_charges) {
-      return parseFloat(selectedProduct.payment.sms_charges);
-    }
-    return parseFloat(selectedProduct.sms_charges || 0);
+    return parseFloat(selectedProduct.cancellation_charges || 2);
   };
 
   const cancellationPrice = getCancellationPrice();
-  const smsPrice = getSmsPrice();
 
   const searchData = useSelector(selectSearchData);
   const currencySymbol = searchData?.airport === "DXB" ? "AED" : searchData?.airport === "DUB" ? "€" : "£";
@@ -63,6 +59,7 @@ const Offer = ({
       </Typography>
 
       <FormGroup>
+
         {/* Cancellation Protection */}
         <Paper
           elevation={1}
@@ -75,35 +72,47 @@ const Offer = ({
           }}
         >
           <Box display="flex" alignItems="center" justifyContent="space-between">
+            
             <Box display="flex" alignItems="center" gap={2}>
               <SecurityIcon 
                 color={bookingOptions.cancellationProtection ? 'primary' : 'action'}
                 fontSize="large"
               />
+
               <Box>
                 <Box display="flex" alignItems="center" gap={1} mb={1}>
                   <Typography variant="h6" fontWeight="bold">
                     Cancellation Protection
                   </Typography>
-                  {cancellationPrice > 0 && (
-                    <Chip 
-                      label={formatPrice(cancellationPrice, currencySymbol)}
-                      color="primary"
-                      size="small"
-                    />
-                  )}
+
+                  <Chip 
+                    label={formatPrice(cancellationPrice, currencySymbol)}
+                    color="primary"
+                    size="small"
+                  />
                 </Box>
-                <Typography variant="body2" color="text.secondary" mb={1}>
-                  Cancel your booking before your arrival date
+
+                {/* SHORT DESCRIPTION */}
+                <Typography variant="body2" color="text.secondary" mb={0.5}>
+                  Cancel your booking before arrival and receive a refund (excludes booking fee).
                 </Typography>
-                {/* <Box display="flex" alignItems="center" gap={1}>
-                  <CheckIcon color="success" fontSize="small" />
-                  <Typography variant="body2" color="text.secondary">
-                    Full refund available
-                  </Typography>
-                </Box> */}
+
+                {/* LEARN MORE LINK */}
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: '#1976d2',
+                    cursor: 'pointer',
+                    fontWeight: 500,
+                  }}
+                  onClick={() => setOpen(true)}
+                >
+                  Learn more
+                </Typography>
+
               </Box>
             </Box>
+
             <FormControlLabel
               control={
                 <Switch
@@ -117,64 +126,29 @@ const Offer = ({
           </Box>
         </Paper>
 
-        {/* SMS Updates */}
-        {/* <Paper
-          elevation={1}
-          sx={{
-            p: 1,
-            mb: 1,
-            border: bookingOptions.smsUpdates ? '2px solid #1976d2' : '1px solid #E0E0E0',
-            backgroundColor: bookingOptions.smsUpdates ? '#f3f8ff' : '#FAFAFA',
-            transition: 'all 0.3s ease',
-          }}
-        >
-          <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Box display="flex" alignItems="center" gap={2}>
-              <SmsIcon 
-                color={bookingOptions.smsUpdates ? 'primary' : 'action'}
-                fontSize="large"
-              />
-              <Box>
-                <Box display="flex" alignItems="center" gap={1} mb={1}>
-                  <Typography variant="h6" fontWeight="bold">
-                    SMS Updates
-                  </Typography>
-                  {smsPrice > 0 && (
-                    <Chip 
-                      label={formatPrice(smsPrice)}
-                      color="primary"
-                      size="small"
-                    />
-                  )}
-                </Box>
-                <Typography variant="body2" color="text.secondary" mb={1}>
-                  Receive text message updates about your booking and parking instructions
-                </Typography>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <CheckIcon color="success" fontSize="small" />
-                  <Typography variant="body2" color="text.secondary">
-                    Real-time notifications
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={bookingOptions.smsUpdates || false}
-                  onChange={(e) => updateBooking('smsUpdates', e.target.checked)}
-                  color="primary"
-                />
-              }
-              label=""
-            />
-          </Box>
-        </Paper> */}
       </FormGroup>
+
+      {/* MODAL */}
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Cancellation Protection</DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" mb={1}>
+            You can cancel your booking up to 24 hours before your arrival time.
+          </Typography>
+          <Typography variant="body2" mb={1}>
+            A full refund will be issued excluding the booking fee.
+          </Typography>
+          <Typography variant="body2">
+            Refunds are processed back to your original payment method.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
 
     </Box>
   );
 };
 
 export default Offer;
-

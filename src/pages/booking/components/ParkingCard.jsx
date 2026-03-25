@@ -1,11 +1,9 @@
-import { Box, Button, Typography, CircularProgress } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import theme from "../../../theme";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
 import InfoAndMapModal from "../../../components/modal/infoAndMapModal/InfoAndMapModal";
 import Stars from "../../../components/reusable/Stars";
 import CustomButton from "../../../components/reusable/CustomButton";
@@ -25,32 +23,31 @@ export default function ParkingCard({ item }) {
     alt,
     average_rating,
     category,
-    display_name,
     offer,
   } = item;
-  // Handle dynamic rating from backend
+
   const rating =
     average_rating !== null && average_rating !== undefined
       ? parseFloat(average_rating)
       : 0;
+
   const hasRating = average_rating !== null && average_rating !== undefined;
+  const reviews = null;
 
-  // For now, we don't have reviews count in the API response
-  // You might want to add this field to your backend API response
-  const reviews = null; // This could be added to your API response later
-
-  // Handle discount information
   const currentPrice = parseFloat(price) || 0;
   const originalPrice = parseFloat(price_before_discount) || 0;
   const discountAmount = parseFloat(discount) || 0;
   const hasDiscount = discountAmount > 0 && originalPrice > currentPrice;
+  const bookingFeeText = "(+£1.95 booking fee)";
 
   const [openParkingInfoModal, setOpenParkingInfoModal] = useState(false);
   const [isLoadingProduct, setIsLoadingProduct] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const searchData = useSelector(selectSearchData);
+
   const getAirport = searchParams.get("airport") || searchData.airport;
 
   const handleOpenParkingInfoModal = () => {
@@ -63,64 +60,81 @@ export default function ParkingCard({ item }) {
 
   const handleBookNow = async () => {
     if (!item.sku) {
-      console.error('❌ No SKU available for product:', item);
-      // // Fallback: still navigate with basic product info
-      // dispatch(setSelectedParking(item));
-      // navigate('/payment');
+      console.error("❌ No SKU available for product:", item);
       return;
     }
 
     setIsLoadingProduct(true);
 
     try {
-      // Get search parameters from URL or Redux state
       const getDeparture = searchParams.get("departure") || searchData.entryDate;
       const getArrival = searchParams.get("arrival") || searchData.exitDate;
       const getAirport = searchParams.get("airport") || searchData.airport;
-      const getPromocode = searchParams.get("promocode") || searchData.discountCode;
-      const getTrafficSource = searchParams.get("traffic_source") || searchData.trafficSource;
+      const getPromocode =
+        searchParams.get("promocode") || searchData.discountCode;
+      const getTrafficSource =
+        searchParams.get("traffic_source") || searchData.trafficSource;
+
       localStorage.setItem("sku_id", item.sku_id);
 
-      console.log('🎯 ParkingCard: Retrieved parameters:', {
-        getTrafficSource,
-        reduxTrafficSource: searchData.trafficSource,
-        urlTrafficSource: searchParams.get("traffic_source")
-      });
-
       const normalizeDateTime = (value) =>
-        value ? value.replace(/\+/g, ' ').trim() : '';
-      
-      // Store selected parking in Redux
+        value ? value.replace(/\+/g, " ").trim() : "";
+
       dispatch(setSelectedParking(item));
 
       if (typeof window !== "undefined") {
-        
-        const departureDate = parse(normalizeDateTime(getDeparture), "yyyy-MM-dd HH:mm", new Date());
-        const arrivalDate = parse(normalizeDateTime(getArrival), "yyyy-MM-dd HH:mm", new Date());
-      
-        const paymentUrl = `/payment?departure=${format(departureDate,
-          "dd-MM-yyyy HH:mm"
-        )}&arrival=${format(arrivalDate,
-          "dd-MM-yyyy HH:mm"
-        )}&airport=${getAirport}&promocode=${getPromocode || ""}&sku=${item.sku}${getTrafficSource ? `&traffic_source=${getTrafficSource}` : ""}`;
-        
-        console.log('🔗 ParkingCard: Built payment URL:', paymentUrl);
-        console.log('📍 ParkingCard: traffic_source included:', !!getTrafficSource);
+        const departureDate = parse(
+          normalizeDateTime(getDeparture),
+          "yyyy-MM-dd HH:mm",
+          new Date()
+        );
 
-        // console.log('🔗 Navigating to payment:', paymentUrl);
+        const arrivalDate = parse(
+          normalizeDateTime(getArrival),
+          "yyyy-MM-dd HH:mm",
+          new Date()
+        );
+
+        const paymentUrl = `/payment?departure=${format(
+          departureDate,
+          "dd-MM-yyyy HH:mm"
+        )}&arrival=${format(
+          arrivalDate,
+          "dd-MM-yyyy HH:mm"
+        )}&airport=${getAirport}&promocode=${
+          getPromocode || ""
+        }&sku=${item.sku}${
+          getTrafficSource ? `&traffic_source=${getTrafficSource}` : ""
+        }`;
+
         navigate(paymentUrl);
       }
-
-      // Navigate to payment page
     } catch (error) {
       console.error("❌ Error in handleBookNow:", error);
-      // Fallback: still navigate with basic product info
       dispatch(setSelectedParking(item));
-      // navigate("/payment");
     } finally {
       setIsLoadingProduct(false);
     }
   };
+
+  const formattedCurrentPrice =
+    getAirport?.toUpperCase() === "DXB"
+      ? `AED${currentPrice.toFixed(2)}`
+      : getAirport?.toUpperCase() === "DUB"
+      ? `€${currentPrice.toFixed(2)}`
+      : `£${currentPrice.toFixed(2)}`;
+
+  const formattedOriginalPrice =
+    getAirport?.toUpperCase() === "DXB"
+      ? `AED${originalPrice.toFixed(2)}`
+      : getAirport?.toUpperCase() === "DUB"
+      ? `€${originalPrice.toFixed(2)}`
+      : `£${originalPrice.toFixed(2)}`;
+
+  const visibleFeatures =
+    Array.isArray(features) && features.length > 0
+      ? features.slice(0, 4)
+      : ["Trusted parking facility"];
 
   return (
     <Box
@@ -131,29 +145,52 @@ export default function ParkingCard({ item }) {
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
-        flex: 1,
         width: "100%",
         height: "100%",
         minHeight: "100%",
       }}
     >
-      <Box sx={{ position: "relative", p: 2, pb: 0 }}>
+      <Box
+        sx={{
+          position: "relative",
+          p: 2,
+          pb: 0,
+        }}
+      >
         <Box
-          component="img"
-          src={image}
-          alt={alt}
           sx={{
+            position: "relative",
             width: "100%",
-            height: { xs: 240, md: 240 },
-            objectFit: "cover",
+            aspectRatio: "16 / 9",
+            minHeight: { xs: 220, md: 240 },
             borderRadius: 3,
-            display: "block",
+            overflow: "hidden",
+            bgcolor: "#f3f4f6",
           }}
-          onError={(e) => {
-            e.currentTarget.src =
-              "https://via.placeholder.com/1000x600?text=Parking";
-          }}
-        />
+        >
+          <Box
+            component="img"
+            src={image}
+            alt={alt || name || "Parking image"}
+            loading="lazy"
+            decoding="async"
+            width="1600"
+            height="900"
+            sx={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+            onError={(e) => {
+              e.currentTarget.src =
+                "https://via.placeholder.com/1600x900?text=Parking";
+            }}
+          />
+        </Box>
+
         <Button
           onClick={handleOpenParkingInfoModal}
           startIcon={<InfoOutlineIcon />}
@@ -161,6 +198,7 @@ export default function ParkingCard({ item }) {
             position: "absolute",
             top: 22,
             right: 28,
+            minHeight: 40,
             color: "#000",
             bgcolor: "#fff",
             borderRadius: 999,
@@ -187,7 +225,16 @@ export default function ParkingCard({ item }) {
       >
         <Typography
           variant="h6"
-          sx={{ fontWeight: 800, lineHeight: 1.15, mb: 1 }}
+          sx={{
+            fontWeight: 800,
+            lineHeight: 1.15,
+            mb: 1,
+            minHeight: { xs: 52, md: 56 },
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
         >
           {name}
         </Typography>
@@ -199,6 +246,8 @@ export default function ParkingCard({ item }) {
             gap: 1.5,
             color: "text.secondary",
             mb: 2,
+            minHeight: 28,
+            flexWrap: "wrap",
           }}
         >
           {hasRating ? (
@@ -213,9 +262,10 @@ export default function ParkingCard({ item }) {
               No ratings yet
             </Typography>
           )}
+
           {category && (
             <>
-              <Typography> | </Typography>
+              <Typography>|</Typography>
               <Typography variant="subtitle2">{category}</Typography>
             </>
           )}
@@ -227,33 +277,38 @@ export default function ParkingCard({ item }) {
             gap: 1.25,
             flexGrow: 1,
             alignContent: "start",
+            minHeight: { xs: 132, md: 144 },
           }}
         >
-          {Array.isArray(features) &&
-            features?.map((f, i) => (
-              <Box
-                key={i}
-                sx={{ display: "flex", alignItems: "center", gap: 1 }}
-              >
-                <CheckCircleOutlineIcon
-                  sx={{ color: "primary.main", fontSize: 22 }}
-                />
-                <Typography variant="body2" sx={{ color: "text.primary" }}>
-                  {f}
-                </Typography>
-              </Box>
-            ))}
-          {/* Show message if no valid features */}
-          {(!Array.isArray(features) || features.length === 0) && (
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          {visibleFeatures.map((f, i) => (
+            <Box
+              key={i}
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 1,
+                minHeight: 24,
+              }}
+            >
               <CheckCircleOutlineIcon
-                sx={{ color: "primary.main", fontSize: 22 }}
+                sx={{
+                  color: "primary.main",
+                  fontSize: 22,
+                  mt: "1px",
+                  flexShrink: 0,
+                }}
               />
-              <Typography variant="body2" sx={{ color: "text.primary" }}>
-                Secure parking facility
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "text.primary",
+                  lineHeight: 1.4,
+                }}
+              >
+                {f}
               </Typography>
             </Box>
-          )}
+          ))}
         </Box>
       </Box>
 
@@ -262,35 +317,23 @@ export default function ParkingCard({ item }) {
           borderTop: "1px solid rgba(0,0,0,0.08)",
           p: { xs: 2, md: 3 },
           display: "flex",
-          alignItems: "center",
+          alignItems: "flex-end",
           justifyContent: "space-between",
           gap: 2,
-          mt: "auto", // Push to bottom
+          mt: "auto",
+          minHeight: { xs: 132, md: 144 },
         }}
       >
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-          {/* {hasDiscount && (
-            <Box
-              sx={{
-                alignSelf: "flex-start",
-                backgroundColor: "error.main",
-                color: "white",
-                px: 1.5,
-                py: 0.75,
-                borderRadius: 2,
-                fontSize: "0.8rem",
-                fontWeight: 800,
-                mb: 0.5,
-                boxShadow: "0 2px 8px rgba(255,0,0,0.2)",
-              }}
-            >
-              SAVE {discountPercentage}%
-            </Box>
-          )} */}
-
-          {/* Price Section */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 0.5,
+            minHeight: 88,
+            justifyContent: "flex-end",
+          }}
+        >
           {hasDiscount ? (
-            // With Discount - Show original price struck through first, then discounted price
             <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
               <Typography
                 variant="body1"
@@ -299,10 +342,12 @@ export default function ParkingCard({ item }) {
                   color: "text.secondary",
                   fontWeight: 600,
                   fontSize: "1.1rem",
+                  minHeight: 28,
                 }}
               >
-                Was { getAirport?.toUpperCase() === "DXB" ? `AED${originalPrice.toFixed(2)}`: getAirport?.toUpperCase() === "DUB" ? `€${originalPrice.toFixed(2)}` : `£${originalPrice.toFixed(2)}`}
+                Was {formattedOriginalPrice}
               </Typography>
+
               <Typography
                 variant="h4"
                 sx={{
@@ -310,80 +355,92 @@ export default function ParkingCard({ item }) {
                   color: "success.main",
                   fontSize: { xs: "1.8rem", md: "2rem" },
                   lineHeight: 1,
+                  minHeight: 36,
                 }}
               >
-                {getAirport?.toUpperCase() === "DXB" ? `AED${originalPrice.toFixed(2)}`: getAirport?.toUpperCase() === "DUB" ? `€${currentPrice.toFixed(2)}` : `£${currentPrice.toFixed(2)}`}
+                {formattedCurrentPrice}
               </Typography>
-              {/* <Typography
+
+              <Typography
                 variant="body2"
                 sx={{
-                  color: "success.main",
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  backgroundColor: "success.light",
-                  color: "white",
-                  px: 1,
-                  py: 0.25,
-                  borderRadius: 1,
-                  display: "inline-block",
-                  alignSelf: "flex-start",
-                  
+                  color: "text.secondary",
+                  fontSize: "0.85rem",
+                  fontWeight: 500,
+                  minHeight: 20,
                 }}
               >
-                💰 You save £{discountAmount.toFixed(2)}!
-              </Typography> */}
+                {bookingFeeText}
+              </Typography>
             </Box>
           ) : (
-            // Without Discount - Show regular price
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: 900,
-                color: "text.primary",
-                fontSize: { xs: "1.5rem", md: "1.75rem" },
-              }}
-            >
-              {getAirport == "DXB"
-              ? `AED${currentPrice.toFixed(2)}`:
-              getAirport == "DUB"
-                ? `€${currentPrice.toFixed(2)}`
-                : `£${currentPrice.toFixed(2)}`}
-            </Typography>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+              <Box sx={{ minHeight: 28 }} />
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 900,
+                  color: "text.primary",
+                  fontSize: { xs: "1.5rem", md: "1.75rem" },
+                  minHeight: 36,
+                  lineHeight: 1.1,
+                }}
+              >
+                {formattedCurrentPrice}
+              </Typography>
+
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "text.secondary",
+                  fontSize: "0.85rem",
+                  fontWeight: 500,
+                  minHeight: 20,
+                }}
+              >
+                {bookingFeeText}
+              </Typography>
+            </Box>
           )}
 
-          {/* Special Offer Text */}
-          {offer && (
-            <Typography
-              variant="body2"
-              sx={{
-                color: "primary.main",
-                fontWeight: 600,
-                fontSize: "0.85rem",
-                fontStyle: "italic",
-              }}
-            >
-              ✨ {offer}
-            </Typography>
-          )}
+          <Box sx={{ minHeight: 20 }}>
+            {offer && (
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "primary.main",
+                  fontWeight: 600,
+                  fontSize: "0.85rem",
+                  fontStyle: "italic",
+                }}
+              >
+                ✨ {offer}
+              </Typography>
+            )}
+          </Box>
         </Box>
 
-        <CustomButton
-          onClick={handleBookNow}
-          customVariant="primary"
-          size="medium"
-          disabled={isLoadingProduct}
-          isLoading={isLoadingProduct}
-          loadingText="Getting Details..."
-          sx={{
-            fontSize: 15,
-            fontWeight: 500,
-          }}
-        >
-          Book Now
-        </CustomButton>
+        <Box sx={{ flexShrink: 0 }}>
+          <CustomButton
+            onClick={handleBookNow}
+            customVariant="primary"
+            size="medium"
+            disabled={isLoadingProduct}
+            isLoading={isLoadingProduct}
+            loadingText="Getting Details..."
+            sx={{
+              fontSize: 15,
+              fontWeight: 500,
+              minWidth: 150,
+              minHeight: 48,
+              whiteSpace: "nowrap",
+            }}
+          >
+            Book Now
+          </CustomButton>
+        </Box>
       </Box>
 
-      {/* Modal component */}
       <InfoAndMapModal
         open={openParkingInfoModal}
         onClose={handleCloseParkingInfoModal}

@@ -15,10 +15,10 @@ import theme from "../../theme";
 import { useSelector } from "react-redux";
 import { selectSearchData } from "../../redux/slice/searchSlice";
 import ParkingCard from "./components/ParkingCard";
-import { parseSearchParamsFromUrl } from "../../utils/urlUtils";
 import AnimateOnScroll from "../../components/reusable/AnimateOnScroll";
 import { useAirports } from "../../hooks/useAirports";
-import { useCookies } from 'react-cookie';
+import BookingFormAlt from "../../components/bookingForm/BookingFormAlt";
+import Seo from "../../components/reusable/Seo";
 
 // shared animation utils
 import {
@@ -29,7 +29,6 @@ import {
   parkingCardStyle,
 } from "../../components/utils/animation";
 
-import BookingFormAlt from "../../components/bookingForm/BookingFormAlt";
 // Feature cache to avoid repeated DOM parsing (40% performance boost!)
 const featureCache = new Map();
 
@@ -59,28 +58,24 @@ const parseHtmlFeatures = (htmlString) => {
     // Convert NodeList to array and extract text content
     const features = Array.from(listItems)
       .map((li) => li.textContent?.trim())
-      .filter((text) => text && text.length > 0); // Remove empty items
+      .filter((text) => text && text.length > 0);
 
-    // console.log("🔍 Parsed HTML features:", features);
+    const result =
+      features.length > 0
+        ? features
+        : ["Secure parking facility", "Professional service"];
 
-    // Return features or fallback if none found
-    const result = features.length > 0
-      ? features
-      : ["Secure parking facility", "Professional service"];
-
-    // Store in cache for future use
     featureCache.set(htmlString, result);
     return result;
   } catch (error) {
     console.warn("⚠️ Error parsing HTML features:", error);
-    // Fallback: try simple regex extraction
+
     const matches = htmlString.match(/<li[^>]*>(.*?)<\/li>/gi);
     if (matches) {
       const result = matches
         .map((match) => match.replace(/<\/?[^>]+(>|$)/g, "").trim())
         .filter((text) => text.length > 0);
 
-      // Cache the regex fallback result too
       featureCache.set(htmlString, result);
       return result;
     }
@@ -97,45 +92,31 @@ export default function Booking() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [sortBy, setSortBy] = useState("");
 
-  // Get airports data to convert airport code to title
-  const { airports, loading: airportsLoading } = useAirports();
+  const { airports } = useAirports();
 
-  // Function to get airport title from airport code
+  const canonicalUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/booking`
+      : "https://www.goairportparking.com/booking";
+
   const getAirportTitle = (airportCode) => {
     if (!airportCode) return "";
 
-    // airports data structure: { level: "Name", value: "CODE" }
     const airport = airports.find((airport) => airport.value === airportCode);
-    return airport ? airport.level : airportCode; // fallback to code if not found
+    return airport ? airport.level : airportCode;
   };
 
-  // Get API products from Redux state (fetched by BookingForm)
   const apiProducts = searchData?.products || [];
   const hasApiProducts = apiProducts.length > 0;
 
-  // console.log("📊 Booking page data:", {
-  //   searchData,
-  //   apiProducts: apiProducts.length,
-  //   hasApiProducts,
-  // });
-
-  // Debug: Log first API product structure
   if (hasApiProducts) {
     console.log("🔍 First API Product Structure:", apiProducts[0]);
-    // console.log(
-    //   "🔍 Features type:",
-    //   typeof apiProducts[0]?.features,
-    //   apiProducts[0]?.features
-    // );
   }
 
-  // Use API products only - no static fallback
   const currentParkingOptions = useMemo(() => {
     if (hasApiProducts) {
-      // Transform API products to match the UI format
       return apiProducts.map((product, index) => {
-        // Determine service type based on API response (using display_name)
-        let serviceType = "park-ride"; // default
+        let serviceType = "park-ride";
         if (product.display_name) {
           const typeStr = product.display_name.toLowerCase();
           if (typeStr.includes("meet") && typeStr.includes("greet")) {
@@ -159,17 +140,15 @@ export default function Booking() {
             typeof product.short_description === "string"
               ? parseHtmlFeatures(product.short_description)
               : Array.isArray(product.features)
-                ? product.features
-                : [
+              ? product.features
+              : [
                   "Secure parking facility",
                   "Regular shuttle service",
                   "Professional service",
                 ],
           price: parseFloat(product.price || 0),
-          // ✅ Fixed: Map discount fields correctly for ParkingCard component
           price_before_discount: parseFloat(product.price_before_discount || 0),
           discount: parseFloat(product.discount || 0),
-          // Keep legacy camelCase for backward compatibility
           priceBeforeDiscount: parseFloat(
             product.price_before_discount || product.price || 0
           ),
@@ -180,15 +159,13 @@ export default function Booking() {
             ? `${product.name} parking facility`
             : "Parking facility",
           rating: parseFloat(product.average_rating || 4.5),
-          // ✅ Fixed: Pass through average_rating and display_name to ParkingCard
           average_rating: product.average_rating,
           display_name: product.display_name,
-          reviews: 0, // No reviews count in new API structure
-          // Remove distance fields since not in API
-          airportCode: searchData.airport, // No airport_code in new API
+          reviews: 0,
+          airportCode: searchData.airport,
           offer: product.offer,
-          adminCharges: 0, // No admin_charges in new API - using extra_amount instead
-          smsCharges: 0, // No sms_charges in new API
+          adminCharges: 0,
+          smsCharges: 0,
           extraAmount: parseFloat(product.extra_amount || 0),
           sku: product.sku,
           sku_id: product.sku_id,
@@ -197,12 +174,10 @@ export default function Booking() {
         };
       });
     } else {
-      // No API products found - return empty array to show "no options" message
       return [];
     }
   }, [hasApiProducts, apiProducts, searchData.airport]);
 
-  // Generate dynamic chip data based on current options
   const chipData = useMemo(() => {
     const totalCount = currentParkingOptions.length;
     const meetGreetCount = currentParkingOptions.filter(
@@ -245,7 +220,6 @@ export default function Booking() {
     cursor: "pointer",
   });
 
-  // Client-side filtering based on active filter + sorting
   const filteredOptions = useMemo(() => {
     let filtered = [...currentParkingOptions];
 
@@ -274,14 +248,17 @@ export default function Booking() {
   const handleChipClick = (chipKey) => setActiveFilter(chipKey);
   const handleSortChange = (event) => setSortBy(event.target.value);
 
-  // Animation timing
   const BASE = 80;
-  const STEP = 90;
-
-  // console.log("search data", searchData);
 
   return (
     <>
+      <Seo
+        title="Airport Parking Results | Go Airport Parking"
+        description="Compare airport parking options and choose the best parking for your trip."
+        canonical={canonicalUrl}
+        robots="noindex,follow"
+      />
+
       <Box sx={{ backgroundColor: theme.palette.background.paper }}>
         <PageWrapper>
           <Box sx={{ py: 3 }}>
@@ -297,8 +274,6 @@ export default function Booking() {
               style={smoothStyle}
             >
               <CustomStepper activeStep={1} />
-
-              {/* {!isSmall ? <BookingFormAlt /> : null} */}
               <BookingFormAlt />
             </AnimateOnScroll>
           </Box>
@@ -330,7 +305,6 @@ export default function Booking() {
                   gap: { md: 1.25, lg: 0 },
                 }}
               >
-                {/* Title */}
                 <Typography
                   variant="h4"
                   sx={{
@@ -348,7 +322,6 @@ export default function Booking() {
                       ({getAirportTitle(searchData.airport)})
                     </Typography>
                   )}
-                  {/* API/Static Data Indicator */}
                   <Typography
                     component="span"
                     sx={{
@@ -361,7 +334,6 @@ export default function Booking() {
                   ></Typography>
                 </Typography>
 
-                {/* Filter + Sort */}
                 <Box
                   sx={{
                     display: "flex",
@@ -381,7 +353,6 @@ export default function Booking() {
 
                   {chipData.map((chip, i) => (
                     <AnimateOnScroll
-                      // animate each chip with small stagger
                       key={chip.key}
                       type="fade"
                       duration={600}
@@ -443,10 +414,32 @@ export default function Booking() {
                   </AnimateOnScroll>
                 </Box>
               </Box>
+
+              <Box
+                sx={{
+                  mt: 1.5,
+                  mb: 1,
+                  px: 2,
+                  py: 1.25,
+                  borderRadius: 2,
+                  backgroundColor: "#FFF8E1",
+                  border: "1px solid rgba(248, 190, 20, 0.35)",
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "#5F4B00",
+                    fontWeight: 600,
+                    textAlign: { md: "center", lg: "left" },
+                  }}
+                >
+                  A £1.95 booking fee applies to all bookings.
+                </Typography>
+              </Box>
             </AnimateOnScroll>
           )}
 
-          {/* Small Screen (sm and down) */}
           {isSmall && (
             <AnimateOnScroll
               type="slide-up"
@@ -476,7 +469,6 @@ export default function Booking() {
                       ({getAirportTitle(searchData.airport)})
                     </Typography>
                   )}
-                  {/* API/Static Data Indicator - Mobile */}
                   <Typography
                     component="span"
                     sx={{
@@ -488,6 +480,29 @@ export default function Booking() {
                     }}
                   ></Typography>
                 </Typography>
+
+                <Box
+                  sx={{
+                    mt: 0.5,
+                    px: 1.5,
+                    py: 1.1,
+                    borderRadius: 2,
+                    backgroundColor: "#FFF8E1",
+                    border: "1px solid rgba(248, 190, 20, 0.35)",
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#5F4B00",
+                      fontWeight: 600,
+                      textAlign: "center",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    A £1.95 booking fee applies to all bookings.
+                  </Typography>
+                </Box>
 
                 <Box
                   sx={{
@@ -617,21 +632,10 @@ export default function Booking() {
               >
                 <Box sx={{ textAlign: "center", py: 4 }}>
                   <Typography variant="h6" color="text.secondary">
-                    {/* No parking companies found for{" "} */}
                     {searchData.airport
                       ? getAirportTitle(searchData.airport)
                       : ""}
-                    {/* : "selected airport" */}
                   </Typography>
-                  {/* <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mt: 1 }}
-                  >
-                    {searchData.productsError ? 
-                      `Error: ${searchData.productsError}` : 
-                      "Try selecting a different airport or adjusting your search dates."}
-                  </Typography> */}
                 </Box>
               </AnimateOnScroll>
             )}
