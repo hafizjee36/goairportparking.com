@@ -1,4 +1,3 @@
-// components/PaymentForm/OrderSummary.js
 import React from "react";
 import { Box, Typography, Divider, Stack } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -13,72 +12,94 @@ import {
 } from "../../../components/utils/animation";
 import AnimateOnScroll from "../../../components/reusable/AnimateOnScroll";
 
-const OrderSummary = ({ basketTotal, orderTotal, airport }) => {
-  // Get selected parking data and search data from Redux
+const OrderSummary = ({ basketTotal, orderTotal, airport, bookingOptions = {} }) => {
   const { selectedParking } = useSelector((state) => state.payment);
   const searchData = useSelector((state) => state.search.searchData);
-  
-  // Get airports data to convert airport code to title
-  const { airports, loading: airportsLoading } = useAirports();
-  
-  // small stagger for inner rows
+
+  const { airports } = useAirports();
+
   const BASE = 140;
   const STEP = 90;
-  
-  // Function to get airport title from airport code
+
   const getAirportTitle = (airportCode) => {
     if (!airportCode) return "Airport";
-    const airport = airports.find(airport => airport.value === airportCode);
-    return airport ? airport.level : airportCode;
+    const airportMatch = airports.find((item) => item.value === airportCode);
+    return airportMatch ? airportMatch.level : airportCode;
   };
-  
-  // Function to format date and time
+
   const formatDateTime = (date, time) => {
     if (!date || !time) return "Not set";
-    
+
     const dateObj = new Date(date);
-    const months = ["January", "February", "March", "April", "May", "June",
-                   "July", "August", "September", "October", "November", "December"];
-    
-    const day = dateObj.getDate().toString().padStart(2, '0');
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const day = dateObj.getDate().toString().padStart(2, "0");
     const month = months[dateObj.getMonth()];
     const year = dateObj.getFullYear();
-    
+
     return `${day} ${month}, ${year} - ${time}`;
   };
-  
-  // Use selected parking data or fallback values
-  const parkingName = selectedParking?.name || "Airparks Short Run - Park and Ride";
-  const parkingPrice = selectedParking?.price || 45.99;
-  const priceBeforeDiscount = selectedParking?.priceBeforeDiscount || parkingPrice;
-  
-  // Get individual charges from selected parking
-  const adminCharges = selectedParking?.adminCharges || 0;
-  const smsCharges = selectedParking?.smsCharges || 0;
-  const extraAmount = selectedParking?.extraAmount || 0;
-  
-  // Calculate booking fee (could be different per booking)
-  const bookingFee = adminCharges > 0 ? adminCharges : 2.99;
-  
-  // Calculate discount amount
-  const discountAmount = priceBeforeDiscount - parkingPrice;
-  
-  // Calculate subtotal and total
-  const subtotal = parkingPrice + bookingFee + smsCharges + extraAmount;
-  const totalPrice = subtotal;
-  
-  // Get airport info
+
+  const parkingName =
+    selectedParking?.name || "Airparks Short Run - Park and Ride";
+  const parkingPrice = Number(selectedParking?.price || 45.99);
+  const priceBeforeDiscount = Number(
+    selectedParking?.priceBeforeDiscount || parkingPrice
+  );
+
+  const adminCharges = Number(selectedParking?.adminCharges || 0);
+  const smsCharges = Number(selectedParking?.smsCharges || 0);
+  const extraAmount = Number(selectedParking?.extraAmount || 0);
+  const cancellationCharges = bookingOptions?.cancellationProtection
+    ? Number(
+        selectedParking?.payment?.cancellation_charges ||
+          selectedParking?.cancellation_charges ||
+          2
+      )
+    : 0;
+
+  const bookingFee = adminCharges > 0 ? adminCharges : 1.95;
+  const discountAmount = Math.max(0, priceBeforeDiscount - parkingPrice);
+  const totalPrice =
+    parkingPrice +
+    bookingFee +
+    smsCharges +
+    extraAmount +
+    cancellationCharges;
+
   const airportCode = selectedParking?.airportCode || searchData?.airport || "BHX";
   const airportName = getAirportTitle(airportCode) || airport || "Birmingham";
-  
-  // Get entry and exit dates
-  const entryDateTime = formatDateTime(searchData?.entryDate, searchData?.entryTime);
+
+  const entryDateTime = formatDateTime(
+    searchData?.entryDate,
+    searchData?.entryTime
+  );
   const exitDateTime = formatDateTime(searchData?.exitDate, searchData?.exitTime);
 
-  const currency = (airportCode == "DXB") ? 'AED': airportCode && ["DUB", "DUBLIN"].includes(airport.toUpperCase()) ? "€" : "£";
+  const currency =
+    airportCode?.toUpperCase() === "DXB"
+      ? "AED"
+      : airportCode?.toUpperCase() === "DUB"
+      ? "€"
+      : "£";
+
+  const formatMoney = (amount) =>
+    `${currency}${Number(amount || 0).toFixed(2)}`;
 
   return (
-    // Slide the whole card in from the left, then fade/slide pieces inside
     <AnimateOnScroll
       type="slide-left"
       distance={18}
@@ -101,6 +122,7 @@ const OrderSummary = ({ basketTotal, orderTotal, airport }) => {
         sx={{
           maxWidth: 400,
           mx: "auto",
+          width: "100%",
         }}
       >
         <Box
@@ -117,7 +139,6 @@ const OrderSummary = ({ basketTotal, orderTotal, airport }) => {
               overflow: "hidden",
             }}
           >
-            {/* Header */}
             <AnimateOnScroll
               type="fade"
               duration={640}
@@ -130,7 +151,7 @@ const OrderSummary = ({ basketTotal, orderTotal, airport }) => {
               as="div"
               style={smoothStyle}
             >
-              <Box sx={{ p: 2 }}>
+              <Box sx={{ p: 2, minHeight: 84 }}>
                 <Typography variant="h4" fontWeight={600} gutterBottom>
                   Order summary
                 </Typography>
@@ -142,7 +163,6 @@ const OrderSummary = ({ basketTotal, orderTotal, airport }) => {
 
             <Divider />
 
-            {/* Selected product + times */}
             <AnimateOnScroll
               type="slide-up"
               distance={14}
@@ -157,11 +177,13 @@ const OrderSummary = ({ basketTotal, orderTotal, airport }) => {
               style={smoothStyle}
             >
               <Box sx={{ p: 2 }}>
-                <Stack direction="row" justifyContent="space-between">
-                  <Typography fontWeight="500">
+                <Stack direction="row" justifyContent="space-between" gap={2}>
+                  <Typography fontWeight="500" sx={{ minHeight: 40 }}>
                     {parkingName}
                   </Typography>
-                  <Typography fontWeight="500">£{parkingPrice.toFixed(2)}</Typography>
+                  <Typography fontWeight="500" sx={{ whiteSpace: "nowrap" }}>
+                    {formatMoney(parkingPrice)}
+                  </Typography>
                 </Stack>
 
                 <Box sx={{ mt: 1 }}>
@@ -190,7 +212,6 @@ const OrderSummary = ({ basketTotal, orderTotal, airport }) => {
             </AnimateOnScroll>
           </Box>
 
-          {/* Price Breakdown */}
           <AnimateOnScroll
             type="fade"
             duration={620}
@@ -204,48 +225,86 @@ const OrderSummary = ({ basketTotal, orderTotal, airport }) => {
             style={smoothStyle}
           >
             <Box sx={{ p: 2 }}>
-              {/* Original Price (if there's a discount) */}
+              <Box
+                sx={{
+                  mb: 2,
+                  px: 1.5,
+                  py: 1.1,
+                  borderRadius: 2,
+                  backgroundColor: "#FFF8E1",
+                  border: "1px solid rgba(248, 190, 20, 0.35)",
+                  minHeight: 48,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "#5F4B00",
+                    fontWeight: 600,
+                    width: "100%",
+                  }}
+                >
+                  A £1.95 booking fee applies to all bookings.
+                </Typography>
+              </Box>
+
               {discountAmount > 0 && (
                 <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                  <Typography color="text.secondary" sx={{ textDecoration: 'line-through' }}>Original price</Typography>
-                  <Typography color="text.secondary" sx={{ textDecoration: 'line-through' }}>£{priceBeforeDiscount.toFixed(2)}</Typography>
+                  <Typography
+                    color="text.secondary"
+                    sx={{ textDecoration: "line-through" }}
+                  >
+                    Original price
+                  </Typography>
+                  <Typography
+                    color="text.secondary"
+                    sx={{ textDecoration: "line-through" }}
+                  >
+                    {formatMoney(priceBeforeDiscount)}
+                  </Typography>
                 </Stack>
               )}
-              
-              {/* Discount Amount */}
+
               {discountAmount > 0 && (
                 <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
                   <Typography color="success.main">Discount</Typography>
-                  <Typography color="success.main">-£{discountAmount.toFixed(2)}</Typography>
+                  <Typography color="success.main">
+                    -{formatMoney(discountAmount)}
+                  </Typography>
                 </Stack>
               )}
-              
-              {/* Booking fee */}
+
               <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
                 <Typography>Booking fee</Typography>
-                <Typography>£{bookingFee.toFixed(2)}</Typography>
+                <Typography>{formatMoney(bookingFee)}</Typography>
               </Stack>
-              
-              {/* SMS Charges (if applicable) */}
-              {smsCharges > 0 && (
+
+              {cancellationCharges > 0 && (
                 <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                  <Typography>SMS charges</Typography>
-                  <Typography>£{smsCharges.toFixed(2)}</Typography>
+                  <Typography>Cancellation Protection</Typography>
+                  <Typography>{formatMoney(cancellationCharges)}</Typography>
                 </Stack>
               )}
-              
-              {/* Extra Amount (if applicable) */}
+
+              {smsCharges > 0 && (
+                <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+                  <Typography>SMS updates</Typography>
+                  <Typography>{formatMoney(smsCharges)}</Typography>
+                </Stack>
+              )}
+
               {extraAmount > 0 && (
                 <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
                   <Typography>Additional charges</Typography>
-                  <Typography>£{extraAmount.toFixed(2)}</Typography>
+                  <Typography>{formatMoney(extraAmount)}</Typography>
                 </Stack>
               )}
             </Box>
           </AnimateOnScroll>
         </Box>
 
-        {/* Total */}
         <AnimateOnScroll
           type="zoom-in"
           duration={700}
@@ -268,8 +327,12 @@ const OrderSummary = ({ basketTotal, orderTotal, airport }) => {
           >
             <Divider sx={{ mb: 2 }} />
             <Stack direction="row" justifyContent="space-between" mb={2}>
-              <Typography variant="h6" fontWeight="bold">Total</Typography>
-              <Typography variant="h6" fontWeight="bold" color="primary.main">{currency}{totalPrice.toFixed(2)}</Typography>
+              <Typography variant="h6" fontWeight="bold">
+                Total
+              </Typography>
+              <Typography variant="h6" fontWeight="bold" color="primary.main">
+                {formatMoney(totalPrice)}
+              </Typography>
             </Stack>
           </Box>
         </AnimateOnScroll>
@@ -278,4 +341,4 @@ const OrderSummary = ({ basketTotal, orderTotal, airport }) => {
   );
 };
 
-export default OrderSummary;
+export default OrderSummary;  

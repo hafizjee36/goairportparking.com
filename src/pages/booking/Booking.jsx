@@ -20,7 +20,6 @@ import { useAirports } from "../../hooks/useAirports";
 import BookingFormAlt from "../../components/bookingForm/BookingFormAlt";
 import Seo from "../../components/reusable/Seo";
 
-// shared animation utils
 import {
   EASE_SOFT,
   THRESHOLD,
@@ -29,33 +28,29 @@ import {
   parkingCardStyle,
 } from "../../components/utils/animation";
 
-// Feature cache to avoid repeated DOM parsing (40% performance boost!)
 const featureCache = new Map();
 
-/**
- * Parse HTML features string into individual feature items
- * @param {string} htmlString - HTML string with <ul><li> structure
- * @returns {Array} Array of feature strings
- */
 const parseHtmlFeatures = (htmlString) => {
   if (!htmlString || typeof htmlString !== "string") {
     return ["Secure parking facility", "Professional service"];
   }
 
-  // Check cache first
   if (featureCache.has(htmlString)) {
     return featureCache.get(htmlString);
   }
 
   try {
-    // Create a temporary DOM element to parse HTML
+    if (typeof document === "undefined") {
+      const fallback = ["Secure parking facility", "Professional service"];
+      featureCache.set(htmlString, fallback);
+      return fallback;
+    }
+
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = htmlString;
 
-    // Extract all <li> elements
     const listItems = tempDiv.querySelectorAll("li");
 
-    // Convert NodeList to array and extract text content
     const features = Array.from(listItems)
       .map((li) => li.textContent?.trim())
       .filter((text) => text && text.length > 0);
@@ -108,10 +103,6 @@ export default function Booking() {
 
   const apiProducts = searchData?.products || [];
   const hasApiProducts = apiProducts.length > 0;
-
-  if (hasApiProducts) {
-    console.log("🔍 First API Product Structure:", apiProducts[0]);
-  }
 
   const currentParkingOptions = useMemo(() => {
     if (hasApiProducts) {
@@ -173,9 +164,9 @@ export default function Booking() {
           cancellation_status: product.cancellation_status,
         };
       });
-    } else {
-      return [];
     }
+
+    return [];
   }, [hasApiProducts, apiProducts, searchData.airport]);
 
   const chipData = useMemo(() => {
@@ -261,7 +252,7 @@ export default function Booking() {
 
       <Box sx={{ backgroundColor: theme.palette.background.paper }}>
         <PageWrapper>
-          <Box sx={{ py: 3 }}>
+          <Box sx={{ py: 3, minHeight: { xs: 220, md: 250 } }}>
             <AnimateOnScroll
               type="zoom-in"
               duration={880}
@@ -303,6 +294,7 @@ export default function Booking() {
                   alignItems: { sm: "center", lg: "center" },
                   justifyContent: { sm: "center", lg: "space-between" },
                   gap: { md: 1.25, lg: 0 },
+                  minHeight: { md: 110, lg: 72 },
                 }}
               >
                 <Typography
@@ -311,6 +303,7 @@ export default function Booking() {
                     fontWeight: 800,
                     color: "#000",
                     textAlign: { md: "center", lg: "left" },
+                    minHeight: 58,
                   }}
                 >
                   Choose your Parking
@@ -330,6 +323,7 @@ export default function Booking() {
                       color: hasApiProducts ? "success.main" : "warning.main",
                       fontWeight: 600,
                       mt: 0.5,
+                      minHeight: 18,
                     }}
                   ></Typography>
                 </Typography>
@@ -342,6 +336,7 @@ export default function Booking() {
                     alignItems: "center",
                     gap: 0.5,
                     mt: { md: 0.5, lg: 0 },
+                    minHeight: 40,
                   }}
                 >
                   <Typography
@@ -424,6 +419,9 @@ export default function Booking() {
                   borderRadius: 2,
                   backgroundColor: "#FFF8E1",
                   border: "1px solid rgba(248, 190, 20, 0.35)",
+                  minHeight: 52,
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 <Typography
@@ -432,6 +430,7 @@ export default function Booking() {
                     color: "#5F4B00",
                     fontWeight: 600,
                     textAlign: { md: "center", lg: "left" },
+                    width: "100%",
                   }}
                 >
                   A £1.95 booking fee applies to all bookings.
@@ -454,11 +453,22 @@ export default function Booking() {
               style={smoothStyle}
             >
               <Box
-                sx={{ py: 2, display: "flex", flexDirection: "column", gap: 1 }}
+                sx={{
+                  py: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                  minHeight: 180,
+                }}
               >
                 <Typography
                   variant="h5"
-                  sx={{ fontWeight: 800, color: "#000", textAlign: "center" }}
+                  sx={{
+                    fontWeight: 800,
+                    color: "#000",
+                    textAlign: "center",
+                    minHeight: 64,
+                  }}
                 >
                   Choose your Parking
                   {searchData.airport && (
@@ -477,6 +487,7 @@ export default function Booking() {
                       color: hasApiProducts ? "success.main" : "warning.main",
                       fontWeight: 600,
                       mt: 0.5,
+                      minHeight: 18,
                     }}
                   ></Typography>
                 </Typography>
@@ -489,6 +500,9 @@ export default function Booking() {
                     borderRadius: 2,
                     backgroundColor: "#FFF8E1",
                     border: "1px solid rgba(248, 190, 20, 0.35)",
+                    minHeight: 50,
+                    display: "flex",
+                    alignItems: "center",
                   }}
                 >
                   <Typography
@@ -498,6 +512,7 @@ export default function Booking() {
                       fontWeight: 600,
                       textAlign: "center",
                       fontSize: "0.9rem",
+                      width: "100%",
                     }}
                   >
                     A £1.95 booking fee applies to all bookings.
@@ -582,7 +597,7 @@ export default function Booking() {
             </AnimateOnScroll>
           )}
 
-          <Box sx={{ paddingY: 5 }}>
+          <Box sx={{ paddingY: 5, minHeight: 320 }}>
             {filteredOptions.length > 0 ? (
               <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
                 {filteredOptions.map((p, i) => (
@@ -630,7 +645,16 @@ export default function Booking() {
                 once
                 style={smoothStyle}
               >
-                <Box sx={{ textAlign: "center", py: 4 }}>
+                <Box
+                  sx={{
+                    textAlign: "center",
+                    py: 4,
+                    minHeight: 180,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <Typography variant="h6" color="text.secondary">
                     {searchData.airport
                       ? getAirportTitle(searchData.airport)

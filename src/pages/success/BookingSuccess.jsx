@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -16,7 +16,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   Snackbar,
   CircularProgress,
 } from '@mui/material';
@@ -31,7 +30,6 @@ import {
   LocationOn as LocationIcon,
   Email as EmailIcon,
   Phone as PhoneIcon,
-  DirectionsCar as CarIcon,
   Receipt as ReceiptIcon,
   Home as HomeIcon,
   Close as CloseIcon,
@@ -42,8 +40,8 @@ import { format as formatFn, isValid, parseISO, addDays } from 'date-fns';
 import theme from '../../theme';
 import PageWrapper from '../../components/reusable/PageWrapper';
 import { getAirportByCode } from '../../services/airportService';
+import Seo from '../../components/reusable/Seo';
 
-// Animation components
 import AnimateOnScroll from '../../components/reusable/AnimateOnScroll';
 import {
   EASE_SOFT,
@@ -59,12 +57,16 @@ import { getCookie } from '../../utils/getCookie';
 const BookingSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Get URL parameters
-  const bookingReference = searchParams.get('bookingReference') || searchParams.get('multi_mode_reference_no');
+  const bookingReference =
+    searchParams.get('bookingReference') ||
+    searchParams.get('multi_mode_reference_no');
   const referenceNo = searchParams.get('reference_no');
-  const transactionId = searchParams.get('transactionID') || searchParams.get('ref');
-  const paymentIntent = searchParams.get('payment_intent') || searchParams.get('ref');
+  const transactionId =
+    searchParams.get('transactionID') || searchParams.get('ref');
+  const paymentIntent =
+    searchParams.get('payment_intent') || searchParams.get('ref');
   const paymentMethod = searchParams.get('paymentMethod');
   const totalAmount = searchParams.get('totalamount');
   const customerName = searchParams.get('name');
@@ -76,35 +78,45 @@ const BookingSuccess = () => {
   const apiTag = searchParams.get('api_tag');
   const trafficSource = searchParams.get('traffic_source');
 
-  // Get booking dates and times
   const entryDate = searchParams.get('entryDate');
   const entryTime = searchParams.get('entryTime');
   const exitDate = searchParams.get('exitDate');
   const exitTime = searchParams.get('exitTime');
 
-  // Get charge breakdown
   const supplierCost = parseFloat(searchParams.get('suppliercost') || '0');
   const cancellationCharge = parseFloat(searchParams.get('cancellationCharge') || '0');
   const smsCharge = parseFloat(searchParams.get('smsCharge') || '0');
   const bookingFee = parseFloat(searchParams.get('bookingFee') || '0');
 
-  const currencyCode = airport === 'DXB' ? "AED" : (airport === 'DUB' || (!airport && service?.toLowerCase().includes('dublin'))) ? 'EUR' : 'GBP';
+  const currencyCode =
+    airport === 'DXB'
+      ? 'AED'
+      : airport === 'DUB' || (!airport && service?.toLowerCase().includes('dublin'))
+      ? 'EUR'
+      : 'GBP';
+
+  const currencySymbol =
+    airport === 'DXB'
+      ? 'AED'
+      : airport === 'DUB' || (!airport && service?.toLowerCase().includes('dublin'))
+      ? '€'
+      : '£';
+
   const awcValue = getCookie('awc');
-  console.log('cookie value:', awcValue);
-  console.log('airport:', airport);
 
-  // Debug logging for amount calculation
-  console.log('🔍 BookingSuccess: URL Parameters for Amount Calculation:', {
-    totalAmount,
-    supplierCost,
-    cancellationCharge,
-    smsCharge,
-    bookingFee,
-    calculatedTotal: (supplierCost + cancellationCharge + smsCharge + bookingFee).toFixed(2),
-    difference: (parseFloat(totalAmount || '0') - (supplierCost + cancellationCharge + smsCharge + bookingFee)).toFixed(2)
-  });
+  const canonicalUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}${location.pathname}`
+      : 'https://www.goairportparking.com/booking-success';
 
-  // Component state
+  const conversionKey = useMemo(() => {
+    return transactionId
+      ? `booking_success_conversion_fired_${transactionId}`
+      : bookingReference
+      ? `booking_success_conversion_fired_${bookingReference}`
+      : null;
+  }, [transactionId, bookingReference]);
+
   const [bookingData, setBookingData] = useState(null);
   const [airportName, setAirportName] = useState('');
   const [loadingAirport, setLoadingAirport] = useState(false);
@@ -113,7 +125,6 @@ const BookingSuccess = () => {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-  // Try to get booking data from session storage on mount
   useEffect(() => {
     const storedBookingData = sessionStorage.getItem('booking_data');
     if (storedBookingData) {
@@ -125,12 +136,10 @@ const BookingSuccess = () => {
       }
     }
 
-    // Clean up session storage after successful booking
     sessionStorage.removeItem('booking_data');
     sessionStorage.removeItem('worldpay_session');
   }, []);
 
-  // Fetch airport name by code
   useEffect(() => {
     const fetchAirportName = async () => {
       if (airport) {
@@ -138,13 +147,13 @@ const BookingSuccess = () => {
         try {
           const airportData = await getAirportByCode(airport);
           if (airportData) {
-            setAirportName(airportData.level); // level contains the airport name
+            setAirportName(airportData.level);
           } else {
-            setAirportName(airport); // Fallback to code if not found
+            setAirportName(airport);
           }
         } catch (error) {
           console.error('Error fetching airport name:', error);
-          setAirportName(airport); // Fallback to code on error
+          setAirportName(airport);
         } finally {
           setLoadingAirport(false);
         }
@@ -154,23 +163,13 @@ const BookingSuccess = () => {
     fetchAirportName();
   }, [airport]);
 
-  // Payment finalization useEffect - Call /payments/update API to complete the booking
   useEffect(() => {
     const finalizePayment = async () => {
-      console.log('🏁 BookingSuccess: Starting payment finalization...');
-      console.log('📋 BookingSuccess: URL Parameters:', {
-        bookingReference,
-        referenceNo,
-        transactionId,
-        paymentIntent,
-        paymentMethod,
-        emailPayment,
-        apiTag
-      });
-
-      // Only finalize if we have the necessary parameters and haven't already done so
       if (!bookingReference || !transactionId) {
-        console.log('⚠️ BookingSuccess: Skipping finalization - missing reference or already finalized');
+        return;
+      }
+
+      if (paymentFinalized) {
         return;
       }
 
@@ -186,29 +185,22 @@ const BookingSuccess = () => {
           email_payment: emailPayment,
         };
 
-        console.log('📦 BookingSuccess: /payments/update payload:', paymentUpdatePayload);
-        console.log('🔄 BookingSuccess: Calling /payments/update API...');
-
         const response = await apiCall(
-          "post",
-          "/payments/update",
+          'post',
+          '/payments/update',
           paymentUpdatePayload,
           {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
           },
           window.location.pathname
         );
 
-        console.log('📋 BookingSuccess: /payments/update response:', response);
-
         if (response?.success) {
-          console.log('✅ BookingSuccess: Payment finalization successful');
           setPaymentFinalized(true);
 
-          const bookingId = localStorage.getItem("bookingId");
-          if (bookingId) 
-          {
+          const bookingId = localStorage.getItem('bookingId');
+          if (bookingId) {
             const updateBookingStatus = {
               access_token: '5MEsB9lLwVqu4qndXvEUE428bqGZY',
               booking_id: bookingId,
@@ -216,34 +208,15 @@ const BookingSuccess = () => {
               booking_type: 'Online',
               stripe_ref_id: '',
             };
-            const urlupdateBookingStatus = `https://globalparkingtech.co.uk/update_booking_status_api?` + new URLSearchParams(updateBookingStatus).toString();
-            const resUpdateStatus = await fetch(urlupdateBookingStatus);
-            console.log("Alveus urlupdateBookingStatus.", urlupdateBookingStatus);
-            console.log("Alveus Booking status updated after payment success.", resUpdateStatus);
-            localStorage.removeItem("bookingId");
-          }
 
-          // Push conversion event to Google Tag Manager
-          if (window.dataLayer) {
-            window.dataLayer.push({
-              event: 'conversion',
-              transaction_id: transactionId,
-              value: parseFloat(totalAmount || 0),
-              currency: 'GBP',
-              booking_reference: bookingReference,
-              payment_method: paymentMethod || 'stripe',
-            });
-            console.log('📊 GTM Conversion Event Pushed:', {
-              event: 'conversion',
-              transaction_id: transactionId,
-              value: parseFloat(totalAmount || 0),
-              currency: 'GBP',
-              booking_reference: bookingReference,
-              payment_method: paymentMethod || 'stripe',
-            });
+            const urlupdateBookingStatus =
+              `https://globalparkingtech.co.uk/update_booking_status_api?` +
+              new URLSearchParams(updateBookingStatus).toString();
+
+            await fetch(urlupdateBookingStatus);
+            localStorage.removeItem('bookingId');
           }
         } else {
-          console.error('❌ BookingSuccess: Payment finalization failed:', response);
           setPaymentError(response?.message || 'Failed to finalize payment');
         }
       } catch (error) {
@@ -253,7 +226,51 @@ const BookingSuccess = () => {
     };
 
     finalizePayment();
-  }, [bookingReference, referenceNo, transactionId, paymentIntent, paymentMethod, emailPayment, apiTag, paymentFinalized]);
+  }, [
+    bookingReference,
+    referenceNo,
+    transactionId,
+    paymentIntent,
+    paymentMethod,
+    emailPayment,
+    apiTag,
+    paymentFinalized,
+  ]);
+
+  useEffect(() => {
+    if (!paymentFinalized || !conversionKey) return;
+
+    const alreadyFired =
+      typeof window !== 'undefined' &&
+      sessionStorage.getItem(conversionKey) === '1';
+
+    if (alreadyFired) return;
+
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: 'purchase',
+        transaction_id: transactionId || bookingReference,
+        value: parseFloat(totalAmount || '0'),
+        currency: currencyCode,
+        booking_reference: bookingReference,
+        payment_method: paymentMethod || 'stripe',
+        traffic_source: trafficSource || '',
+      });
+    }
+
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem(conversionKey, '1');
+    }
+  }, [
+    paymentFinalized,
+    conversionKey,
+    transactionId,
+    bookingReference,
+    totalAmount,
+    currencyCode,
+    paymentMethod,
+    trafficSource,
+  ]);
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Not specified';
@@ -267,7 +284,6 @@ const BookingSuccess = () => {
   };
 
   const handleDownloadVoucher = () => {
-    // Create downloadable content
     const voucherContent = `
       PARKING BOOKING CONFIRMATION
 
@@ -286,7 +302,7 @@ const BookingSuccess = () => {
       Pick-up: ${formatDate(exitDate || bookingData?.searchData?.exitDate)} at ${formatTime(exitTime || bookingData?.searchData?.exitTime)}
 
       Payment:
-      Total Paid: ${airport ==='DXB'?  "AED": (airport === 'DUB' || (!airport && service?.toLowerCase().includes('dublin'))) ? '€' : '£'}${totalAmount}
+      Total Paid: ${currencySymbol}${totalAmount}
       Payment Method: ${paymentMethod}
 
       Generated: ${formatFn(new Date(), 'dd/MM/yyyy HH:mm')}
@@ -328,7 +344,7 @@ const BookingSuccess = () => {
         </div>
         <div style="border: 1px solid #ccc; padding: 20px; margin: 20px 0;">
           <h2>Payment Information</h2>
-          <p><strong>Total Paid:</strong> ${airport === 'DXB'? "AED" :(airport === 'DUB' || (!airport && service?.toLowerCase().includes('dublin'))) ? '€' : '£'}${totalAmount}</p>
+          <p><strong>Total Paid:</strong> ${currencySymbol}${totalAmount}</p>
           <p><strong>Payment Method:</strong> ${paymentMethod}</p>
         </div>
         <p style="margin-top: 40px;"><em>Printed on: ${formatFn(new Date(), 'dd/MM/yyyy HH:mm')}</em></p>
@@ -364,12 +380,12 @@ const BookingSuccess = () => {
   };
 
   const handleAddToCalendar = () => {
-    // Create calendar event (simplified version)
-    const startDate = bookingData?.searchData?.entryDate || formatFn(new Date(), 'yyyy-MM-dd');
-    const endDate = bookingData?.searchData?.exitDate || formatFn(addDays(new Date(), 1), 'yyyy-MM-dd');
+    const startDate =
+      bookingData?.searchData?.entryDate || formatFn(new Date(), 'yyyy-MM-dd');
+    const endDate =
+      bookingData?.searchData?.exitDate ||
+      formatFn(addDays(new Date(), 1), 'yyyy-MM-dd');
 
-    // For date-fns, we need to import addDays if we want to use it like this
-    // I'll use native Date for now or add to imports
     const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Airport Parking - ${airport}&dates=${formatFn(parseISO(startDate), 'yyyyMMdd')}/${formatFn(parseISO(endDate), 'yyyyMMdd')}&details=Booking Reference: ${bookingReference}%0AService: ${service}%0ALocation: ${airport}&location=${airport}`;
 
     window.open(calendarUrl, '_blank');
@@ -381,30 +397,57 @@ const BookingSuccess = () => {
         <Alert severity="error">
           No booking reference found. Please contact support if you believe this is an error.
         </Alert>
-        <Button
-          variant="contained"
-          onClick={() => navigate('/')}
-          sx={{ mt: 2 }}
-        >
+        <Button variant="contained" onClick={() => navigate('/')} sx={{ mt: 2 }}>
           Back to Home
         </Button>
       </Container>
     );
   }
-  console.log('transactionId', transactionId);
+
   return (
     <Box sx={{ backgroundColor: theme.palette.background.default, minHeight: '100vh' }}>
+      <Seo
+        title="Booking Confirmed | Go Airport Parking"
+        description="Your airport parking booking has been confirmed."
+        canonical={canonicalUrl}
+        robots="noindex,follow"
+      />
 
-      <AwinTracking price={totalAmount} currency={currencyCode}
-        refId={bookingReference} awc={awcValue} />
-      <AwinFallbackPixel price={totalAmount} currency={currencyCode}
-        refId={bookingReference} />
-      <AwinConversionScript price={totalAmount} currency={currencyCode}
-        refId={bookingReference} />
+      {paymentFinalized && (
+        <>
+          <AwinTracking
+            price={totalAmount}
+            currency={currencyCode}
+            refId={bookingReference}
+            awc={awcValue}
+          />
+          <AwinFallbackPixel
+            price={totalAmount}
+            currency={currencyCode}
+            refId={bookingReference}
+          />
+          <AwinConversionScript
+            price={totalAmount}
+            currency={currencyCode}
+            refId={bookingReference}
+          />
+        </>
+      )}
 
       <PageWrapper>
         <Container maxWidth="lg" sx={{ py: 6 }}>
-          {/* Success Header */}
+          {paymentError && (
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {paymentError}
+            </Alert>
+          )}
+
+          {!paymentFinalized && !paymentError && (
+            <Alert severity="info" sx={{ mb: 3 }}>
+              Finalising your booking confirmation...
+            </Alert>
+          )}
+
           <AnimateOnScroll
             type="zoom-in"
             duration={800}
@@ -432,12 +475,14 @@ const BookingSuccess = () => {
             </Box>
           </AnimateOnScroll>
 
-          <Grid container display="flex" sx={{
-            flexDirection: { xs: "column", sm: "row" },
-          }} justifyContent="space-between" spacing={4}>
-            {/* Main Content - Left Column: Booking Details, Service Information, Payment Breakdown */}
-            <Grid item lg={8} flex="1.2" >
-              {/* Booking Details */}
+          <Grid
+            container
+            display="flex"
+            sx={{ flexDirection: { xs: 'column', sm: 'row' } }}
+            justifyContent="space-between"
+            spacing={4}
+          >
+            <Grid item lg={8} flex="1.2">
               <AnimateOnScroll
                 type="slide-up"
                 distance={20}
@@ -487,7 +532,7 @@ const BookingSuccess = () => {
                           Total Paid
                         </Typography>
                         <Typography variant="h6" sx={{ fontWeight: 600, color: 'success.main' }}>
-                          {airport === 'DXB' ? "AED":(airport === 'DUB' || (!airport && service?.toLowerCase().includes('dublin'))) ? '€' : '£'}{totalAmount || 'N/A'}
+                          {currencySymbol}{totalAmount || 'N/A'}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -495,7 +540,6 @@ const BookingSuccess = () => {
                 </Card>
               </AnimateOnScroll>
 
-              {/* Service Information */}
               <AnimateOnScroll
                 type="slide-up"
                 distance={20}
@@ -532,7 +576,11 @@ const BookingSuccess = () => {
                             <Typography variant="body1" sx={{ fontWeight: 500 }}>
                               {airportName || airport || 'Airport information not available'}
                               {airport && airport !== airportName && (
-                                <Typography variant="body2" component="span" sx={{ ml: 1, color: 'text.secondary' }}>
+                                <Typography
+                                  variant="body2"
+                                  component="span"
+                                  sx={{ ml: 1, color: 'text.secondary' }}
+                                >
                                   ({airport})
                                 </Typography>
                               )}
@@ -540,6 +588,7 @@ const BookingSuccess = () => {
                           )}
                         </Box>
                       </Grid>
+
                       <Grid item xs={12} sm={6}>
                         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                           Service Type
@@ -549,9 +598,13 @@ const BookingSuccess = () => {
                         </Typography>
                       </Grid>
 
-                      {/* Departure Date and Time */}
                       <Grid item xs={12} sm={6}>
-                        <Typography variant="subtitle2" color="text.secondary" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography
+                          variant="subtitle2"
+                          color="text.secondary"
+                          gutterBottom
+                          sx={{ display: 'flex', alignItems: 'center' }}
+                        >
                           <ScheduleIcon sx={{ fontSize: 16, mr: 0.5 }} />
                           Drop-off Date & Time
                         </Typography>
@@ -563,9 +616,13 @@ const BookingSuccess = () => {
                         </Typography>
                       </Grid>
 
-                      {/* Arrival Date and Time */}
                       <Grid item xs={12} sm={6}>
-                        <Typography variant="subtitle2" color="text.secondary" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography
+                          variant="subtitle2"
+                          color="text.secondary"
+                          gutterBottom
+                          sx={{ display: 'flex', alignItems: 'center' }}
+                        >
                           <ScheduleIcon sx={{ fontSize: 16, mr: 0.5 }} />
                           Pick-up Date & Time
                         </Typography>
@@ -581,7 +638,6 @@ const BookingSuccess = () => {
                 </Card>
               </AnimateOnScroll>
 
-              {/* Payment Breakdown */}
               {(supplierCost > 0 || cancellationCharge > 0 || smsCharge > 0 || bookingFee > 0) && (
                 <AnimateOnScroll
                   type="slide-up"
@@ -607,10 +663,10 @@ const BookingSuccess = () => {
                           <Grid item xs={12} sm={6}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                               <Typography variant="body2" color="text.secondary">
-                                Supplier Cost:
+                                Parking:
                               </Typography>
                               <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                                {(airport === 'DUB' || (!airport && service?.toLowerCase().includes('dublin'))) ? '€' : '£'}{supplierCost.toFixed(2)}
+                                {currencySymbol}{supplierCost.toFixed(2)}
                               </Typography>
                             </Box>
                           </Grid>
@@ -623,7 +679,7 @@ const BookingSuccess = () => {
                                 Cancellation Protection:
                               </Typography>
                               <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                                {airport === 'DUB' ? '€' : '£'}{cancellationCharge.toFixed(2)}
+                                {currencySymbol}{cancellationCharge.toFixed(2)}
                               </Typography>
                             </Box>
                           </Grid>
@@ -633,10 +689,10 @@ const BookingSuccess = () => {
                           <Grid item xs={12} sm={6}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                               <Typography variant="body2" color="text.secondary">
-                                SMS Updates:
+                                SMS updates:
                               </Typography>
                               <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                                {airport === 'DUB' ? '€' : '£'}{smsCharge.toFixed(2)}
+                                {currencySymbol}{smsCharge.toFixed(2)}
                               </Typography>
                             </Box>
                           </Grid>
@@ -646,10 +702,10 @@ const BookingSuccess = () => {
                           <Grid item xs={12} sm={6}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                               <Typography variant="body2" color="text.secondary">
-                                Booking Fee:
+                                Booking fee:
                               </Typography>
                               <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                                {(airport === 'DUB' || (!airport && service?.toLowerCase().includes('dublin'))) ? '€' : '£'}{bookingFee.toFixed(2)}
+                                {currencySymbol}{bookingFee.toFixed(2)}
                               </Typography>
                             </Box>
                           </Grid>
@@ -662,7 +718,7 @@ const BookingSuccess = () => {
                               Total Paid:
                             </Typography>
                             <Typography variant="h6" sx={{ fontWeight: 600, color: 'success.main' }}>
-                              {airport === 'DXB' ? "AED":(airport === 'DUB' || (!airport && service?.toLowerCase().includes('dublin'))) ? '€' : '£'}{totalAmount || '0.00'}
+                              {currencySymbol}{totalAmount || '0.00'}
                             </Typography>
                           </Box>
                         </Grid>
@@ -673,9 +729,7 @@ const BookingSuccess = () => {
               )}
             </Grid>
 
-            {/* Sidebar - Right Column: Quick Actions and Contact Information */}
             <Grid item xs={12} lg={4} flex="0.4">
-              {/* Quick Actions */}
               <AnimateOnScroll
                 type="slide-up"
                 distance={20}
@@ -694,36 +748,16 @@ const BookingSuccess = () => {
                     </Typography>
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        startIcon={<DownloadIcon />}
-                        onClick={handleDownloadVoucher}
-                      >
+                      <Button variant="outlined" fullWidth startIcon={<DownloadIcon />} onClick={handleDownloadVoucher}>
                         Download Voucher
                       </Button>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        startIcon={<PrintIcon />}
-                        onClick={handlePrintVoucher}
-                      >
+                      <Button variant="outlined" fullWidth startIcon={<PrintIcon />} onClick={handlePrintVoucher}>
                         Print Confirmation
                       </Button>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        startIcon={<CalendarIcon />}
-                        onClick={handleAddToCalendar}
-                      >
+                      <Button variant="outlined" fullWidth startIcon={<CalendarIcon />} onClick={handleAddToCalendar}>
                         Add to Calendar
                       </Button>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        startIcon={<ShareIcon />}
-                        onClick={handleShareBooking}
-                      >
+                      <Button variant="outlined" fullWidth startIcon={<ShareIcon />} onClick={handleShareBooking}>
                         Share Booking
                       </Button>
                     </Box>
@@ -731,7 +765,6 @@ const BookingSuccess = () => {
                 </Card>
               </AnimateOnScroll>
 
-              {/* Contact Information */}
               {(customerName || customerEmail) && (
                 <AnimateOnScroll
                   type="slide-up"
@@ -783,8 +816,6 @@ const BookingSuccess = () => {
             </Grid>
           </Grid>
 
-
-          {/* Next Steps */}
           <AnimateOnScroll
             type="slide-up"
             distance={20}
@@ -812,7 +843,6 @@ const BookingSuccess = () => {
             </Alert>
           </AnimateOnScroll>
 
-          {/* Navigation */}
           <Box sx={{ textAlign: 'center', mt: 4 }}>
             <Button
               variant="contained"
@@ -823,18 +853,10 @@ const BookingSuccess = () => {
             >
               Back to Home
             </Button>
-            {/* <Button
-              variant="outlined"
-              size="large"
-              onClick={() => navigate('/my-bookings')}
-            >
-              View My Bookings
-            </Button> */}
           </Box>
         </Container>
       </PageWrapper>
 
-      {/* Share Dialog */}
       <Dialog open={showShareDialog} onClose={() => setShowShareDialog(false)}>
         <DialogTitle>
           Share Booking Confirmation
@@ -864,7 +886,6 @@ const BookingSuccess = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Success Snackbar */}
       <Snackbar
         open={showSuccessMessage}
         autoHideDuration={3000}
@@ -876,4 +897,3 @@ const BookingSuccess = () => {
 };
 
 export default BookingSuccess;
-

@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   AppBar,
   Toolbar,
-  Typography,
   IconButton,
   Button,
   Drawer,
@@ -18,8 +17,6 @@ import {
   Collapse,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import PersonIcon from "@mui/icons-material/Person";
-import LogoutIcon from "@mui/icons-material/Logout";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -27,20 +24,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
-import { logout, initializeAuth } from "../redux/slice/authSlice";
+import { logout } from "../redux/slice/authSlice";
 import { authenticatedApiService } from "../services/authenticatedApiService";
 import logo from "../assets/optimized/logo-1.webp";
 import ManageBookingModal from "./manageBooking/ManageBookingModal";
-import { useAirports } from "../hooks/useAirports";
 import { useUserRegion } from "../hooks/useUserRegion";
 
 // Base navigation links (without Manage Booking)
 const baseNavLinks = [
   { title: "About Us", path: "/about-us" },
   { title: "Airport Parking", path: "/airport-parking", hasDropdown: true },
-  // { title: "Airport Lounges", path: "/extra" },
-  // { title: "Car Hire", path: "/car-hire" },
-  // { title: "Blog", path: "/blog" },
   { title: "Why Choose Us", path: "/why-choose-us" },
   { title: "FAQ", path: "/faq" },
   { title: "Contact Us", path: "/contact-us" },
@@ -61,8 +54,6 @@ const airportParkingOptions = [
   { title: "Southampton Port", path: "/southampton-port-parking" },
 ];
 
-
-
 export default function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -77,21 +68,14 @@ export default function Navbar() {
   const [manageBookingModalOpen, setManageBookingModalOpen] = useState(false);
   const open = Boolean(anchorEl);
 
-  // ✅ Dynamic airports data
-  const { airports, loading: airportsLoading, error: airportsError } = useAirports();
+  // User region detection from IP
+  const { isDubai: isUserFromDubai } = useUserRegion();
 
-  // ✅ User region detection from IP
-  const { region: userRegion, isDubai: isUserFromDubai, loading: regionLoading } = useUserRegion();
-
-  // ✅ Map airport data from API to include navigation paths
-  // API returns: { level: "Manchester", value: "MAN" }
-  // We need: { title: "Manchester Airport", path: "/manchester-airport-parking", value: "MAN" }
   const mapAirportToNavOption = (airport) => {
     const name = airport.level || airport.name || airport.title || "";
     const code = airport.value || airport.code || airport.path || "";
     const nameLower = name.toLowerCase();
 
-    // Map airport names to paths
     let path = "/airport-parking";
     if (nameLower.includes("birmingham")) path = "/birmingham-airport-parking";
     else if (nameLower.includes("bristol")) path = "/bristol-airport-parking";
@@ -105,7 +89,6 @@ export default function Navbar() {
     else if (nameLower.includes("stansted")) path = "/stansted-airport-parking";
     else if (nameLower.includes("southampton")) path = "/southampton-port-parking";
 
-    // Format title - add "Airport" if not present
     let title = name;
     if (!nameLower.includes("airport") && !nameLower.includes("port")) {
       title = `${name} Airport`;
@@ -115,36 +98,29 @@ export default function Navbar() {
       title,
       path,
       value: code,
-      name: name
+      name,
     };
   };
 
-  // ✅ Convert airports to navigation options
   const airportOptions = airportParkingOptions.map(mapAirportToNavOption);
-  // const airportOptions = airports.map(mapAirportToNavOption);
 
-  // ✅ Filter airport options based on IP-detected region - Dubai Airport only shows in Dubai region
   const getFilteredAirportOptions = () => {
-    // If user is from Dubai (based on IP), show all airports including Dubai
     if (isUserFromDubai) return airportOptions;
-    
-    // Otherwise, exclude Dubai Airport for UK users
+
     return airportOptions.filter((airport) => {
       return airport.path !== "/dubai-airport-parking";
     });
   };
 
-
-  // Dynamic navigation links - show Dashboard when logged in, Manage Booking when not
   const navLinks = [
-    ...baseNavLinks.slice(0, 2), // About Us, Airport Parking
+    ...baseNavLinks.slice(0, 2),
     {
       title: isLoggedIn ? "Dashboard" : "Manage Booking (Login)",
       path: isLoggedIn ? "/customer-dashboard" : "/manage-booking",
       isModal: !isLoggedIn,
       authAction: isLoggedIn ? "dashboard" : "login",
     },
-    ...baseNavLinks.slice(2), // Car Hire, FAQ, Contact Us
+    ...baseNavLinks.slice(2),
   ];
 
   const toggleDrawer = (open) => () => {
@@ -184,54 +160,65 @@ export default function Navbar() {
   };
 
   const handleBookingFound = (bookingData) => {
-    // Navigate to customer dashboard or booking details page
-    // For now, we'll navigate to a placeholder route
     navigate("/customer-dashboard", { state: { bookingData } });
   };
 
   const handleLogout = async () => {
     try {
-      // Call logout API endpoint with Bearer token
       await authenticatedApiService.logout();
       console.log("Logged out successfully");
     } catch (error) {
       console.error("Logout API error (continuing with local logout):", error);
-      // Continue with local logout even if API fails
     } finally {
-      // Always clear Redux state and redirect
       dispatch(logout());
       navigate("/");
     }
   };
 
-  // Initialize auth state from localStorage on component mount
-  useEffect(() => {
-    dispatch(initializeAuth());
-  }, [dispatch]);
-
   return (
     <>
-      <AppBar position="static" sx={{ backgroundColor: "secondary.main" }}>
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: "secondary.main",
+          minHeight: { xs: 74, md: 82 },
+          justifyContent: "center",
+        }}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            minHeight: { xs: "74px !important", md: "82px !important" },
+            px: { xs: 2, sm: 3, md: 4 },
+          }}
+        >
           {/* Left Section - Logo */}
-          <Box sx={{ flex: "0 0 auto" }}>
+          <Box sx={{ flex: "0 0 auto", minWidth: { xs: 170, md: 210 } }}>
             <Box
               component={Link}
               to="/"
               sx={{
-                display: "flex",
+                display: "inline-flex",
                 alignItems: "center",
                 textDecoration: "none",
+                lineHeight: 0,
               }}
             >
               <Box
                 component="img"
                 src={logo}
                 alt="Go Airport Parking LTD"
+                width="180"
+                height="50"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 sx={{
-                  height: 50, // adjust size as needed
-                  width: "auto",
-                  my: 2,
+                  display: "block",
+                  width: { xs: 160, sm: 170, md: 180 },
+                  height: { xs: 44, sm: 47, md: 50 },
+                  objectFit: "contain",
                 }}
               />
             </Box>
@@ -246,26 +233,24 @@ export default function Navbar() {
                 justifyContent: "center",
                 alignItems: "center",
                 gap: 3,
+                minHeight: 50,
               }}
             >
               {navLinks.map((ele) => {
-                const isActive = location.pathname === ele.path; // check active path
+                const isActive = location.pathname === ele.path;
 
-                // Special handling for Airport Parking dropdown
                 if (ele.hasDropdown && ele.title === "Airport Parking") {
                   return (
                     <Box key={ele.title} sx={{ position: "relative" }}>
                       <Button
                         onMouseEnter={handleMouseEnter}
-                        // Removed component={Link} and to={ele.path} to prevent navigation
                         endIcon={<KeyboardArrowDownIcon />}
                         sx={{
-                          color: isActive
-                            ? theme.palette.primary.main
-                            : "white",
+                          color: isActive ? theme.palette.primary.main : "white",
                           fontWeight: isActive ? 700 : 500,
                           textTransform: "none",
                           cursor: "pointer",
+                          minHeight: 40,
                           "&:hover": {
                             backgroundColor: "rgba(255,255,255,0.1)",
                           },
@@ -274,11 +259,11 @@ export default function Navbar() {
                         {ele.title}
                       </Button>
 
-                      {/* Dropdown Menu */}
                       <Menu
                         anchorEl={anchorEl}
                         open={open}
                         onClose={handleMouseLeave}
+                        keepMounted
                         MenuListProps={{
                           onMouseLeave: handleMouseLeave,
                           sx: { py: 0 },
@@ -309,8 +294,7 @@ export default function Navbar() {
                               width: 10,
                               height: 10,
                               bgcolor: "background.paper",
-                              transform:
-                                "translateY(-50%) translateX(-50%) rotate(45deg)",
+                              transform: "translateY(-50%) translateX(-50%) rotate(45deg)",
                               zIndex: 0,
                             },
                           },
@@ -339,24 +323,18 @@ export default function Navbar() {
                   );
                 }
 
-                // Handle Dashboard/Manage Booking based on login state
-                if (
-                  ele.authAction === "dashboard" ||
-                  ele.authAction === "login"
-                ) {
+                if (ele.authAction === "dashboard" || ele.authAction === "login") {
                   if (ele.authAction === "dashboard" && isLoggedIn) {
-                    // Show Dashboard link when logged in
                     return (
                       <Button
                         key={ele.title}
                         component={Link}
                         to={ele.path}
                         sx={{
-                          color: isActive
-                            ? theme.palette.primary.main
-                            : "white",
+                          color: isActive ? theme.palette.primary.main : "white",
                           fontWeight: isActive ? 700 : 500,
                           textTransform: "none",
+                          minHeight: 40,
                           "&:hover": {
                             backgroundColor: "rgba(255,255,255,0.1)",
                           },
@@ -366,7 +344,6 @@ export default function Navbar() {
                       </Button>
                     );
                   } else if (ele.authAction === "login" && !isLoggedIn) {
-                    // Show Manage Booking modal when not logged in
                     return (
                       <Button
                         key={ele.title}
@@ -375,6 +352,7 @@ export default function Navbar() {
                           color: "white",
                           fontWeight: 500,
                           textTransform: "none",
+                          minHeight: 40,
                           "&:hover": {
                             backgroundColor: "rgba(255,255,255,0.1)",
                           },
@@ -386,7 +364,6 @@ export default function Navbar() {
                   }
                 }
 
-                // Regular navigation links
                 return (
                   <Button
                     key={ele.title}
@@ -396,6 +373,7 @@ export default function Navbar() {
                       color: isActive ? theme.palette.primary.main : "white",
                       fontWeight: isActive ? 700 : 500,
                       textTransform: "none",
+                      minHeight: 40,
                       "&:hover": {
                         backgroundColor: "rgba(255,255,255,0.1)",
                       },
@@ -408,12 +386,10 @@ export default function Navbar() {
             </Box>
           )}
 
-          {/* Right Section - Empty for Desktop, Menu for Mobile */}
-          <Box sx={{ flex: "0 0 auto" }}>
+          {/* Right Section */}
+          <Box sx={{ flex: "0 0 auto", minWidth: { xs: 48, md: 80 }, display: "flex", justifyContent: "flex-end" }}>
             {!isMobile ? (
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                {/* Empty - all actions handled in center navigation */}
-              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", minHeight: 40 }} />
             ) : (
               <IconButton
                 edge="end"
@@ -430,13 +406,17 @@ export default function Navbar() {
       </AppBar>
 
       {/* Drawer for Mobile */}
-      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+        ModalProps={{ keepMounted: true }}
+      >
         <Box sx={{ width: 250 }} role="presentation">
           <List>
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
 
-              // Special handling for Airport Parking dropdown in mobile
               if (link.hasDropdown && link.title === "Airport Parking") {
                 return (
                   <Box key={link.title}>
@@ -444,33 +424,21 @@ export default function Navbar() {
                       <ListItemButton
                         onClick={handleMobileDropdownToggle}
                         sx={{
-                          color: isActive
-                            ? theme.palette.primary.main
-                            : theme.palette.text.primary,
+                          color: isActive ? theme.palette.primary.main : theme.palette.text.primary,
                           fontWeight: isActive ? 600 : 400,
                         }}
                       >
                         <ListItemText primary={link.title} />
-                        {mobileDropdownOpen ? (
-                          <ExpandLessIcon />
-                        ) : (
-                          <ExpandMoreIcon />
-                        )}
+                        {mobileDropdownOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                       </ListItemButton>
                     </ListItem>
-                    <Collapse
-                      in={mobileDropdownOpen}
-                      timeout="auto"
-                      unmountOnExit
-                    >
+                    <Collapse in={mobileDropdownOpen} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding>
                         {getFilteredAirportOptions().map((airport) => (
                           <ListItem key={airport.title} disablePadding>
                             <ListItemButton
                               sx={{ pl: 4 }}
-                              onClick={() =>
-                                handleMobileAirportClick(airport.path)
-                              }
+                              onClick={() => handleMobileAirportClick(airport.path)}
                             >
                               <ListItemText
                                 primary={airport.title}
@@ -490,13 +458,8 @@ export default function Navbar() {
                 );
               }
 
-              // Handle Dashboard/Manage Booking in mobile based on login state
-              if (
-                link.authAction === "dashboard" ||
-                link.authAction === "login"
-              ) {
+              if (link.authAction === "dashboard" || link.authAction === "login") {
                 if (link.authAction === "dashboard" && isLoggedIn) {
-                  // Show Dashboard link when logged in
                   return (
                     <ListItem key={link.title} disablePadding>
                       <ListItemButton
@@ -504,9 +467,7 @@ export default function Navbar() {
                         to={link.path}
                         onClick={toggleDrawer(false)}
                         sx={{
-                          color: isActive
-                            ? theme.palette.primary.main
-                            : theme.palette.text.primary,
+                          color: isActive ? theme.palette.primary.main : theme.palette.text.primary,
                           fontWeight: isActive ? 600 : 400,
                         }}
                       >
@@ -515,7 +476,6 @@ export default function Navbar() {
                     </ListItem>
                   );
                 } else if (link.authAction === "login" && !isLoggedIn) {
-                  // Show Manage Booking modal when not logged in
                   return (
                     <ListItem key={link.title} disablePadding>
                       <ListItemButton
@@ -532,7 +492,6 @@ export default function Navbar() {
                 }
               }
 
-              // Regular navigation links
               return (
                 <ListItem key={link.title} disablePadding>
                   <ListItemButton
@@ -540,9 +499,7 @@ export default function Navbar() {
                     to={link.path}
                     onClick={toggleDrawer(false)}
                     sx={{
-                      color: isActive
-                        ? theme.palette.primary.main
-                        : theme.palette.text.primary,
+                      color: isActive ? theme.palette.primary.main : theme.palette.text.primary,
                       fontWeight: isActive ? 600 : 400,
                     }}
                   >
@@ -557,7 +514,6 @@ export default function Navbar() {
         </Box>
       </Drawer>
 
-      {/* Manage Booking Modal */}
       <ManageBookingModal
         open={manageBookingModalOpen}
         onClose={() => setManageBookingModalOpen(false)}

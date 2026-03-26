@@ -67,7 +67,8 @@ export default function ParkingCard({ item }) {
     setIsLoadingProduct(true);
 
     try {
-      const getDeparture = searchParams.get("departure") || searchData.entryDate;
+      const getDeparture =
+        searchParams.get("departure") || searchData.entryDate;
       const getArrival = searchParams.get("arrival") || searchData.exitDate;
       const getAirport = searchParams.get("airport") || searchData.airport;
       const getPromocode =
@@ -198,6 +199,7 @@ export default function ParkingCard({ item }) {
             position: "absolute",
             top: 22,
             right: 28,
+            minWidth: 118,
             minHeight: 40,
             color: "#000",
             bgcolor: "#fff",
@@ -251,13 +253,19 @@ export default function ParkingCard({ item }) {
           }}
         >
           {hasRating ? (
-            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, minHeight: 24 }}>
               <Stars rating={rating} reviews={reviews} />
             </Box>
           ) : (
             <Typography
               variant="body2"
-              sx={{ color: "text.secondary", fontStyle: "italic" }}
+              sx={{
+                color: "text.secondary",
+                fontStyle: "italic",
+                minHeight: 24,
+                display: "flex",
+                alignItems: "center",
+              }}
             >
               No ratings yet
             </Typography>
@@ -329,8 +337,9 @@ export default function ParkingCard({ item }) {
             display: "flex",
             flexDirection: "column",
             gap: 0.5,
-            minHeight: 88,
+            minHeight: 108,
             justifyContent: "flex-end",
+            flex: "1 1 auto",
           }}
         >
           {hasDiscount ? (
@@ -403,7 +412,13 @@ export default function ParkingCard({ item }) {
             </Box>
           )}
 
-          <Box sx={{ minHeight: 20 }}>
+          <Box
+            sx={{
+              minHeight: 20,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             {offer && (
               <Typography
                 variant="body2"

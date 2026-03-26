@@ -1,23 +1,37 @@
 import { useEffect } from "react";
 
+function normaliseContent(content) {
+  if (Array.isArray(content)) {
+    return content.filter(Boolean).join(", ").trim();
+  }
+
+  if (typeof content === "string") {
+    return content.trim();
+  }
+
+  if (content != null) {
+    return String(content).trim();
+  }
+
+  return "";
+}
+
 function setMetaTag(name, content) {
   if (!name) return;
+
+  const value = normaliseContent(content);
   const selector = `meta[name="${name}"]`;
   let tag = document.head.querySelector(selector);
+
+  if (!value) {
+    if (tag) tag.remove();
+    return;
+  }
 
   if (!tag) {
     tag = document.createElement("meta");
     tag.setAttribute("name", name);
     document.head.appendChild(tag);
-  }
-
-  let value = "";
-  if (Array.isArray(content)) {
-    value = content.filter(Boolean).join(", ");
-  } else if (typeof content === "string") {
-    value = content;
-  } else if (content != null) {
-    value = String(content);
   }
 
   tag.setAttribute("content", value);
@@ -29,10 +43,54 @@ function removeMetaTag(name) {
   if (tag) tag.remove();
 }
 
+function setPropertyMetaTag(property, content) {
+  if (!property) return;
+
+  const value = normaliseContent(content);
+  const selector = `meta[property="${property}"]`;
+  let tag = document.head.querySelector(selector);
+
+  if (!value) {
+    if (tag) tag.remove();
+    return;
+  }
+
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute("property", property);
+    document.head.appendChild(tag);
+  }
+
+  tag.setAttribute("content", value);
+}
+
+function removePropertyMetaTag(property) {
+  if (!property) return;
+  const tag = document.head.querySelector(`meta[property="${property}"]`);
+  if (tag) tag.remove();
+}
+
+function toAbsoluteUrl(url) {
+  if (!url || typeof window === "undefined") return "";
+
+  try {
+    return new URL(url, window.location.origin).toString();
+  } catch {
+    return "";
+  }
+}
+
 function setLinkTag(rel, href) {
-  if (!rel || !href) return;
+  if (!rel) return;
+
+  const value = normaliseContent(href);
   const selector = `link[rel="${rel}"]`;
   let tag = document.head.querySelector(selector);
+
+  if (!value) {
+    if (tag) tag.remove();
+    return;
+  }
 
   if (!tag) {
     tag = document.createElement("link");
@@ -40,7 +98,7 @@ function setLinkTag(rel, href) {
     document.head.appendChild(tag);
   }
 
-  tag.setAttribute("href", href);
+  tag.setAttribute("href", value);
 }
 
 function removeLinkTag(rel) {
@@ -57,7 +115,7 @@ function removeLinkTag(rel) {
  * - description: string
  * - keywords: string | string[]
  * - canonical?: string
- * - robots?: string   // e.g. "index,follow" or "noindex,follow"
+ * - robots?: string
  */
 export default function Seo({
   title,
@@ -67,17 +125,14 @@ export default function Seo({
   robots,
 }) {
   useEffect(() => {
+    const absoluteCanonical = canonical ? toAbsoluteUrl(canonical) : "";
+
     if (title) {
-      document.title = title;
+      document.title = title.trim();
     }
 
-    if (description !== undefined) {
-      setMetaTag("description", description);
-    }
-
-    if (keywords !== undefined) {
-      setMetaTag("keywords", keywords);
-    }
+    setMetaTag("description", description);
+    setMetaTag("keywords", keywords);
 
     if (robots !== undefined) {
       setMetaTag("robots", robots);
@@ -85,11 +140,15 @@ export default function Seo({
       removeMetaTag("robots");
     }
 
-    if (canonical) {
-      setLinkTag("canonical", canonical);
+    if (absoluteCanonical) {
+      setLinkTag("canonical", absoluteCanonical);
     } else {
       removeLinkTag("canonical");
     }
+
+    setPropertyMetaTag("og:title", title);
+    setPropertyMetaTag("og:description", description);
+    setPropertyMetaTag("og:url", absoluteCanonical);
 
     return () => {};
   }, [title, description, keywords, canonical, robots]);

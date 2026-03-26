@@ -1,5 +1,4 @@
 import { Provider, useDispatch } from "react-redux";
-// import { useSearchParams } from 'react-router-dom';
 import { store } from "./redux/store";
 import routes from "./routes/AppRoutes";
 import Footer from "./components/Footer";
@@ -12,30 +11,39 @@ import GoogleAnalytics from "./components/GoogleAnalytics/GoogleAnalytics";
 import DefaultSeo from "./components/reusable/DefaultSeo";
 import AwinCookieHandler from "./components/AwinTracking/AwinCookieHandler";
 
-// Toast notifications
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useCookies } from 'react-cookie';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Inner App component that uses Redux dispatch
 function AppContent() {
   const dispatch = useDispatch();
   const routing = useRoutes(routes);
-  // const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
 
   return (
     <>
-      <ScrollToTop/>
+      <ScrollToTop />
       <GoogleAnalytics trackingId="GTM-MP74ZBZM" />
       <DefaultSeo />
       <AwinCookieHandler />
+
       <Navbar />
-      <main>
+
+      <main
+        style={{
+          width: "100%",
+          minHeight: "60vh",
+          display: "block",
+        }}
+      >
         {routing}
       </main>
+
       <Footer />
-      
-      {/* Global Toast Container */}
+
       <ToastContainer
         position="top-right"
         autoClose={5000}

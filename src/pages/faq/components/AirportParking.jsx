@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import FAQItem from "../../../components/reusable/FaqItem";
 import AnimateOnScroll from "../../../components/reusable/AnimateOnScroll";
 
-// shared animation utils
 import {
   EASE_SOFT,
   THRESHOLD,
@@ -56,13 +55,45 @@ export default function AirportParking() {
     },
   ];
 
-  // animation timing
-  const BASE = 80; // initial delay
-  const STEP = 90; // stagger per item
+  const allFaqItems = useMemo(
+    () => [...carParkInfo, ...priorToBooking],
+    []
+  );
+
+  useEffect(() => {
+    const existingSchema = document.getElementById("faq-airport-parking-schema");
+    if (existingSchema) existingSchema.remove();
+
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: allFaqItems.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
+    };
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "faq-airport-parking-schema";
+    script.text = JSON.stringify(schema);
+    document.head.appendChild(script);
+
+    return () => {
+      const injectedSchema = document.getElementById("faq-airport-parking-schema");
+      if (injectedSchema) injectedSchema.remove();
+    };
+  }, [allFaqItems]);
+
+  const BASE = 80;
+  const STEP = 90;
 
   return (
     <Box>
-      {/* Section 1 */}
       <AnimateOnScroll
         type="zoom-in"
         duration={850}
@@ -103,7 +134,6 @@ export default function AirportParking() {
         </Box>
       ))}
 
-      {/* Divider fade */}
       <AnimateOnScroll
         type="fade"
         duration={600}
@@ -118,7 +148,6 @@ export default function AirportParking() {
         <Divider sx={{ my: { xs: 4, md: 6 } }} />
       </AnimateOnScroll>
 
-      {/* Section 2 */}
       <AnimateOnScroll
         type="zoom-in"
         duration={850}
@@ -136,7 +165,7 @@ export default function AirportParking() {
       </AnimateOnScroll>
 
       {priorToBooking.map((item, idx) => (
-        <Box key={`car-wrap-${idx}`} sx={{ mb: 1.25 }}>
+        <Box key={`pre-wrap-${idx}`} sx={{ mb: 1.25 }}>
           <AnimateOnScroll
             type="fade"
             duration={720}

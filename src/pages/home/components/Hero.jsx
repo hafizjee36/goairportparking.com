@@ -15,11 +15,10 @@ function Hero() {
         position: "relative",
         width: "100%",
         overflow: "hidden",
-        minHeight: { xs: 520, sm: 580, md: "90vh" },
-        height: { xs: 520, sm: 580, md: "90vh" },
+        minHeight: { xs: "520px", sm: "580px", md: "90vh" },
+        height: { xs: "520px", sm: "580px", md: "90vh" },
       }}
     >
-      {/* Background Image */}
       <Box
         component="img"
         src={BANNER_IMAGE_528}
@@ -43,7 +42,6 @@ function Hero() {
         }}
       />
 
-      {/* Overlay */}
       <Box
         sx={{
           position: "absolute",
@@ -53,7 +51,6 @@ function Hero() {
         }}
       />
 
-      {/* Text Content */}
       <Box
         sx={{
           position: "relative",
@@ -75,7 +72,7 @@ function Hero() {
           sx={{
             width: "100%",
             maxWidth: 1100,
-            minHeight: { xs: 180, sm: 200, md: 220 },
+            minHeight: { xs: 190, sm: 210, md: 230 },
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -99,6 +96,7 @@ function Hero() {
                 color: theme.palette.text.white100,
                 mb: 1,
                 display: "block",
+                minHeight: 21,
               }}
             >
               Find and Book Parking in Seconds.
@@ -124,6 +122,7 @@ function Hero() {
                 fontSize: { xs: "2rem", md: "3rem", lg: "3.5rem" },
                 lineHeight: 1.15,
                 maxWidth: "1100px",
+                minHeight: { xs: 74, sm: 92, md: 138 },
               }}
             >
               Compare, Save And Park.

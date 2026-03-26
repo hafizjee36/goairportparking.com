@@ -1,4 +1,3 @@
-// pages/PaymentPage.js
 import React, { useMemo, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -9,7 +8,6 @@ import PageWrapper from "../../components/reusable/PageWrapper";
 import CustomButton from "../../components/reusable/CustomButton";
 import Seo from "../../components/reusable/Seo";
 
-// Enhanced booking components from budget-react-app adaptation
 import UserDetails from "../booking/components/UserDetails";
 import TravelDetail from "../booking/components/TravelDetail";
 import VehicleDetail from "../booking/components/VehicleDetail";
@@ -50,13 +48,11 @@ const PaymentPage = () => {
       ? `${window.location.origin}/payment`
       : "https://www.goairportparking.com/payment";
 
-  // Redux state
   const { personalData, bookingOptions, selectedParking, ui, validation } =
     useSelector((state) => state.payment);
 
   const searchData = useSelector(selectSearchData);
 
-  // Component state
   const [basket, setBasket] = useState([]);
   const [airport, setAirport] = useState("Birmingham");
   const [paymentError, setPaymentErrorState] = useState("");
@@ -70,7 +66,6 @@ const PaymentPage = () => {
   ]);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // Hooks
   const {
     updatePersonal,
     updateBooking,
@@ -129,37 +124,34 @@ const PaymentPage = () => {
       dispatch(
         updateSearchField({ field: "trafficSource", value: getTrafficSource })
       );
-      console.log("💳 Payment: Captured traffic_source from URL:", getTrafficSource);
     }
   }, [getTrafficSource, searchData.trafficSource, dispatch]);
 
-  useMemo(() => {
+  useEffect(() => {
     const fetchProduct = async () => {
-      if (getSku) {
-        try {
-          if (getDeparture && getSku) {
-            const response = await fetchSingleProduct({
-              sku: getSku,
-              departure: getDeparture,
-              arrival: getArrival,
-              airport: getAirport,
-              discount_code: getPromocode || "",
-            });
+      if (!getSku || !getDeparture) return;
 
-            if (response && response.data) {
-              dispatch(setSelectedParking(response.data));
-            }
-          }
-        } catch (error) {
-          console.error("❌ Error fetching product:", error);
+      try {
+        const response = await fetchSingleProduct({
+          sku: getSku,
+          departure: getDeparture,
+          arrival: getArrival,
+          airport: getAirport,
+          discount_code: getPromocode || "",
+        });
+
+        if (response && response.data) {
+          dispatch(setSelectedParking(response.data));
+          setSelectedProduct(response.data);
         }
+      } catch (error) {
+        console.error("❌ Error fetching product:", error);
       }
     };
 
     fetchProduct();
-  }, [getAirport, getDeparture, getArrival, getPromocode, getSku]);
+  }, [dispatch, getAirport, getDeparture, getArrival, getPromocode, getSku]);
 
-  // Phone typing suppression for store API
   const [phoneFocused, setPhoneFocused] = useState(false);
   const [phoneLastTypedAt, setPhoneLastTypedAt] = useState(0);
 
@@ -238,6 +230,9 @@ const PaymentPage = () => {
     }
   }, [step]);
 
+  const combinedError =
+    paymentError || worldPayError || ui.responseError || syncError;
+
   return (
     <>
       <Seo
@@ -249,7 +244,7 @@ const PaymentPage = () => {
 
       <Box sx={{ backgroundColor: theme.palette.background.paper, py: 3 }}>
         <PageWrapper>
-          <Box>
+          <Box sx={{ minHeight: 56 }}>
             <CustomStepper activeStep={3} />
           </Box>
         </PageWrapper>
@@ -257,220 +252,226 @@ const PaymentPage = () => {
 
       <Box sx={{ backgroundColor: theme.palette.background.default }}>
         <PageWrapper>
-          <Box sx={{ py: 4 }}>
-            {(paymentError || worldPayError || ui.responseError || syncError) && (
-              <Alert
-                severity="error"
-                sx={{ mb: 3 }}
-                onClose={() => {
-                  setPaymentErrorState("");
-                  dispatch(clearBookingError());
-                }}
-              >
-                {paymentError || worldPayError || ui.responseError || syncError}
-              </Alert>
-            )}
+          <Box sx={{ py: 4, minHeight: 700 }}>
+            <Box sx={{ minHeight: combinedError ? 84 : 0, mb: combinedError ? 3 : 0 }}>
+              {combinedError && (
+                <Alert
+                  severity="error"
+                  sx={{ mb: 0 }}
+                  onClose={() => {
+                    setPaymentErrorState("");
+                    dispatch(clearBookingError());
+                  }}
+                >
+                  {combinedError}
+                </Alert>
+              )}
+            </Box>
 
-            <Grid container spacing={4}>
+            <Grid container spacing={4} sx={{ alignItems: "flex-start" }}>
               <Grid size={{ xs: 12, md: 8 }}>
-                {step === 1 && (
-                  <>
-                    <UserDetails
-                      personalData={personalData}
-                      updatePersonal={updatePersonal}
-                      getFieldError={getFieldError}
-                      hasFieldError={hasFieldError}
-                      hasAttemptedSubmit={validation.hasAttemptedSubmit}
-                      onPhoneFocus={() => setPhoneFocused(true)}
-                      onPhoneBlur={() => setPhoneFocused(false)}
-                      onPhoneTyping={() => setPhoneLastTypedAt(Date.now())}
-                    />
-
-                    <TravelDetail
-                      personalData={personalData}
-                      updatePersonal={updatePersonal}
-                      getFieldError={getFieldError}
-                      hasFieldError={hasFieldError}
-                      hasAttemptedSubmit={validation.hasAttemptedSubmit}
-                      airports={airports}
-                      selectedAirport={getAirport}
-                      selectedProduct={selectedParking}
-                    />
-
-                    <VehicleDetail
-                      vehicles={vehicles}
-                      setVehicles={setVehicles}
-                      getFieldError={getFieldError}
-                      hasFieldError={hasFieldError}
-                      hasAttemptedSubmit={validation.hasAttemptedSubmit}
-                    />
-
-                    <Offer
-                      bookingOptions={bookingOptions}
-                      updateBooking={updateBooking}
-                      selectedProduct={selectedProduct || selectedParking}
-                    />
-
-                    <CustomButton
-                      customVariant="primary"
-                      size="medium"
-                      onClick={() => {
-                        dispatch(setHasAttemptedSubmit(true));
-
-                        const requiredPersonalFields = [
-                          "firstName",
-                          "lastName",
-                          "email",
-                          "phone",
-                        ];
-
-                        const personalComplete = requiredPersonalFields.every(
-                          (field) => {
-                            const value = personalData[field]?.trim();
-                            return value;
-                          }
-                        );
-
-                        console.log("📝 Validation result:", personalComplete);
-
-                        if (!personalComplete) {
-                          toast.error(
-                            "Please complete all required fields before proceeding.",
-                            {
-                              position: "top-right",
-                              autoClose: 3000,
-                              hideProgressBar: true,
-                              closeOnClick: true,
-                              pauseOnHover: true,
-                              draggable: true,
-                              theme: "colored",
-                            }
-                          );
-                          return;
-                        }
-
-                        console.log("✅ Validation passed");
-                        setStep(2);
-                      }}
-                      sx={{
-                        fontSize: 15,
-                        fontWeight: 500,
-                        float: "right",
-                      }}
-                    >
-                      Next → Payment
-                    </CustomButton>
-                  </>
-                )}
-
-                {step === 2 && (
-                  <>
-                    <Box
-                      sx={{
-                        p: 2,
-                        mb: 2,
-                        borderRadius: 3,
-                        border: "1px solid #F4F5F5",
-                        backgroundColor: theme.palette.background.paper,
-                      }}
-                    >
-                      <StripePay
+                <Box sx={{ minHeight: { xs: 500, md: 620 } }}>
+                  {step === 1 && (
+                    <>
+                      <UserDetails
                         personalData={personalData}
-                        vehicleData={vehicles}
-                        bookingOptions={bookingOptions}
-                        selectedProduct={selectedProduct || selectedParking}
-                        searchData={searchData}
-                        correctPricing={correctPricing}
-                        airport={getAirport}
-                        onValidate={() => {
-                          dispatch(setHasAttemptedSubmit(true));
-
-                          const requiredPersonalFields = [
-                            "firstName",
-                            "lastName",
-                            "email",
-                            "phone",
-                          ];
-
-                          const personalComplete = requiredPersonalFields.every(
-                            (field) => {
-                              const value = personalData[field]?.trim();
-                              return value;
-                            }
-                          );
-
-                          console.log(
-                            "📝 Personal details validation result:",
-                            personalComplete
-                          );
-
-                          if (!personalComplete) {
-                            console.log(
-                              "❌ Validation failed - missing required personal details"
-                            );
-                            return false;
-                          }
-
-                          console.log(
-                            "✅ Validation passed - all required personal details present"
-                          );
-                          return true;
-                        }}
-                        onPaymentSuccess={(result) => {
-                          console.log("✅ Stripe payment successful:", result);
-                          dispatch(setPaymentSuccess(result));
-                        }}
-                        onPaymentError={(error) => {
-                          console.error("❌ Stripe payment failed:", error);
-                          dispatch(
-                            setPaymentError(error.message || "Payment failed")
-                          );
-                        }}
-                        onBookingSync={triggerSync}
-                        multiModeReference={multimode}
-                        referenceNo={referenceNo}
-                        supplierCost={correctPricing.supplierCost || 0}
-                        syncStatus={syncStatus}
+                        updatePersonal={updatePersonal}
+                        getFieldError={getFieldError}
+                        hasFieldError={hasFieldError}
+                        hasAttemptedSubmit={validation.hasAttemptedSubmit}
+                        onPhoneFocus={() => setPhoneFocused(true)}
+                        onPhoneBlur={() => setPhoneFocused(false)}
+                        onPhoneTyping={() => setPhoneLastTypedAt(Date.now())}
                       />
-                    </Box>
 
-                    <CustomButton
-                      customVariant="primary"
-                      size="medium"
-                      onClick={() => setStep(1)}
-                      sx={{
-                        fontSize: 15,
-                        fontWeight: 500,
-                        float: "left",
-                      }}
-                    >
-                      ← Back to Details
-                    </CustomButton>
-                  </>
-                )}
+                      <TravelDetail
+                        personalData={personalData}
+                        updatePersonal={updatePersonal}
+                        getFieldError={getFieldError}
+                        hasFieldError={hasFieldError}
+                        hasAttemptedSubmit={validation.hasAttemptedSubmit}
+                        airports={airports}
+                        selectedAirport={getAirport}
+                        selectedProduct={selectedParking}
+                      />
+
+                      <VehicleDetail
+                        vehicles={vehicles}
+                        setVehicles={setVehicles}
+                        getFieldError={getFieldError}
+                        hasFieldError={hasFieldError}
+                        hasAttemptedSubmit={validation.hasAttemptedSubmit}
+                      />
+
+                      <Offer
+                        bookingOptions={bookingOptions}
+                        updateBooking={updateBooking}
+                        selectedProduct={selectedProduct || selectedParking}
+                      />
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          pt: 1,
+                          minHeight: 56,
+                        }}
+                      >
+                        <CustomButton
+                          customVariant="primary"
+                          size="medium"
+                          onClick={() => {
+                            dispatch(setHasAttemptedSubmit(true));
+
+                            const requiredPersonalFields = [
+                              "firstName",
+                              "lastName",
+                              "email",
+                              "phone",
+                            ];
+
+                            const personalComplete = requiredPersonalFields.every(
+                              (field) => {
+                                const value = personalData[field]?.trim();
+                                return value;
+                              }
+                            );
+
+                            if (!personalComplete) {
+                              toast.error(
+                                "Please complete all required fields before proceeding.",
+                                {
+                                  position: "top-right",
+                                  autoClose: 3000,
+                                  hideProgressBar: true,
+                                  closeOnClick: true,
+                                  pauseOnHover: true,
+                                  draggable: true,
+                                  theme: "colored",
+                                }
+                              );
+                              return;
+                            }
+
+                            setStep(2);
+                          }}
+                          sx={{
+                            fontSize: 15,
+                            fontWeight: 500,
+                          }}
+                        >
+                          Next → Payment
+                        </CustomButton>
+                      </Box>
+                    </>
+                  )}
+
+                  {step === 2 && (
+                    <>
+                      <Box
+                        sx={{
+                          p: 2,
+                          mb: 2,
+                          borderRadius: 3,
+                          border: "1px solid #F4F5F5",
+                          backgroundColor: theme.palette.background.paper,
+                          minHeight: 220,
+                        }}
+                      >
+                        <StripePay
+                          personalData={personalData}
+                          vehicleData={vehicles}
+                          bookingOptions={bookingOptions}
+                          selectedProduct={selectedProduct || selectedParking}
+                          searchData={searchData}
+                          correctPricing={correctPricing}
+                          airport={getAirport}
+                          onValidate={() => {
+                            dispatch(setHasAttemptedSubmit(true));
+
+                            const requiredPersonalFields = [
+                              "firstName",
+                              "lastName",
+                              "email",
+                              "phone",
+                            ];
+
+                            const personalComplete = requiredPersonalFields.every(
+                              (field) => {
+                                const value = personalData[field]?.trim();
+                                return value;
+                              }
+                            );
+
+                            if (!personalComplete) {
+                              return false;
+                            }
+
+                            return true;
+                          }}
+                          onPaymentSuccess={(result) => {
+                            dispatch(setPaymentSuccess(result));
+                          }}
+                          onPaymentError={(error) => {
+                            dispatch(
+                              setPaymentError(error.message || "Payment failed")
+                            );
+                          }}
+                          onBookingSync={triggerSync}
+                          multiModeReference={multimode}
+                          referenceNo={referenceNo}
+                          supplierCost={correctPricing.supplierCost || 0}
+                          syncStatus={syncStatus}
+                        />
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          minHeight: 56,
+                        }}
+                      >
+                        <CustomButton
+                          customVariant="primary"
+                          size="medium"
+                          onClick={() => setStep(1)}
+                          sx={{
+                            fontSize: 15,
+                            fontWeight: 500,
+                          }}
+                        >
+                          ← Back to Details
+                        </CustomButton>
+                      </Box>
+                    </>
+                  )}
+                </Box>
               </Grid>
 
               <Grid size={{ xs: 12, md: 4 }}>
-                {(selectedProduct || selectedParking) && (
-                  <BookingSummary
-                    selectedProduct={selectedProduct || selectedParking}
-                    airports={airports}
-                    bookingOptions={bookingOptions}
-                    vehicles={vehicles}
-                    searchData={searchData}
-                  />
-                )}
+                <Box sx={{ minHeight: 320 }}>
+                  {(selectedProduct || selectedParking) && (
+                    <BookingSummary
+                      selectedProduct={selectedProduct || selectedParking}
+                      airports={airports}
+                      bookingOptions={bookingOptions}
+                      vehicles={vehicles}
+                      searchData={searchData}
+                    />
+                  )}
 
-                {!(selectedProduct || selectedParking) && (
-                  <OrderSummary
-                    basketTotal={basketTotal}
-                    orderTotal={orderTotal}
-                    airport={airport}
-                    totalsBreakdown={totalsBreakdown}
-                    bookingOptions={bookingOptions}
-                    selectedParking={selectedParking}
-                  />
-                )}
+                  {!(selectedProduct || selectedParking) && (
+                    <OrderSummary
+                      basketTotal={basketTotal}
+                      orderTotal={orderTotal}
+                      airport={airport}
+                      totalsBreakdown={totalsBreakdown}
+                      bookingOptions={bookingOptions}
+                      selectedParking={selectedParking}
+                    />
+                  )}
+                </Box>
               </Grid>
             </Grid>
           </Box>
