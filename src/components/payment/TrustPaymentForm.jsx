@@ -49,7 +49,7 @@ const TrustPaymentForm = ({
 
   // Hardcoded test credentials from provided PHP
   const SITE_KEY = '59-06864b7484aafe5568a83cbf42905d03838c4842cd42fd95a7a5be9d229fa9f5';
-  const SITEREFERENCE = 'test_goairportp149005'; // test_goairportp149005, goairportp149006
+  const SITEREFERENCE = 'goairportp149006'; // test_goairportp149005, goairportp149006
   const CURRENCY = 'GBP'; // Hardcoded per form; make dynamic if needed
 
   // Dynamic currency based on airport (fallback to form's EURO)
@@ -113,17 +113,17 @@ const TrustPaymentForm = ({
     try {
       // Store booking data for return (sanitized)
       
-        const sessionData = {
-          personalData: { ...personalData },
-          vehicleData: Array.isArray(vehicleData) ? vehicleData.map(v => ({ ...v })) : vehicleData,
-          totalAmount: String(totalAmount),
-          bookingReference: multimode || syncResult.multiModeReference || '',
-          referenceNo: referenceNo || syncResult.referenceNo || '',
-          paymentMethod: 'TrustPayment',
-        };
-        sessionStorage.setItem('booking_data', JSON.stringify(sessionData));
-        sessionStorage.setItem('trustpayment_session', JSON.stringify(sessionData));
-      console.log('✅ TrustPayment session data stored in booking_data & trustpayment_session');
+      const sessionData = {
+        personalData: { ...personalData },
+        vehicleData: Array.isArray(vehicleData) ? vehicleData.map(v => ({ ...v })) : vehicleData,
+        totalAmount: String(totalAmount),
+        bookingReference: multimode || syncResult.multiModeReference || '',
+        referenceNo: referenceNo || syncResult.referenceNo || '',
+        paymentMethod: 'TrustPayment',
+      };
+      sessionStorage.setItem('booking_data', JSON.stringify(sessionData));
+      sessionStorage.setItem('trustpayment_session', JSON.stringify(sessionData));
+      console.log('TrustPayment session data stored in booking_data & trustpayment_session');
       
 
       // Form is ready - trigger submit
@@ -149,7 +149,7 @@ const TrustPaymentForm = ({
 
   const isLoading = isSubmitting || ui.isSubmitting || ui.bookingInProgress || localState === 'loading';
   const hasError = localError || ui.responseError;
-  const isButtonDisabled = isLoading || !personalData?.firstName || !personalData?.lastName || !personalData?.email;
+  const isButtonDisabled = isLoading || !personalData?.firstName || !personalData?.lastName || !personalData?.email || !personalData?.phone;
 
   const buildRedirectUrl = (status) => {
     const baseUrl = window.location.origin;
@@ -171,6 +171,8 @@ const TrustPaymentForm = ({
 
   const timestamp = getSiteSecurityTimestamp();
   const sitesecurity = getSiteSecurity();
+
+  console.log('trustpayment: ',personalData);
 
   return (
     <Box sx={{ mt: 3 }}>
@@ -212,12 +214,14 @@ const TrustPaymentForm = ({
           <input type="hidden" name="mainamount" value={mainAmount} />
           
           {/* Billing */}
-          <input type="hidden" name="billingfirstname" value={personalData?.firstName || 'Jay'} />
-          <input type="hidden" name="billinglastname" value={personalData?.lastName || 'Doe'} />
-          <input type="hidden" name="billingemail" value={personalData?.email || 'test@email.com'} />
+          <input type="hidden" name="billingfirstname" value={personalData?.firstName || ''} />
+          <input type="hidden" name="billinglastname" value={personalData?.lastName || ''} />
+          <input type="hidden" name="billingemail" value={personalData?.email || ''} />
+          <input type="hidden" name="billingtelephone" value={personalData?.phone || ''} />
           <input type="hidden" name="strequiredfields" value="billingfirstname" />
           <input type="hidden" name="strequiredfields" value="billinglastname" />
           <input type="hidden" name="strequiredfields" value="billingemail" />
+          <input type="hidden" name="strequiredfields" value="billingtelephone" />
           <input type="hidden" name="billingpremise" value="" />
           <input type="hidden" name="billingstreet" value="" />
           <input type="hidden" name="billingtown" value="" />
