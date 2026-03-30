@@ -126,19 +126,40 @@ const BookingSuccess = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
-    const storedBookingData = sessionStorage.getItem('booking_data');
-    if (storedBookingData) {
-      try {
-        const parsedData = JSON.parse(storedBookingData);
-        setBookingData(parsedData);
-      } catch (error) {
-        console.error('Error parsing stored booking data:', error);
-      }
+    const status = searchParams.get('status');
+    if (status !== '1') {
+      setPaymentError('Invalid payment status. Please check your payment or contact support.');
+      return;
     }
 
-    sessionStorage.removeItem('booking_data');
+    // Try multiple session keys for compatibility
+    const sessionKeys = ['trustpayment_session', 'booking_data'];
+    let parsedData = null;
+
+    for (const key of sessionKeys) {
+      const storedData = sessionStorage.getItem(key);
+      if (storedData) {
+        try {
+          parsedData = JSON.parse(storedData);
+          console.log(`✅ Loaded booking data from ${key}:`, parsedData ? 'Success' : 'Empty');
+          break;
+        } catch (error) {
+          console.error(`Error parsing ${key}:`, error);
+        }
+      }
+    }
+    if (!parsedData) {
+      console.warn('⚠️ No session data found - using URL params only. Page may lack details.');
+    }
+
+    if (parsedData) {
+      setBookingData(parsedData);
+    }
+
+    // Clean up all session keys
+    sessionKeys.forEach(key => sessionStorage.removeItem(key));
     sessionStorage.removeItem('worldpay_session');
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchAirportName = async () => {
@@ -391,13 +412,17 @@ const BookingSuccess = () => {
     window.open(calendarUrl, '_blank');
   };
 
-  if (!bookingReference) {
+  if (!bookingReference || searchParams.get('status') !== '1') {
     return (
       <Container maxWidth="md" sx={{ py: 8, textAlign: 'center' }}>
         <Alert severity="error">
-          No booking reference found. Please contact support if you believe this is an error.
+          Payment not successful or invalid status. Reference: {bookingReference || 'N/A'}. 
+          Please contact support if you believe this is an error.
         </Alert>
-        <Button variant="contained" onClick={() => navigate('/')} sx={{ mt: 2 }}>
+        <Button variant="contained" onClick={() => navigate('/payment')} sx={{ mt: 2, mr: 1 }}>
+          Try Payment Again
+        </Button>
+        <Button variant="outlined" onClick={() => navigate('/')} sx={{ mt: 2 }}>
           Back to Home
         </Button>
       </Container>
