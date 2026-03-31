@@ -127,38 +127,52 @@ const BookingSuccess = () => {
 
   useEffect(() => {
     const status = searchParams.get('status');
+    console.log('🟢 BookingSuccess loaded with status:', status, 'All params:', Object.fromEntries(searchParams));
+    
     if (status !== '1') {
-      setPaymentError('Invalid payment status. Please check your payment or contact support.');
+      setPaymentError(`Payment status invalid: ${status}. Check payment or contact support.`);
       return;
     }
 
-    // Try multiple session keys for compatibility
-    const sessionKeys = ['trustpayment_session', 'booking_data'];
+    // EXTENDED: TrustPayment + all payment methods session keys
+    const allSessionKeys = ['trustpayment_session', 'booking_data', 'worldpay_session', 'stripe_session'];
     let parsedData = null;
+    let loadedKey = null;
 
-    for (const key of sessionKeys) {
+    for (const key of allSessionKeys) {
       const storedData = sessionStorage.getItem(key);
       if (storedData) {
         try {
           parsedData = JSON.parse(storedData);
+          loadedKey = key;
           console.log(`✅ Loaded booking data from ${key}:`, parsedData ? 'Success' : 'Empty');
           break;
         } catch (error) {
-          console.error(`Error parsing ${key}:`, error);
+          console.error(`❌ Error parsing ${key}:`, error);
         }
       }
     }
+    
     if (!parsedData) {
-      console.warn('⚠️ No session data found - using URL params only. Page may lack details.');
+      console.warn('⚠️ No session data - using URL params. Common for test payments.');
+      // Fallback: construct minimal data from URL
+      parsedData = {
+        personalData: {},
+        searchData: {
+          entryDate: searchParams.get('entryDate'),
+          entryTime: searchParams.get('entryTime'),
+          exitDate: searchParams.get('exitDate'),
+          exitTime: searchParams.get('exitTime'),
+        }
+      };
     }
 
     if (parsedData) {
       setBookingData(parsedData);
     }
 
-    // Clean up all session keys
-    sessionKeys.forEach(key => sessionStorage.removeItem(key));
-    sessionStorage.removeItem('worldpay_session');
+    // Clean up ALL session keys to prevent stale data
+    allSessionKeys.forEach(key => sessionStorage.removeItem(key));
   }, [searchParams]);
 
   useEffect(() => {
@@ -412,12 +426,13 @@ const BookingSuccess = () => {
     window.open(calendarUrl, '_blank');
   };
 
-  if (!bookingReference || searchParams.get('status') !== '1') {
+  // RELAXED: Show partial page even without full data (use URL params)
+  const status = searchParams.get('status');
+  if (status !== '1') {
     return (
       <Container maxWidth="md" sx={{ py: 8, textAlign: 'center' }}>
         <Alert severity="error">
-          Payment not successful or invalid status. Reference: {bookingReference || 'N/A'}. 
-          Please contact support if you believe this is an error.
+          Payment status: {status || 'unknown'}. Reference: {bookingReference || 'N/A'}.
         </Alert>
         <Button variant="contained" onClick={() => navigate('/payment')} sx={{ mt: 2, mr: 1 }}>
           Try Payment Again

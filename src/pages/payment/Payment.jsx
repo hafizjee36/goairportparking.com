@@ -18,6 +18,7 @@ import BookingSummary from "../booking/components/BookingSummary";
 
 import StripePay from "../../components/payment/StripePay";
 import TrustPaymentForm from "../../components/payment/TrustPaymentForm";
+// import TrustPaymentPay from "../../components/payment/TrustPaymentPay";
 import NetworkInternationalPay from "../../components/payment/NetworkInternationalPay";
 import {
   RadioGroup,
@@ -526,8 +527,15 @@ const PaymentPage = () => {
                         );
                         return personalComplete;
                       }}
+                      onPaymentSuccess={(result) => {
+                        console.log("✅ TrustPayment success:", result);
+                        dispatch(setPaymentSuccess(result));
+                      }}
+                      onPaymentError={(error) => {
+                        console.error("❌ TrustPayment failed:", error);
+                        dispatch(setPaymentError(error.message || "Payment failed"));
+                      }}
                       onBookingSync={triggerSync}
-                      airport={getAirport}
                     />
                   )}
                 </Box>

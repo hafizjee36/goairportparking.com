@@ -597,7 +597,7 @@ export default function Booking() {
             </AnimateOnScroll>
           )}
 
-          <Box sx={{ paddingY: 5, minHeight: 320 }}>
+          <Box sx={{ paddingY: 2, minHeight: 320 }}>
             {filteredOptions.length > 0 ? (
               <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
                 {filteredOptions.map((p, i) => (

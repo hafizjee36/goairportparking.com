@@ -5,6 +5,36 @@ import { format, parse } from "date-fns";
 import { apiKey } from "../common/config/api";
 import apiCall from "../services/apiService";
 
+const safeJsonParse = async (response) => {
+  const clonedResponse = response.clone(); // Clone for multiple reads
+  let rawText = '';
+  
+  try {
+    if (!response.ok) {
+      rawText = await clonedResponse.text();
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    rawText = await response.text();
+    console.log(`🔍 Raw Alveus API response (${response.url}):`, rawText.slice(0, 500) + (rawText.length > 500 ? '...' : ''));
+    
+    // Check if it's JSON (starts with { or [)
+    if (rawText.trim().startsWith('{') || rawText.trim().startsWith('[')) {
+      const json = JSON.parse(rawText);
+      return { success: true, data: json, raw: rawText };
+    } else {
+      throw new Error('Response is not valid JSON');
+    }
+  } catch (err) {
+    console.error('❌ safeJsonParse failed:', err.message);
+    
+    // Use clone for error logging
+    const errorText = await clonedResponse.text();
+    console.error('Raw response snippet:', errorText.slice(0, 200));
+    
+    return { success: false, error: err.message, status: response.status, raw: errorText };
+  }
+};
+
 export const useBookingSync = ({
   personalData,
   vehicleData,
@@ -206,12 +236,20 @@ export const useBookingSync = ({
         
         const skudId = localStorage.getItem("sku_id");
         const urlP = `https://globalparkingtech.co.uk/api_get_product?product_code=` + skudId + '&airport=' + bookingDetails2.airport;
+        
+        console.log('🌐 Fetching Alveus product:', urlP);
         const resp = await fetch(urlP);
-        const product = await resp.json();
-
-        bookingDetails2.p_id = product?.data?.id || '';
-        bookingDetails2.operator_id = product?.data?.operator_id || '';
-        console.log("Response from Alveus product:", product);
+        const productResult = await safeJsonParse(resp);
+        
+        if (productResult.success) {
+          bookingDetails2.p_id = productResult.data?.data?.id || '';
+          bookingDetails2.operator_id = productResult.data?.data?.operator_id || '';
+          console.log("✅ Response from Alveus product:", productResult.data);
+        } else {
+          console.error("❌ Alveus product API failed:", productResult.error);
+          bookingDetails2.p_id = '';
+          bookingDetails2.operator_id = '';
+        }
 
         if (
           response?.data?.reference_no &&
@@ -225,19 +263,26 @@ export const useBookingSync = ({
           console.log("bookingDetails2:", bookingDetails2);
           if (bookingDetails2.p_id) {
             const url = `https://globalparkingtech.co.uk/api_create_booking3?` + new URLSearchParams(bookingDetails2).toString();
+            console.log('🌐 Creating Alveus booking:', url);
+            
             const response2 = await fetch(url);
-            if (!response2.ok) {
-              throw new Error(`HTTP error! status: ${response2.status}`);
+            const alveusResult = await safeJsonParse(response2);
+            
+            if (alveusResult.success) {
+              const bookingId = alveusResult.data?.booking_last_inserted_id || alveusResult.data?.id;
+              localStorage.setItem("bookingId", bookingId || 'unknown');
+              localStorage.removeItem("sku_id");
+              console.log("✅ Response from Alveus admin:", alveusResult.data);
+              console.log("bookingId:", localStorage.getItem("bookingId"));
+            } else {
+              console.error("❌ Alveus booking API failed:", alveusResult.error);
+              console.error("Raw Alveus response:", alveusResult.raw?.slice(0, 500));
+              localStorage.setItem("bookingId", "alveus_failed");
+              // Continue - don't fail entire booking sync
             }
-            const alveusResp = await response2.json();
-            const bookingId = alveusResp.booking_last_inserted_id;
-            localStorage.setItem("bookingId", bookingId);
-            localStorage.removeItem("sku_id");
-
-            console.log("Response from Alveus admin:", alveusResp);
-            console.log("bookingId:", localStorage.getItem("bookingId"));
           } else {
             console.log("Product ID is missing, skipping Alveus booking creation.");
+            localStorage.setItem("bookingId", "no_product_id");
           }
 
           setMultimode(newMultiMode);
@@ -304,15 +349,16 @@ export const useBookingSync = ({
           throw new Error(response?.message || "Failed to update booking");
         }
       }
-    } catch (err) {
-      console.error("❌ useBookingSync error:", err);
-      setError(err.message || "Booking sync failed");
-      setResponseError(err.message || "Booking sync failed");
-      setSyncStatus("error");
-      return { success: false, error: err.message };
-    } finally {
-      syncInProgress.current = false;
-    }
+      } catch (err) {
+        console.error("❌ useBookingSync error:", err);
+        const errorMsg = err.message || "Booking sync failed";
+        setError(errorMsg);
+        setResponseError(errorMsg);
+        setSyncStatus("error");
+        return { success: false, error: errorMsg };
+      } finally {
+        syncInProgress.current = false;
+      }
   };
 
   // Auto-sync when form is ready (matching reference project with 3 second delay)
