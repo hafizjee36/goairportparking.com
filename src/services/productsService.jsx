@@ -42,7 +42,7 @@ let productsCache = new Map();
  * @returns {Promise<Object>} Products response
  */
 export const fetchProducts = async (searchParams) => {
-  console.log('🚀 fetchProducts called');
+  // console.log('🚀 fetchProducts called');
   console.log('📋 Search Params:', searchParams);
 
   // Create cache key from search params
@@ -57,7 +57,7 @@ export const fetchProducts = async (searchParams) => {
   console.log('🆆 Cache DISABLED - fetching fresh products...');
 
   try {
-    console.log('🌐 Making GET request to /products');
+    // console.log('🌐 Making GET request to /products');
 
     // Convert dates to API expected format (DD-MM-YYYY HH:mm)
     const convertedDeparture = convertDateFormat(searchParams.departure);
@@ -85,7 +85,7 @@ export const fetchProducts = async (searchParams) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-    console.log('⏰ Setting up request with 10s timeout...');
+    // console.log('⏰ Setting up request with 10s timeout...');
 
     const fetchResponse = await fetch(url, {
       method: 'GET',

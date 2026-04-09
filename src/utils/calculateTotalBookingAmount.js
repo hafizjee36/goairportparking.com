@@ -69,11 +69,13 @@ export function calculateProductPrice(product, quantity = 1, options = {}) {
     basePrice = parseFloat(product.price) * quantity;
   }
 
-  // Admin charges - handle both old and new API structure
+  // Admin charges - handle both old and new API structure (with 1.95 GBP default booking fee)
   if (product.payment?.admin_charges) {
     adminCharges = parseFloat(product.payment.admin_charges);
   } else if (product.admin_charges) {
     adminCharges = parseFloat(product.admin_charges);
+  } else {
+    adminCharges = 1.95; // Fixed booking fee for all bookings
   }
 
   // Extra amount (new API field)

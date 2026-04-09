@@ -33,17 +33,8 @@ const PrivacyPolicy = lazy(() => import('../pages/privacyPolicy/PrivacyPolicy'))
 const Blog = lazy(() => import('../pages/blog/Blog'));
 const BlogDetails = lazy(() => import('../pages/blogDetails/BlogDetails'));
 const AirportParking = lazy(() => import('../pages/airportParking/AirportParking'));
-const ManchesterAirportParking = lazy(() => import('../pages/ManchesterAirportParking'));
-const HeathrowAirportParking = lazy(() => import('../pages/HeathrowAirportParking'));
-const LeedsAirportParking = lazy(() => import('../pages/LeedsAirportParking'));
-const StanstedAirportParking = lazy(() => import('../pages/StanstedAirportParking'));
-const SouthamptonPortParking = lazy(() => import('../pages/SouthamptonPortParking'));
-const GlasgowAirportParking = lazy(() => import('../pages/GlasgowAirportParking'));
-const BristolAirportParking = lazy(() => import('../pages/BristolAirportParking'));
-const LutonAirportParking = lazy(() => import('../pages/LutonAirportParking'));
-const BirminghamAirportParking = lazy(() => import('../pages/BirminghamAirportParking'));
-const DublinAirportParking = lazy(() => import('../pages/DublinAirportParking'));
-const DubaiAirportParking = lazy(() => import('../pages/DubaiAirportParking'));
+const AirportPage = lazy(() => import('../pages/airport/AirportPage'));
+
 const CustomerDashboard = lazy(() => import('../pages/manageBooking/CustomerDashboard'));
 const About = lazy(() => import('../pages/about/About'));
 const WhyChooseUs = lazy(() => import('../pages/whyChooseUs/WhyChooseUs'));
@@ -85,19 +76,10 @@ const routes = [
   { path: '/terms-condition', element: withSuspense(TermsAndCondition) },
   { path: '/privacy-policy', element: withSuspense(PrivacyPolicy) },
   { path: '/blog', element: withSuspense(Blog) },
-  { path: '/blog/:id', element: withSuspense(BlogDetails) },
+  { path: '/blog/:slug', element: withSuspense(BlogDetails) },
   { path: '/airport-parking', element: withSuspense(AirportParking) },
-  { path: '/manchester-airport-parking', element: withSuspense(ManchesterAirportParking) },
-  { path: '/heathrow-airport-parking', element: withSuspense(HeathrowAirportParking) },
-  { path: '/leeds-airport-parking', element: withSuspense(LeedsAirportParking) },
-  { path: '/stansted-airport-parking', element: withSuspense(StanstedAirportParking) },
-  { path: '/southampton-port-parking', element: withSuspense(SouthamptonPortParking) },
-  { path: '/glasgow-airport-parking', element: withSuspense(GlasgowAirportParking) },
-  { path: '/bristol-airport-parking', element: withSuspense(BristolAirportParking) },
-  { path: '/luton-airport-parking', element: withSuspense(LutonAirportParking) },
-  { path: '/birmingham-airport-parking', element: withSuspense(BirminghamAirportParking) },
-  { path: '/dubai-airport-parking', element: withSuspense(DubaiAirportParking) },
-  { path: '/dublin-airport-parking', element: withSuspense(DublinAirportParking) },
+  { path: '/:airport-airport-parking', element: withSuspense(AirportPage) },
+
   { path: '/customer-dashboard', element: withSuspense(CustomerDashboard) },
   { path: '/about-us', element: withSuspense(About) },
   { path: '/why-choose-us', element: withSuspense(WhyChooseUs) },

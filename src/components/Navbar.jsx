@@ -35,24 +35,16 @@ const baseNavLinks = [
   { title: "About Us", path: "/about-us" },
   { title: "Airport Parking", path: "/airport-parking", hasDropdown: true },
   { title: "Why Choose Us", path: "/why-choose-us" },
+  { title: "Blog", path: "/blog" },
   { title: "FAQ", path: "/faq" },
   { title: "Contact Us", path: "/contact-us" },
 ];
 
-// Airport Parking dropdown options - sorted alphabetically
-const airportParkingOptions = [
-  { title: "Birmingham Airport", path: "/birmingham-airport-parking" },
-  { title: "Bristol Airport", path: "/bristol-airport-parking" },
-  { title: "Dublin Airport", path: "/dublin-airport-parking" },
-  { title: "Dubai Airport", path: "/dubai-airport-parking" },
-  { title: "Glasgow Airport", path: "/glasgow-airport-parking" },
-  { title: "Heathrow Airport", path: "/heathrow-airport-parking" },
-  { title: "Leeds Bradford Airport", path: "/leeds-airport-parking" },
-  { title: "Luton Airport", path: "/luton-airport-parking" },
-  { title: "Manchester Airport", path: "/manchester-airport-parking" },
-  { title: "Stansted Airport", path: "/stansted-airport-parking" },
-  { title: "Southampton Port", path: "/southampton-port-parking" },
-];
+import { getAirportList } from "../data/airportConfigs";
+
+// Airport Parking dropdown options - dynamic from config
+const airportParkingOptions = getAirportList();
+
 
 export default function Navbar() {
   const theme = useTheme();
@@ -71,38 +63,9 @@ export default function Navbar() {
   // User region detection from IP
   const { isDubai: isUserFromDubai } = useUserRegion();
 
-  const mapAirportToNavOption = (airport) => {
-    const name = airport.level || airport.name || airport.title || "";
-    const code = airport.value || airport.code || airport.path || "";
-    const nameLower = name.toLowerCase();
+// No need for mapAirportToNavOption anymore - configs have title/path ready
+const airportOptions = airportParkingOptions;
 
-    let path = "/airport-parking";
-    if (nameLower.includes("birmingham")) path = "/birmingham-airport-parking";
-    else if (nameLower.includes("bristol")) path = "/bristol-airport-parking";
-    else if (nameLower.includes("dublin")) path = "/dublin-airport-parking";
-    else if (nameLower.includes("dubai")) path = "/dubai-airport-parking";
-    else if (nameLower.includes("glasgow")) path = "/glasgow-airport-parking";
-    else if (nameLower.includes("heathrow")) path = "/heathrow-airport-parking";
-    else if (nameLower.includes("leeds") || nameLower.includes("bradford")) path = "/leeds-airport-parking";
-    else if (nameLower.includes("luton")) path = "/luton-airport-parking";
-    else if (nameLower.includes("manchester")) path = "/manchester-airport-parking";
-    else if (nameLower.includes("stansted")) path = "/stansted-airport-parking";
-    else if (nameLower.includes("southampton")) path = "/southampton-port-parking";
-
-    let title = name;
-    if (!nameLower.includes("airport") && !nameLower.includes("port")) {
-      title = `${name} Airport`;
-    }
-
-    return {
-      title,
-      path,
-      value: code,
-      name,
-    };
-  };
-
-  const airportOptions = airportParkingOptions.map(mapAirportToNavOption);
 
   const getFilteredAirportOptions = () => {
     if (isUserFromDubai) return airportOptions;

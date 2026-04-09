@@ -1,7 +1,9 @@
-# Fix Cruise CITY CRUISE TERMINAL Auto-Selection
-- [x] Step 1: Edit src/pages/booking/components/TravelDetail.jsx 
-  - Default cruise Departure Terminal value to 'TBC'
-  - Add 'TBC' MenuItem first in cruise terminals
-  - Update FormHelperText
-- [x] Step 2: Test on Southampton Port page - verify defaults to 'TBC', no auto-select
-- [x] Step 3: Mark complete
+# Fix AirportBlogSection "true is not iterable" Error
+
+## Steps:
+- [x] 1. Create this TODO.md
+- [x] 2. Edit src/components/airport/AirportBlogSection.jsx: Add Array.isArray check on response.data before filter, ensure filteredBlogs safe, uncomment/fix propTypes.
+- [ ] 3. Test: Reload page, check console for new logs ('Full API Response', 'response.data type') - share console output and network tab /blogs?key=... response to see what data looks like.
+- [ ] 4. Update TODO.md to mark complete and attempt_completion.
+
+Current progress: Step 2 complete. File edited with defensive checks: data || [], Array.isArray, ?.airport_id, slug validation, PropTypes fixed.

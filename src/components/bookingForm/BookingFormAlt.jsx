@@ -25,7 +25,8 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import CheckIcon from "@mui/icons-material/Check"; // ✅ Import Check Icon
 
 // ✅ Redux and Navigation
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams, useParams } from "react-router-dom";
+import { airportConfigs } from "../../data/airportConfigs";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectSearchData,

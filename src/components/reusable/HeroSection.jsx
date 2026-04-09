@@ -19,7 +19,6 @@ const HeroSection = React.memo(function HeroSection({
     () => pathname.split("/").filter(Boolean),
     [pathname]
   );
-
   return (
     <Box
       role="banner"

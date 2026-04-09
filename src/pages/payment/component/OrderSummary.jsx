@@ -70,7 +70,7 @@ const OrderSummary = ({ basketTotal, orderTotal, airport, bookingOptions = {} })
           2
       )
     : 0;
-
+  
   const bookingFee = adminCharges > 0 ? adminCharges : 1.95;
   const discountAmount = Math.max(0, priceBeforeDiscount - parkingPrice);
   const totalPrice =
@@ -246,7 +246,7 @@ const OrderSummary = ({ basketTotal, orderTotal, airport, bookingOptions = {} })
                     width: "100%",
                   }}
                 >
-                  A £1.95 booking fee applies to all bookings.
+                  A {currency}1.95 booking fee applies to all bookings.
                 </Typography>
               </Box>
 

@@ -1,9 +1,11 @@
 // RelatedPosts.jsx
+import { useState, useEffect } from 'react';
 import { Box, Typography, Stack, Avatar, Button, Grid } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import { blogPosts } from "../../../assets/data";
 import AnimateOnScroll from "../../../components/reusable/AnimateOnScroll";
+import { blogService } from "../../../services/blogService.js";
 
 import {
   EASE_SOFT,
@@ -13,12 +15,30 @@ import {
 } from "../../../components/utils/animation";
 
 export default function RelatedPosts() {
-  const { id } = useParams();
+  const [related, setRelated] = useState([]);
+  const { slug } = useParams();
 
-  const related = blogPosts
-    .filter((p) => String(p.id) !== String(id))
-    .slice(0, 3);
-  const [featured, ...side] = related;
+  useEffect(() => {
+        const loadBlogDetails = async () => {
+          try {
+            // Fetch popular posts list (exclude current slug)
+            const blogsResponse = await blogService.fetchBlogs('trending-blog-card');
+            const allBlogs = blogsResponse.data || [];
+            const filteredBlogs = allBlogs.filter(blog => !blog.airport_id || blog.airport_id === '' || blog.airport_id === null);
+            const filteredRelated = filteredBlogs.filter(p => p.url_slug !== slug).slice(0, 5);
+            // console.log('seRelated: ',filteredRelated)
+            setRelated(filteredRelated);
+            
+          } catch (err) {
+            console.error('Failed to fetch blog details:', err);
+            setError(err.message || 'Failed to load blog post');
+          }
+        };
+  
+        if (slug) {
+          loadBlogDetails();
+        }
+      }, [slug]);
 
   if (related.length === 0) return null;
 
@@ -47,8 +67,8 @@ export default function RelatedPosts() {
 
       <Grid container spacing={4}>
         {/* Left column: two stacked rows */}
-        <Grid size={{ xs: 12, md: 7 }}>
-          {side.map((post, i) => (
+        <Grid size={{ xs: 12, md: 12 }}>
+          {related.map((post, i) => (
             <AnimateOnScroll
               key={post.id}
               type="slide-up"
@@ -64,7 +84,7 @@ export default function RelatedPosts() {
             >
               <Grid
                 component={Link}
-                to={`/blog/${post.id}`}
+                to={`/blog/${post.url_slug}`}
                 container
                 spacing={3}
                 alignItems="center"
@@ -94,7 +114,7 @@ export default function RelatedPosts() {
                       "&:hover img": { transform: "scale(1.05)" },
                     }}
                   >
-                    <img src={post.image} alt={post.title}  loading="lazy" />
+                    <img src={post.featured_image||post.image} alt={post.title}  loading="lazy" />
                   </Box>
                 </Grid>
 
@@ -120,20 +140,8 @@ export default function RelatedPosts() {
                     alignItems="center"
                     sx={{ mb: 2, color: "text.secondary" }}
                   >
-                    <Avatar sx={{ width: 26, height: 26, fontSize: 12 }}>
-                      {(post.author || "U")[0]}
-                    </Avatar>
-                    <Typography variant="body2">By {post.author}</Typography>
-                    <Box
-                      sx={{
-                        width: 4,
-                        height: 4,
-                        borderRadius: "50%",
-                        bgcolor: "text.disabled",
-                      }}
-                    />
                     <CalendarMonthOutlinedIcon sx={{ fontSize: 18 }} />
-                    <Typography variant="body2">{post.date}</Typography>
+                    <Typography variant="body2">{new Date(post.created_at).toLocaleDateString()}</Typography>
                   </Stack>
 
                   <Button
@@ -158,7 +166,7 @@ export default function RelatedPosts() {
         </Grid>
 
         {/* Right column: one large featured card */}
-        {featured && (
+        {/* {featured && (
           <Grid size={{ xs: 12, md: 5 }}>
             <AnimateOnScroll
               type="slide-right"
@@ -247,7 +255,7 @@ export default function RelatedPosts() {
               </Box>
             </AnimateOnScroll>
           </Grid>
-        )}
+        )} */}
       </Grid>
     </Box>
   );

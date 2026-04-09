@@ -70,69 +70,6 @@ export default function Why() {
         >
           <BookingFormAlt />
         </Box>
-        {/* <Box sx={{ py: 8 }}>
-          <Grid container spacing={{ xs: 4, md: 6 }}>
-            {SERVICES.map((s, i) => (
-              <Grid key={s.title} size={{ xs: 12, md: 4 }}>
-                <AnimateOnScroll
-                  type="slide-up"
-                  distance={22}
-                  duration={720}
-                  delay={BASE_DELAY + i * STEP}
-                  easingTransform={EASE_SOFT}
-                  easingOpacity={EASE_SOFT}
-                  threshold={THRESHOLD}
-                  rootMargin={ROOT_MARGIN}
-                  once
-                  style={smoothStyle}
-                >
-                  <Stack spacing={1.5} alignItems="center" textAlign="center">
-               
-                    <Box
-                      component="img"
-                      src={s.img}
-                      alt={s.title}
-                      sx={{
-                        width: 96,
-                        height: 96,
-                        objectFit: "contain",
-                        borderRadius: 2,
-                        willChange: "transform",
-                        "&:hover": {
-                          animation: "wobble-horizontal 1s ease-in-out 1",
-                        },
-                        "@keyframes wobble-horizontal": {
-                          "0%": { transform: "translateX(0)" },
-                          "16.65%": { transform: "translateX(8px)" },
-                          "33.3%": { transform: "translateX(-6px)" },
-                          "49.95%": { transform: "translateX(4px)" },
-                          "66.6%": { transform: "translateX(-2px)" },
-                          "83.25%": { transform: "translateX(1px)" },
-                          "100%": { transform: "translateX(0)" },
-                        },
-                      }}
-                    />
-
-                    <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                      {s.title}
-                    </Typography>
-
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: "text.secondary",
-                        maxWidth: 420,
-                        lineHeight: 1.65,
-                      }}
-                    >
-                      {s.desc}
-                    </Typography>
-                  </Stack>
-                </AnimateOnScroll>
-              </Grid>
-            ))}
-          </Grid>
-        </Box> */}
       </PageWrapper>
     </Box>
   );

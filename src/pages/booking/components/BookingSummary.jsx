@@ -67,10 +67,17 @@ const BookingSummary = ({
 
   if (!selectedProduct) return null;
 
-  const bookingFeeAmount = formatPrice(pricing.breakdown.adminCharges || 0);
+  const currency =
+    searchData?.airport === "DXB"
+      ? `AED`
+      : searchData?.airport  === "DUB"
+      ? `€`
+      : `£`;
+
+  const bookingFeeAmount = formatPrice((pricing.breakdown.adminCharges, currency) || 0);
   const cancellationEnabled = !!bookingOptions.cancellationProtection;
   const cancellationAmount = formatPrice(
-    pricing.breakdown.cancellationCharges || 0
+    (pricing.breakdown.cancellationCharges, currency) || 0
   );
 
   return (
@@ -186,7 +193,7 @@ const BookingSummary = ({
                 width: "100%",
               }}
             >
-              A £1.95 booking fee applies to all bookings.
+              A {currency}1.95 booking fee applies to all bookings.
             </Typography>
           </Box>
 
@@ -236,20 +243,20 @@ const BookingSummary = ({
                 Parking ({vehicles.length} vehicle{vehicles.length > 1 ? "s" : ""})
               </Typography>
               <Typography variant="body2" fontWeight="500">
-                {formatPrice(pricing.breakdown.basePrice)}
+                {formatPrice(pricing.breakdown.basePrice, currency)}
               </Typography>
             </Box>
 
             <Box display="flex" justifyContent="space-between" mb={1}>
               <Typography variant="body2">Booking fee</Typography>
-              <Typography variant="body2">{bookingFeeAmount}</Typography>
+              <Typography variant="body2">{formatPrice(pricing.breakdown.adminCharges, currency)}</Typography>
             </Box>
 
             {pricing.breakdown.cancellationCharges > 0 && (
               <Box display="flex" justifyContent="space-between" mb={1}>
                 <Typography variant="body2">Cancellation Protection</Typography>
                 <Typography variant="body2">
-                  {formatPrice(pricing.breakdown.cancellationCharges)}
+                  {cancellationAmount}
                 </Typography>
               </Box>
             )}
@@ -258,7 +265,7 @@ const BookingSummary = ({
               <Box display="flex" justifyContent="space-between" mb={1}>
                 <Typography variant="body2">SMS updates</Typography>
                 <Typography variant="body2">
-                  {formatPrice(pricing.breakdown.smsCharges)}
+                  {formatPrice(pricing.breakdown.smsCharges,currency)}
                 </Typography>
               </Box>
             )}
@@ -270,7 +277,7 @@ const BookingSummary = ({
                 Total Price
               </Typography>
               <Typography variant="h6" fontWeight="bold" color="primary.main">
-                {formatPrice(pricing.total)}
+                {formatPrice(pricing.total,currency)}
               </Typography>
             </Box>
           </Box>

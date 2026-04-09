@@ -155,8 +155,6 @@ export default function Booking() {
           reviews: 0,
           airportCode: searchData.airport,
           offer: product.offer,
-          adminCharges: 0,
-          smsCharges: 0,
           extraAmount: parseFloat(product.extra_amount || 0),
           sku: product.sku,
           sku_id: product.sku_id,
@@ -235,6 +233,13 @@ export default function Booking() {
 
     return filtered;
   }, [currentParkingOptions, activeFilter, sortBy]);
+
+  const currency =
+    searchData?.airport === "DXB"
+      ? `AED`
+      : searchData?.airport  === "DUB"
+      ? `€`
+      : `£`;
 
   const handleChipClick = (chipKey) => setActiveFilter(chipKey);
   const handleSortChange = (event) => setSortBy(event.target.value);
@@ -433,7 +438,7 @@ export default function Booking() {
                     width: "100%",
                   }}
                 >
-                  A £1.95 booking fee applies to all bookings.
+                  A {currency}1.95 booking fee applies to all bookings.
                 </Typography>
               </Box>
             </AnimateOnScroll>
@@ -515,7 +520,7 @@ export default function Booking() {
                       width: "100%",
                     }}
                   >
-                    A £1.95 booking fee applies to all bookings.
+                    A {currency}1.95 booking fee applies to all bookings.
                   </Typography>
                 </Box>
 

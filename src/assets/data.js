@@ -997,6 +997,7 @@ export const blogPosts = [
     image:
       "https://images.unsplash.com/photo-1541945595989-a21441a816ae?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     href: "/blog/1",
+    slug: "5-ways-to-save-on-airport-parking-this-summer",
     isTrending: true,
     blogHtml: `
 <article>
@@ -1041,6 +1042,7 @@ export const blogPosts = [
     image:
       "https://images.unsplash.com/photo-1736317210138-0ac2c4941c78?q=80&w=1994&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     href: "/blog/2",
+    slug: "best-red-eye-flight-survival-tips",
     isTrending: true,
     blogHtml: `
 <article>
@@ -1091,6 +1093,7 @@ export const blogPosts = [
     image:
       "https://plus.unsplash.com/premium_photo-1754951198392-05a7608ed140?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     href: "/blog/3",
+    slug: "carry-on-packing-the-ultimate-checklist",
     isTrending: true,
     blogHtml: `
 <article>
@@ -1139,6 +1142,7 @@ export const blogPosts = [
     image:
       "https://images.unsplash.com/photo-1530521954074-e64f6810b32d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     href: "/blog/4",
+    slug: "how-early-should-you-get-to-the-airport-domestic-vs-international",
     isTrending: false,
     blogHtml: `
 <article>

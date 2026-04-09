@@ -22,7 +22,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 // ✅ Redux and Navigation
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams, useParams } from "react-router-dom";
+import { airportConfigs } from "../../data/airportConfigs";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSearchData, setSearchData } from "../../redux/slice/searchSlice";
 
@@ -37,16 +38,16 @@ import DiscountCodeField from "../reusable/DiscountCodeField";
 import { useAirports } from "../../hooks/useAirports";
 // ✅ User region detection hook
 import { useUserRegion } from "../../hooks/useUserRegion";
-// ✅ Products service for dynamic parking companies
+// Products service for dynamic parking companies
 import { fetchProducts } from "../../services/productsService";
-// ✅ URL utilities
+// URL utilities
 import { parseSearchParamsFromUrl, updateUrlWithSearchParams } from "../../utils/urlUtils";
 import CustomButton from "../reusable/CustomButton";
 import theme from "../../theme";
 import ErrorMessage from "../reusable/ErrorMessage"; 
 import { Height } from "@mui/icons-material";
 
-// ✅ IMPROVED: Field Wrapper Component
+// IMPROVED: Field Wrapper Component
 function FieldWrapper({ children, error, hasAttemptedSubmit, sx = {} }) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", ...sx }}>
@@ -65,13 +66,10 @@ export default function BookingForm() {
   const reduxSearchData = useSelector(selectSearchData);
   const isBookingPage = location.pathname === "/booking";
 
-  // ✅ Dynamic airports data
   const { airports, loading: airportsLoading, error: airportsError } = useAirports();
 
-  // ✅ User region detection from IP
   const { region: userRegion, isDubai: isUserFromDubai, loading: regionLoading } = useUserRegion();
 
-  // ✅ Filter airports based on user region - hide Dubai when user is NOT from Dubai
   const filteredAirports = React.useMemo(() => {
     if (!airports || airports.length === 0) return [];
     
@@ -93,17 +91,7 @@ export default function BookingForm() {
   }, [airports, isUserFromDubai]);
 
 
-  // Debug logging for user region
-  // React.useEffect(() => {
-  //   console.log('🌍 BookingForm: User region detected:', {
-  //     region: userRegion,
-  //     isDubai: isUserFromDubai,
-  //     loading: regionLoading
-  //   });
-  // }, [userRegion, isUserFromDubai, regionLoading]);
-
-  // ✅ FIXED: Default date values - Entry Date should be today
-  const today = new Date(); // ✅ Changed from tomorrow to today
+  const today = new Date(); // Changed from tomorrow to today
   const sevenDaysFromToday = addDays(today, 7); // Exit date 7 days from today
   const noonTime = set(new Date(), { hours: 12, minutes: 0, seconds: 0, milliseconds: 0 });
 
@@ -115,10 +103,9 @@ export default function BookingForm() {
   const [children, setChildren] = React.useState(0);
   const [guestsOpen, setGuestsOpen] = React.useState(false);
 
-  // ✅ FIXED: Default values for date and time - Entry Date should be today
-  const [entryDate, setEntryDate] = React.useState(today); // ✅ Changed to today
+  const [entryDate, setEntryDate] = React.useState(today); //  Changed to today
   const [entryTime, setEntryTime] = React.useState(noonTime);
-  const [exitDate, setExitDate] = React.useState(sevenDaysFromToday); // ✅ Updated reference
+  const [exitDate, setExitDate] = React.useState(sevenDaysFromToday); // Updated reference
   const [exitTime, setExitTime] = React.useState(noonTime);
 
   const [entryDateOpen, setEntryDateOpen] = React.useState(false);
@@ -133,7 +120,7 @@ export default function BookingForm() {
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = React.useState(false);
   const [isSearching, setIsSearching] = React.useState(false);
 
-  // ✅ Real-time validation for better UX
+  // Real-time validation for better UX
   const [showRealTimeValidation, setShowRealTimeValidation] =
     React.useState(false);
 
@@ -226,254 +213,83 @@ export default function BookingForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount
 
-  // Set specific airport as default when on specific airport pages
+// Dynamic airport detection using useParams for /:airport-airport-parking
+  const params = useParams();
   React.useEffect(() => {
-    const isManchesterPage = location.pathname === '/manchester-airport-parking';
-    const isHeathrowPage = location.pathname === '/heathrow-airport-parking';
-    const isLeedsPage = location.pathname === '/leeds-airport-parking';
-    const isStanstedPage = location.pathname === '/stansted-airport-parking';
-    const isBristolPage = location.pathname === '/bristol-airport-parking';
-    const isLutonPage = location.pathname === '/luton-airport-parking';
-    const isBirminghamPage = location.pathname === '/birmingham-airport-parking';
-    const isSouthamptonPage = location.pathname === '/southampton-port-parking';
-    const isGlasgowPage = location.pathname === '/glasgow-airport-parking';
-    const isDubaiPage = location.pathname === '/dubai-airport-parking';
-
-    // Only set default airport if we're on a specific airport page and no airport is selected
-    if ((isManchesterPage || isHeathrowPage || isBirminghamPage || isLeedsPage || isStanstedPage || isBristolPage || isLutonPage || isSouthamptonPage || isGlasgowPage || isDubaiPage) && !airport && airports && airports.length > 0) {
-      if (isManchesterPage) {
-        console.log('🏢 Setting Manchester as default airport for Manchester page');
-
-        const manchesterAirport = airports.find(apt =>
-          (apt.level && apt.level.toLowerCase().includes('manchester')) ||
-          (apt.value && apt.value.toLowerCase() === 'man') ||
-          (apt.name && apt.name.toLowerCase().includes('manchester')) ||
-          (apt.code && apt.code.toLowerCase() === 'man')
+    if (params.airport && !airport && airports && airports.length > 0) {
+      // Find matching airport
+      const slug = params.airport;
+      const config = airportConfigs[slug];
+      if (config) {
+        const targetAirport = airports.find(apt => 
+          (apt.code === config.code) ||
+          (apt.level && apt.level.toLowerCase().includes(slug)) ||
+          (apt.value && apt.value.toLowerCase().includes(config.code.toLowerCase()))
         );
-
-        if (manchesterAirport) {
-          const airportValue = manchesterAirport.value || manchesterAirport.code || manchesterAirport.level;
-          console.log('✈️ Found Manchester airport:', manchesterAirport, 'Using value:', airportValue);
-
+        if (targetAirport) {
+          const airportValue = targetAirport.value || targetAirport.code || targetAirport.level;
+          console.log(`🏢 Setting ${config.name} as default for /${slug}-airport-parking page`);
           setAirport(airportValue);
           dispatch(setSearchData({
             ...reduxSearchData,
             airport: airportValue
           }));
-        } else {
-          console.log('❌ Manchester airport not found in:', airports);
-        }
-      } else if (isHeathrowPage) {
-        console.log('🏢 Setting Heathrow as default airport for Heathrow page');
-
-        const heathrowAirport = airports.find(apt =>
-          (apt.level && apt.level.toLowerCase().includes('heathrow')) ||
-          (apt.value && apt.value.toLowerCase() === 'lhr') ||
-          (apt.name && apt.name.toLowerCase().includes('heathrow')) ||
-          (apt.code && apt.code.toLowerCase() === 'lhr')
-        );
-
-        if (heathrowAirport) {
-          const airportValue = heathrowAirport.value || heathrowAirport.code || heathrowAirport.level;
-          console.log('✈️ Found Heathrow airport:', heathrowAirport, 'Using value:', airportValue);
-
-          setAirport(airportValue);
-          dispatch(setSearchData({
-            ...reduxSearchData,
-            airport: airportValue
-          }));
-        } else {
-          console.log('❌ Heathrow airport not found in:', airports);
-        }
-      }
-      else if (isLeedsPage) {
-        console.log('🏢 Setting Heathrow as default airport for Leeds page');
-
-        const leedsAirport = airports.find(apt =>
-          (apt.level && apt.level.toLowerCase().includes('leads bradford')) ||
-          (apt.value && apt.value.toLowerCase() === 'lba') ||
-          (apt.name && apt.name.toLowerCase().includes('leeds bradford')) ||
-          (apt.code && apt.code.toLowerCase() === 'lba')
-        );
-
-        if (leedsAirport) {
-          const airportValue = leedsAirport.value || leedsAirport.code || leedsAirport.level;
-          console.log('✈️ Found Leeds Bradford airport:', leedsAirport, 'Using value:', airportValue);
-
-          setAirport(airportValue);
-          dispatch(setSearchData({
-            ...reduxSearchData,
-            airport: airportValue
-          }));
-        } else {
-          console.log('❌ Leeds Airport airport not found in:', airports);
-        }
-      }
-      else if (isStanstedPage) {
-        console.log('🏢 Setting Heathrow as default airport for Leeds page');
-
-        const stanstedAirport = airports.find(apt =>
-          (apt.level && apt.level.toLowerCase().includes('stansted')) ||
-          (apt.value && apt.value.toLowerCase() === 'stn') ||
-          (apt.name && apt.name.toLowerCase().includes('stansted')) ||
-          (apt.code && apt.code.toLowerCase() === 'stn')
-        );
-
-        if (stanstedAirport) {
-          const airportValue = stanstedAirport.value || stanstedAirport.code || stanstedAirport.level;
-          console.log('✈️ Found Leeds Bradford airport:', stanstedAirport, 'Using value:', airportValue);
-
-          setAirport(airportValue);
-          dispatch(setSearchData({
-            ...reduxSearchData,
-            airport: airportValue
-          }));
-        } else {
-          console.log('❌ Leeds Airport airport not found in:', airports);
-        }
-      }
-      else if (isBristolPage) {
-        console.log('🏢 Setting Bristol as default airport for Bristol page');
-
-        const bristolAirport = airports.find(apt =>
-          (apt.level && apt.level.toLowerCase().includes('bristol')) ||
-          (apt.value && apt.value.toLowerCase() === 'brs') ||
-          (apt.name && apt.name.toLowerCase().includes('bristol')) ||
-          (apt.code && apt.code.toLowerCase() === 'brs')
-        );
-
-        if (bristolAirport) {
-          const airportValue = bristolAirport.value || bristolAirport.code || bristolAirport.level;
-          console.log('✈️ Found Bristol airport:', bristolAirport, 'Using value:', airportValue);
-
-          setAirport(airportValue);
-          dispatch(setSearchData({
-            ...reduxSearchData,
-            airport: airportValue
-          }));
-        } else {
-          console.log('❌ Bristol airport not found in:', airports);
-        }
-      }
-      else if (isLutonPage) {
-        console.log('🏢 Setting Luton as default airport for Luton page');
-
-        const lutonAirport = airports.find(apt =>
-          (apt.level && apt.level.toLowerCase().includes('luton')) ||
-          (apt.value && apt.value.toLowerCase() === 'ltn') ||
-          (apt.name && apt.name.toLowerCase().includes('luton')) ||
-          (apt.code && apt.code.toLowerCase() === 'ltn')
-        );
-
-        if (lutonAirport) {
-          const airportValue = lutonAirport.value || lutonAirport.code || lutonAirport.level;
-          console.log('✈️ Found Luton airport:', lutonAirport, 'Using value:', airportValue);
-
-          setAirport(airportValue);
-          dispatch(setSearchData({
-            ...reduxSearchData,
-            airport: airportValue
-          }));
-        } else {
-          console.log('❌ Luton airport not found in:', airports);
-        }
-      }
-      else if (isBirminghamPage) {
-        console.log('🏢 Setting Birmingham as default airport for Birmingham page');
-
-        const birminghamAirport = airports.find(apt =>
-          (apt.level && apt.level.toLowerCase().includes('birmingham')) ||
-          (apt.value && apt.value.toLowerCase() === 'bhx') ||
-          (apt.name && apt.name.toLowerCase().includes('birmingham')) ||
-          (apt.code && apt.code.toLowerCase() === 'bhx')
-        );
-
-        if (birminghamAirport) {
-          const airportValue = birminghamAirport.value || birminghamAirport.code || birminghamAirport.level;
-          console.log('✈️ Found Birmingham airport:', birminghamAirport, 'Using value:', airportValue);
-
-          setAirport(airportValue);
-          dispatch(setSearchData({
-            ...reduxSearchData,
-            airport: airportValue
-          }));
-        } else {
-          console.log('❌ Birmingham airport not found in:', airports);
-        }
-      }
-      else if (isSouthamptonPage) {
-        console.log('🏢 Setting Southampton Port as default airport for Southampton page');
-
-        const southamptonPort = airports.find(apt => 
-          (apt.level && apt.level.toLowerCase().includes('southampton port')) ||
-          (apt.value && apt.value.toLowerCase() === 'gbsou') ||
-          (apt.name && apt.name.toLowerCase().includes('southampton port')) ||
-          (apt.code && apt.code.toLowerCase() === 'gbsou')
-        );
-
-        if (southamptonPort) {
-          const airportValue = southamptonPort.value || southamptonPort.code || southamptonPort.level;
-          console.log('✈️ Found Southampton Port airport:', southamptonPort, 'Using value:', airportValue);
-
-          setAirport(airportValue);
-          dispatch(setSearchData({
-            ...reduxSearchData,
-            airport: airportValue
-          }));
-        } else {
-          console.log('❌ Southampton Port airport not found in:', airports);
-        }
-      }
-      else if (isGlasgowPage) {
-        console.log('🏢 Setting Glasgow as default airport for Glasgow page');
-
-        const glasgowAirport = airports.find(apt =>
-          (apt.level && apt.level.toLowerCase().includes('glasgow')) ||
-          (apt.value && apt.value.toLowerCase() === 'gla') ||
-          (apt.name && apt.name.toLowerCase().includes('glasgow')) ||
-          (apt.code && apt.code.toLowerCase() === 'gla')
-        );
-
-        if (glasgowAirport) {
-          const airportValue = glasgowAirport.value || glasgowAirport.code || glasgowAirport.level;
-          console.log('✈️ Found Glasgow airport:', glasgowAirport, 'Using value:', airportValue);
-
-          setAirport(airportValue);
-          dispatch(setSearchData({
-            ...reduxSearchData,
-            airport: airportValue
-          }));
-        } else {
-          console.log('❌ Glasgow airport not found in:', airports);
-        }
-      }
-      else if (isDubaiPage) {
-        console.log('🏢 Setting Dubai as default airport for Dubai page');
-
-        const dubaiAirport = airports.find(apt =>
-          (apt.level && apt.level.toLowerCase().includes('dubai')) ||
-          (apt.value && apt.value.toLowerCase() === 'dxb') ||
-          (apt.name && apt.name.toLowerCase().includes('dubai')) ||
-          (apt.code && apt.code.toLowerCase() === 'dxb')
-        );
-
-        if (dubaiAirport) {
-          const airportValue = dubaiAirport.value || dubaiAirport.code || dubaiAirport.level;
-          console.log('✈️ Found Dubai airport:', dubaiAirport, 'Using value:', airportValue);
-
-          setAirport(airportValue);
-          dispatch(setSearchData({
-            ...reduxSearchData,
-            airport: airportValue
-          }));
-        } else {
-          console.log('❌ Dubai airport not found in:', airports);
         }
       }
     }
-  }, [location.pathname, airports, airport, dispatch, reduxSearchData]); // Run when path, airports, or current airport changes
+  }, [params.airport, airports, airport, dispatch, reduxSearchData]);
 
-  // ✅ NEW: Set Dubai as default airport based on IP region detection
+  React.useEffect(() => {
+    if (!airports || airports.length === 0) return;
+  
+    const airportMap = [
+      { slugs: ['manchester'],              code: 'man',   name: 'Manchester'      },
+      { slugs: ['heathrow'],                code: 'lhr',   name: 'Heathrow'        },
+      { slugs: ['leeds', 'bradford'],       code: 'lba',   name: 'Leeds Bradford'  },
+      { slugs: ['stansted'],                code: 'stn',   name: 'Stansted'        },
+      { slugs: ['bristol'],                 code: 'brs',   name: 'Bristol'         },
+      { slugs: ['luton'],                   code: 'ltn',   name: 'Luton'           },
+      { slugs: ['birmingham'],              code: 'bhx',   name: 'Birmingham'      },
+      { slugs: ['southampton'],             code: 'gbsou', name: 'Southampton Port' },
+      { slugs: ['glasgow'],                 code: 'gla',   name: 'Glasgow'         },
+      { slugs: ['dubai'],                   code: 'dxb',   name: 'Dubai'           },
+    ];
+  
+    const pathname = location.pathname.toLowerCase();
+  
+    // Find which airport matches current URL path
+    const matched = airportMap.find(({ slugs }) =>
+      slugs.some(slug => pathname.includes(slug))
+    );
+  
+    if (!matched) {
+      console.log('❌ No airport matched for path:', pathname);
+      return;
+    }
+  
+    // Find airport object from airports list
+    const foundAirport = airports.find(apt =>
+      apt.code?.toLowerCase()  === matched.code ||
+      apt.value?.toLowerCase() === matched.code ||
+      apt.level?.toLowerCase().includes(matched.slugs[0]) ||
+      apt.name?.toLowerCase().includes(matched.slugs[0])
+    );
+  
+    if (foundAirport) {
+      const airportValue = foundAirport.value || foundAirport.code || foundAirport.level;
+      console.log(`✈️ Found ${matched.name} airport:`, foundAirport, 'Using value:', airportValue);
+  
+      setAirport(airportValue);
+      dispatch(setSearchData({
+        ...reduxSearchData,
+        airport: airportValue
+      }));
+    } else {
+      console.log(`❌ ${matched.name} airport not found in:`, airports);
+    }
+  
+  }, [location.pathname, airports]);
+  // NEW: Set Dubai as default airport based on IP region detection
   // This runs when user region is detected and airports are loaded
   React.useEffect(() => {
     // Only run if:
@@ -914,7 +730,7 @@ export default function BookingForm() {
         width: "90%",
       }}
     >
-      {/* ✅ Top row with better spacing for error messages */}
+      {/* Top row with better spacing for error messages */}
       <Grid
         container
         spacing={1}

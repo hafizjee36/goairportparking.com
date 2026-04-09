@@ -1,10 +1,11 @@
 // BlogDetails.jsx
+import { useState, useEffect } from 'react';
 import HeroSection from "../../components/reusable/HeroSection";
 import blogImage from "../../assets/optimized/blog.webp";
 import PageWrapper from "../../components/reusable/PageWrapper";
 import theme from "../../theme";
 
-import { Box, Typography, Stack, Avatar, Grid, Chip } from "@mui/material";
+import { Box, Typography, Stack, Button, Avatar, Grid, Chip } from "@mui/material";
 
 import { Link, useParams, Navigate } from "react-router-dom";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
@@ -14,6 +15,7 @@ import RichHtml from "../../components/utils/RichText";
 import RelatedPosts from "./components/RelatedPosts";
 import AnimateOnScroll from "../../components/reusable/AnimateOnScroll";
 import advertisement from "../../assets/optimized/advertisement.webp";
+import { blogService } from "../../services/blogService.js";
 
 import {
   EASE_SOFT,
@@ -23,18 +25,62 @@ import {
 } from "../../components/utils/animation";
 
 export default function BlogDetails() {
-  const { id } = useParams();
-  const post = blogPosts.find((p) => String(p.id) === String(id));
-  if (!post) return <Navigate to="/blog" replace />;
+  const [post, setPost] = useState(null);
+  const [popular, setPopular] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { slug } = useParams();
 
-  const popular = blogPosts.filter((p) => p.id !== post.id);
+  useEffect(() => {
+      const loadBlogDetails = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+          
+          // Fetch single post by slug
+          const postResponse = await blogService.fetchBlog(slug, 'blog-details');
+          setPost(postResponse.data);
+          // console.log('Single post:', postResponse.data);
+
+          // Fetch popular posts list (exclude current slug)
+          const blogsResponse = await blogService.fetchBlogs('trending-blog-card');
+          const allBlogs = blogsResponse.data || [];
+          const filteredBlogs = allBlogs.filter(blog => !blog.airport_id || blog.airport_id === '' || blog.airport_id === null);
+          const filteredPopular = filteredBlogs.filter(p => p.url_slug !== slug).slice(0, 5);
+          // console.log('filteredPopular: ',filteredPopular)
+          setPopular(filteredPopular);
+          
+        } catch (err) {
+          console.error('Failed to fetch blog details:', err);
+          setError(err.message || 'Failed to load blog post');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      if (slug) {
+        loadBlogDetails();
+      }
+    }, [slug]);
+  // Early return for invalid post (404)
+  if (loading) {
+    return (
+      <HeroSection title="Loading..." breadcrumb image={blogImage} />
+    );
+  }
+  
+  if (error || !post) {
+    console.log('404 or error:', { error, post, slug });
+    return <Navigate to="/blog" replace />;
+  }
+  console.log('post: ',post)
 
   const BASE = 80;
   const STEP = 110;
 
   return (
     <>
-      <HeroSection title="Blog Details" breadcrumb image={blogImage} />
+      <HeroSection title={post.title} breadcrumb image={post.featured_image} />
 
       <Box sx={{ backgroundColor: theme.palette.background.default, py: 4 }}>
         <PageWrapper>
@@ -76,22 +122,10 @@ export default function BlogDetails() {
                   alignItems="center"
                   sx={{ color: "text.secondary", mb: 3 }}
                 >
-                  <Avatar sx={{ width: 28, height: 28, fontSize: 12 }}>
-                    {(post.author || "U")[0]}
-                  </Avatar>
-                  <Typography variant="body2">By {post.author}</Typography>
-
-                  <Box
-                    sx={{
-                      width: 4,
-                      height: 4,
-                      borderRadius: "50%",
-                      bgcolor: "text.disabled",
-                    }}
-                  />
-
                   <CalendarMonthOutlinedIcon sx={{ fontSize: 18 }} />
-                  <Typography variant="body2">{post.date}</Typography>
+                  <Typography variant="body2">
+                    {new Date(post.created_at || post.date).toLocaleDateString()}
+                  </Typography>
                 </Stack>
               </AnimateOnScroll>
 
@@ -106,9 +140,38 @@ export default function BlogDetails() {
                 once
                 style={smoothStyle}
               >
-                <RichHtml html={post.blogHtml} />
+                <RichHtml html={post.full_content} />
+                <Grid
+                    component={Link}
+                    to={post.cta_button_url || "https://www.goairportparking.com/"}
+                    container
+                    spacing={3}
+                    alignItems="center"
+                    sx={{
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                  >
+                    <Button
+                      component="span"
+                      variant="contained"
+                      disableElevation
+                      sx={{
+                        textTransform: "none",
+                        px: 2.5,
+                        py: 1,
+                        fontWeight: 600,
+                        backgroundColor: "primary.main",
+                        "&:hover": { backgroundColor: "success.dark" },
+                      }}
+                    >
+                      {post.cta_button_text || "Book Your Airport Parking Now"}
+                    </Button>
+                </Grid>
+                
               </AnimateOnScroll>
             </Grid>
+            
 
             {/* RIGHT: Popular posts */}
             <Grid
@@ -152,9 +215,9 @@ export default function BlogDetails() {
                     once
                     style={smoothStyle}
                   >
-                    <Stack
+                      <Stack
                       component={Link}
-                      to={p.href || `/blog/${p.id}`}
+                      to={`/blog/${p.url_slug || p.id}`}
                       direction="row"
                       spacing={1.5}
                       sx={{
@@ -183,7 +246,7 @@ export default function BlogDetails() {
                           "&:hover img": { transform: "scale(1.05)" },
                         }}
                       >
-                        <Box component="img" src={p.image} alt={p.title} />
+                        <Box component="img" src={p.featured_image || p.image} alt={p.title} />
                       </Box>
 
                       {/* Title + meta */}
@@ -209,14 +272,10 @@ export default function BlogDetails() {
                           alignItems="center"
                           sx={{ color: "text.secondary" }}
                         >
-                          <Avatar sx={{ width: 18, height: 18, fontSize: 10 }}>
-                            {(p.author || "U")[0]}
-                          </Avatar>
-                          <Typography variant="caption">
-                            By {p.author}
-                          </Typography>
                           <CalendarMonthOutlinedIcon sx={{ fontSize: 14 }} />
-                          <Typography variant="caption">{p.date}</Typography>
+                          <Typography variant="caption">
+                            {new Date(p.created_at || p.date).toLocaleDateString()}
+                          </Typography>
                         </Stack>
                       </Box>
                     </Stack>
@@ -271,20 +330,7 @@ export default function BlogDetails() {
                   </Typography>
 
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.25 }}>
-                    {[
-                      "Airport Guides",
-                      "Airport Parking",
-                      "Business Travel",
-                      "Editor's Picks",
-                      "Flight Tips",
-                      "Expert Guides",
-                      "Health & Wellbeing",
-                      "Manchester Airport",
-                      "Travel Deals",
-                      "Travel Destinations",
-                      "Travel News",
-                      "Travel Tips",
-                    ].map((t) => (
+                    {(post?.tags || []).map((t) => (
                       <Chip
                         key={t}
                         label={t}

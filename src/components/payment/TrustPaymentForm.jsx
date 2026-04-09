@@ -39,7 +39,6 @@ const TrustPaymentForm = ({
   // SecureTrading credentials - UPDATE WITH PROD VALUES
   const SITE_KEY = '59-06864b7484aafe5568a83cbf42905d03838c4842cd42fd95a7a5be9d229fa9f5';
   const SITEREFERENCE = 'goairportp149006'; // test_goairportp149005, goairportp149006
-  const CURRENCY = 'GBP';//GBP, EURO
 
   const getSiteReference = () => SITEREFERENCE;
   const getCurrencyIso = () => (airport === 'DUB' ? 'EUR' : 'GBP');
@@ -53,7 +52,7 @@ const TrustPaymentForm = ({
     return amt.toFixed(2); // "1.00"
     // return String(Math.round(amt * 100)); // use this if provider expects minor units (e.g., 100 for £1)
   }, [totalAmount]);
-  console.log('totalAmount',totalAmount)
+  // console.log('totalAmount',totalAmount)
 
   // Timestamp generator matching PHP "Y-m-d H:i:s"
   const getSiteSecurityTimestamp = () => {
@@ -71,7 +70,7 @@ const TrustPaymentForm = ({
     const siteRef = getSiteReference();
     const data = `${siteRef}${currencyIso3a}${mainAmount}${timestamp}`;
     const hmac = CryptoJS.HmacSHA256(data, SITE_KEY).toString(CryptoJS.enc.Hex);
-    console.log('🔐 HMAC data:', { data, hmacPreview: hmac.slice(0, 16) + '...' });
+    // console.log('🔐 HMAC data:', { data, hmacPreview: hmac.slice(0, 16) + '...' });
     return hmac;
   };
 
@@ -82,25 +81,22 @@ const TrustPaymentForm = ({
   const isLoading = isSubmitting || ui.isSubmitting || ui.bookingInProgress;
   const hasError = localError || ui.responseError;
   const isButtonDisabled = isLoading || !personalData?.firstName || !personalData?.lastName || !personalData?.email;
-
-  const buildRedirectUrl = (status) => {
+  
+  // Replace buildRedirectUrl with this:
+  const buildCallbackUrl = () => {
+    const siteOrigin = window.location.origin; // e.g. https://www.goairportparking.com
     const siteRef = getSiteReference();
-    const baseUrl = window.location.origin;
-    const path = status === '1' ? 'success' : 'cancel';
+    const callbackBase = `https://lywkpomnzaldwzmekorr.supabase.co/functions/v1/trustpayment-callback`;
     const params = new URLSearchParams({
-      status,
-      bookingReference: multimode || siteRef,
+      site_origin: siteOrigin,
+      bookingReference: multimode || referenceNo,
       reference_no: Array.isArray(referenceNo) ? referenceNo.join(',') : referenceNo || '',
-      paymentMethod: 'TrustPayment',
       totalamount: mainAmount,
-      currency: currencyIso3a,
-      sitereference: siteRef,
-      transactionID: siteRef,
       email_payment: 'true',
-      payment_intent: siteRef,
     });
-    return `${baseUrl}/${path}?${params.toString()}`;
+    return `${callbackBase}?${params.toString()}`;
   };
+
 
   const handleTrustPaymentSubmit = async () => {
     const validationStatus = onValidate ? onValidate() : true;
@@ -128,15 +124,25 @@ const TrustPaymentForm = ({
       }
 
       const sessionData = {
-        personalData: { ...personalData },
+        name: personalData?.firstName+' '+personalData?.lastName,
+        email: personalData?.email,
+        mobile: personalData?.phone,
+        airport: searchData?.airport,
+        service: selectedProduct?.name,
+        entryDate: searchData?.entryDate,
+        entryTime: searchData?.entryTime,
+        exitDate: searchData?.exitDate,
+        exitTime: searchData?.exitTime,
+        personalData: personalData,
         vehicleData: Array.isArray(vehicleData) ? vehicleData.map(v => ({ ...v })) : vehicleData,
         totalAmount: String(totalAmount),
         bookingReference: multimode || syncResult.multiModeReference || '',
         referenceNo: referenceNo || syncResult.referenceNo || '',
+        referenceNo: referenceNo || syncResult.referenceNo || '',
         paymentMethod: 'TrustPayment',
       };
-      sessionStorage.setItem('booking_data', JSON.stringify(sessionData));
-      sessionStorage.setItem('trustpayment_session', JSON.stringify(sessionData));
+      localStorage.setItem('booking_data', JSON.stringify(sessionData));
+      localStorage.setItem('trustpayment_session', JSON.stringify(sessionData));
 
       // Make form visible and submit immediately (use requestAnimationFrame to ensure DOM updated)
       setFormReady(true);
@@ -189,7 +195,7 @@ const TrustPaymentForm = ({
 
           <input type="hidden" name="billingfirstname" value={personalData?.firstName || ''} />
           <input type="hidden" name="billinglastname" value={personalData?.lastName || ''} />
-          <input type="hidden" name="billingemail" value={personalData?.email || ''} />
+          <input type="hidden" name="billingemail" value={personalData?.email || 'test@gmail.com'} />
           <input type="hidden" name="strequiredfields" value="billingfirstname" />
           <input type="hidden" name="strequiredfields" value="billinglastname" />
           <input type="hidden" name="strequiredfields" value="billingemail" />
@@ -215,11 +221,13 @@ const TrustPaymentForm = ({
           <input type="hidden" name="ruleidentifier" value="STR-5" />
           <input type="hidden" name="merchantemail" value="merchant@email.com" />
           <input type="hidden" name="ruleidentifier" value="STR-6" />
-          <input type="hidden" name="successfulurlredirect" value={buildRedirectUrl('1')} />
+          <input type="hidden" name="successfulurlredirect" value={buildCallbackUrl()} />
+          <input type="hidden" name="ruleidentifier" value="STR-7" />
+          <input type="hidden" name="declinedurlredirect" value={buildCallbackUrl()} />
           <input type="hidden" name="ruleidentifier" value="STR-8" />
-          <input type="hidden" name="successfulurlnotification" value={buildRedirectUrl('1')} />
+          <input type="hidden" name="successfulurlnotification" value={buildCallbackUrl()} />
           <input type="hidden" name="ruleidentifier" value="STR-9" />
-          <input type="hidden" name="declinedurlnotification" value={buildRedirectUrl('2')} />
+          <input type="hidden" name="declinedurlnotification" value={buildCallbackUrl()} />
 
           <input type="hidden" name="version" value="2" />
           <input type="hidden" name="stprofile" value="default" />

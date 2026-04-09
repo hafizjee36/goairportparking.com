@@ -34,11 +34,6 @@ export default function ParkingCard({ item }) {
   const hasRating = average_rating !== null && average_rating !== undefined;
   const reviews = null;
 
-  const currentPrice = parseFloat(price) || 0;
-  const originalPrice = parseFloat(price_before_discount) || 0;
-  const discountAmount = parseFloat(discount) || 0;
-  const hasDiscount = discountAmount > 0 && originalPrice > currentPrice;
-  const bookingFeeText = "(+£1.95 booking fee)";
 
   const [openParkingInfoModal, setOpenParkingInfoModal] = useState(false);
   const [isLoadingProduct, setIsLoadingProduct] = useState(false);
@@ -49,6 +44,19 @@ export default function ParkingCard({ item }) {
   const searchData = useSelector(selectSearchData);
 
   const getAirport = searchParams.get("airport") || searchData.airport;
+
+  const currency =
+    getAirport?.toUpperCase() === "DXB"
+      ? `AED`
+      : getAirport?.toUpperCase() === "DUB"
+      ? `€`
+      : `£`;
+
+  const currentPrice = parseFloat(price) || 0;
+  const originalPrice = parseFloat(price_before_discount) || 0;
+  const discountAmount = parseFloat(discount) || 0;
+  const hasDiscount = discountAmount > 0 && originalPrice > currentPrice;
+  const bookingFeeText = `(+${currency}1.95 booking fee)`;
 
   const handleOpenParkingInfoModal = () => {
     setOpenParkingInfoModal(true);

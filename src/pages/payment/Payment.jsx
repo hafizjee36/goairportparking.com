@@ -129,12 +129,20 @@ const PaymentPage = () => {
   }, [searchParams]);
 
   // Capture traffic_source from URL and store in Redux
-  useEffect(() => {
+useEffect(() => {
     if (getTrafficSource && getTrafficSource !== searchData.trafficSource) {
       dispatch(updateSearchField({ field: "trafficSource", value: getTrafficSource }));
       console.log('💳 Payment: Captured traffic_source from URL:', getTrafficSource);
     }
   }, [getTrafficSource, searchData.trafficSource, dispatch]);
+
+  // Auto-select Stripe if product sku_tag === 'a2z'
+  useEffect(() => {
+    if (selectedParking?.api_tag === 'a2z') {
+      // console.log('🎯 A2Z product detected, activating Stripe gateway');
+      setSelectedGateway('stripe');
+    }
+  }, [selectedParking]);
 
   useMemo(() => {
     const fetchProduct = async () => {
@@ -236,16 +244,21 @@ const PaymentPage = () => {
     totalsBreakdown.total ||
     baseProduct.price + baseProduct.bookingFee + basketTotal;
   const [step, setStep] = useState(1);
-  const initialGateway = getAirport === 'DXB' ? 'networkinternational' : (getAirport === 'DUB' ? 'stripe' : 'trustpayment');
+  const initialGateway = getAirport === 'DXB' ? 'networkinternational' : (selectedParking?.api_tag === 'a2z' ? 'stripe' : 'trustpayment');
   const [selectedGateway, setSelectedGateway] = useState(initialGateway); // 'stripe', 'trustpayment'
+  console.log('baseProduct: ',baseProduct)
+  console.log('basketTotal: ',basketTotal)
+  console.log('orderTotal: ',orderTotal)
   useEffect(() => {
-  if (step === 2) {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
-}, [step]);
+    if (step === 2) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  }, [step]);
+// console.log('selectedParking: ',selectedParking);
+// console.log('initialGateway: ',initialGateway);
   return (
     <>
       <Box sx={{ backgroundColor: theme.palette.background.paper, py: 3 }}>
@@ -383,7 +396,6 @@ const PaymentPage = () => {
               {step === 2 && (
                 <>
                 {/* Stripe Payment Section */}
-                {/* Gateway Selector */}
                 {/* <FormControl component="fieldset" sx={{ mb: 3 }}>
                   <FormLabel component="legend">Choose Payment Gateway</FormLabel>
                   <RadioGroup
@@ -511,9 +523,10 @@ const PaymentPage = () => {
                       bookingOptions={bookingOptions}
                       selectedProduct={selectedProduct || selectedParking}
                       searchData={searchData}
-                      totalAmount={correctPricing.total || orderTotal}
+                      totalAmount={correctPricing.total}
                       multimode={multimode}
                       referenceNo={referenceNo}
+                      airport={getAirport}
                       onValidate={() => {
                         dispatch(setHasAttemptedSubmit(true));
                         const requiredPersonalFields = [

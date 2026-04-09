@@ -33,17 +33,11 @@ const quickLinks = [
   { name: "Contact Us", path: "contact-us" },
 ];
 
-// Airport Parking dropdown options for footer - sorted alphabetically
-const airportParkingOptions = [
-  { title: "Birmingham Airport", path: "/birmingham-airport-parking" },
-  { title: "Bristol Airport", path: "/bristol-airport-parking" },
-  { title: "Dublin Airport", path: "/dublin-airport-parking" },
-  { title: "Heathrow Airport", path: "/heathrow-airport-parking" },
-  { title: "Leeds Bradford Airport", path: "/leeds-airport-parking" },
-  { title: "Luton Airport", path: "/luton-airport-parking" },
-  { title: "Manchester Airport", path: "/manchester-airport-parking" },
-  { title: "Stansted Airport", path: "/stansted-airport-parking" },
-];
+import { getAirportList } from "../data/airportConfigs";
+
+// Airport Parking dropdown options for footer - dynamic
+const airportParkingOptions = getAirportList();
+
 
 const policyLinks = [
   { name: "Privacy Policy", path: "privacy-policy" },
