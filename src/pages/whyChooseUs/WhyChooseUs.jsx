@@ -5,7 +5,6 @@ import {
   Divider,
   List,
   ListItem,
-  ListItemText,
 } from "@mui/material";
 import PageWrapper from "../../components/reusable/PageWrapper";
 import Seo from "../../components/reusable/Seo";
@@ -20,19 +19,45 @@ import theme from "../../theme";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 const WhyChooseUs = () => {
+
   let bullets = [
-    "Compare hundreds of trusted airport and port parking providers in seconds.",
-    "Access exclusive deals and lower rates from Go Airport–branded operators.",
-    "Enjoy nationwide and international coverage, including Dublin.",
-    "Simple, transparent, and secure booking — no hidden fees.",
-    "Verified customer reviews you can trust.",
-    "Fast and responsive support, ready when you need it.",
+    {
+      title: "Compare a Wide Range of Providers",
+      description:
+        "Quickly view and compare multiple parking services across UK airports and ports without switching between different websites.",
+    },
+    {
+      title: "Access Competitive & Exclusive Pricing",
+      description:
+        "Find deals from a mix of providers, including selected partners offering competitive rates not always available elsewhere.",
+    },
+    {
+      title: "Coverage Across Key Travel Locations",
+      description:
+        "Search parking options near major airports and ports across the UK and Ireland, including international routes.",
+    },
+    {
+      title: "Simple & Transparent Booking Process",
+      description:
+        "Clear pricing and straightforward booking steps help you understand exactly what you’re paying for.",
+    },
+    {
+      title: "Real Customer Reviews & Insights",
+      description:
+        "Use genuine traveller feedback to make more informed decisions before confirming your booking.",
+    },
+    {
+      title: "Support When You Need It",
+      description:
+        "Access responsive customer support to help with bookings, changes, or general queries.",
+    }
   ];
+
   return (
     <>
       <Seo 
-        title="Why Choose Us - Best Airport Parking Provider | Go Airport Parking"
-        description="Discover why thousands choose Go Airport Parking. Compare trusted providers, exclusive deals, transparent pricing, verified reviews, and fast support for all UK airports."
+        title="Why Choose Go Airport Parking | Compare & Save on Travel Parking"
+        description="Discover why Go Airport Parking is a trusted comparison platform. Compare prices, find reliable providers, and book parking with confidence."
         keywords={[
           "why choose go airport parking",
           "best airport parking",
@@ -41,8 +66,11 @@ const WhyChooseUs = () => {
           "exclusive parking deals"
         ]}
       />
+
       <PageWrapper>
         <Box sx={{ my: { xs: 3, md: 7 } }}>
+
+          {/* Heading + Description */}
           <AnimateOnScroll
             type="zoom-in"
             duration={700}
@@ -60,6 +88,7 @@ const WhyChooseUs = () => {
             >
               Why Choose Us
             </Typography>
+
             <Typography
               variant="body2"
               align="center"
@@ -71,37 +100,11 @@ const WhyChooseUs = () => {
                 fontSize: { xs: 14, md: 16 },
               }}
             >
-              Finding the right airport parking shouldn’t be complicated — and
-              with Go Airport Parking, it isn’t. We’re more than just another
-              comparison site. Go Airport Parking brings together the largest
-              network of trusted airport and port parking providers across the
-              UK, Ireland, and beyond — all on one easy-to-use platform.
-              Travelers can instantly compare prices, services, and reviews,
-              helping them find the best deal without compromising on quality or
-              convenience. What sets Go Airport apart is the strength of our
-              partnerships. In addition to listing leading independent
-              operators, we also work with a growing network of Go
-              Airport–branded providers — professional operators who share our
-              commitment to customer satisfaction and service excellence. This
-              gives us a unique edge in offering exclusive rates and reliable
-              experiences, often at prices lower than booking directly. Our
-              platform covers every major UK airport — including Manchester,
-              Birmingham, Glasgow, Luton, Stansted, Bristol, Leeds, Heathrow,
-              and Southampton — as well as international locations such as
-              Dublin Airport. Whether you’re flying for business or leisure,
-              you’ll find flexible options including Meet & Greet, Park & Ride,
-              and On-Site Parking, all vetted for performance, safety, and ease
-              of use. Go Airport Parking’s mission is simple: to make travel
-              smoother, more transparent, and more affordable. We’re
-              continuously improving our technology, expanding our network, and
-              refining our partnerships to ensure travelers have access to the
-              most competitive parking options available anywhere online. So,
-              whether you’re planning ahead or booking last minute, Go Airport
-              Parking lets you compare, choose, and save — all in just a few
-              clicks.
+              Finding the right parking before you travel shouldn’t feel confusing or time-consuming. At Go Airport Parking, the goal is simple — to help you compare different options clearly so you can make the right choice without overpaying.Unlike single-provider booking sites, our platform brings together a wide range of parking services across the UK and Ireland, including locations near major travel hubs such as Heathrow Airport, Manchester Airport, and Dublin Airport. This allows you to explore multiple options in one place instead of relying on limited availability from a single source.Whether you’re travelling for business, a family holiday, or a longer trip, different journeys require different types of parking. Some travellers prioritise convenience, while others focus on cost. By comparing options side by side, you can choose what fits your plans best — without compromise.We also work with a mix of independent operators and selected partner providers, giving you access to a broader range of prices and services. This helps create more flexibility, whether you're booking early or closer to your departure date.From short stays to extended trips, the aim is to make the process straightforward — clear pricing, easy comparison, and no unnecessary steps. With everything in one place, you can plan ahead with confidence and focus on your journey rather than the logistics.
             </Typography>
           </AnimateOnScroll>
 
+          {/* Bullet Section */}
           <AnimateOnScroll
             type="zoom-in"
             duration={720}
@@ -115,47 +118,50 @@ const WhyChooseUs = () => {
           >
             <Typography
               variant="h3"
-              sx={{ fontWeight: 800, mb: 2, fontSize: { xs: 22, md: 32 } }}
+              sx={{ fontWeight: 800, mb: 3, fontSize: { xs: 22, md: 32 } }}
             >
               Why Travellers Choose Go Airport Parking
             </Typography>
+
             <List
               sx={{
-                // listStyleType: "disc",
                 "& .MuiListItem-root": {
-                  display: "flex", // critical line — restores bullet behavior
+                  display: "flex",
                   alignItems: "flex-start",
-                  py: 0.75,
+                  py: 1,
                 },
-                "& .MuiListItemText-primary": { fontSize: 14 },
-                pl: 0,
               }}
             >
               {bullets.map((bullet, index) => (
-                <ListItem
-                  key={index}
-                  // sx={{ display: "flex", alignItems: "center" }}
-                  // md={{ display: "flex", alignItems: "center" }}
-                >
+                <ListItem key={index}>
                   <CheckCircleRoundedIcon
                     fontSize="small"
                     sx={{
                       color: theme.palette.primary.main,
-                      mt: "2px",
-                      mr: 1,
+                      mt: "4px",
+                      mr: 1.5,
                       flexShrink: 0,
                     }}
                   />
-                  <Typography
-                    variant="body"
-                    align="center"
-                    sx={{ fontWeight: 400, mb: 1 }}
-                  >
-                    {bullet}
-                  </Typography>
+
+                  <Box>
+                    <Typography sx={{ fontWeight: 700 }}>
+                      {bullet.title}
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        fontWeight: 400,
+                        color: theme.palette.text.secondary,
+                      }}
+                    >
+                      {bullet.description}
+                    </Typography>
+                  </Box>
                 </ListItem>
               ))}
             </List>
+
           </AnimateOnScroll>
         </Box>
       </PageWrapper>

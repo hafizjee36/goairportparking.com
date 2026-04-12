@@ -79,29 +79,6 @@ function Hero() {
             justifyContent: "flex-end",
           }}
         >
-          <AnimateOnScroll
-            type="slide-up"
-            duration={1600}
-            delay={0}
-            distance={24}
-            threshold={0.25}
-            rootMargin="0px 0px -12% 0px"
-            easingTransform={EASE_SOFT}
-            easingOpacity={EASE_SOFT}
-          >
-            <Typography
-              variant="overline"
-              fontSize={14}
-              sx={{
-                color: theme.palette.text.white100,
-                mb: 1,
-                display: "block",
-                minHeight: 21,
-              }}
-            >
-              Find and Book Parking in Seconds.
-            </Typography>
-          </AnimateOnScroll>
 
           <AnimateOnScroll
             type="slide-up"
@@ -120,12 +97,12 @@ function Hero() {
                 color: theme.palette.text.white100,
                 mb: 2,
                 fontSize: { xs: "2rem", md: "3rem", lg: "3.5rem" },
-                lineHeight: 1.15,
+                lineHeight: 1,
                 maxWidth: "1100px",
                 minHeight: { xs: 74, sm: 92, md: 138 },
               }}
             >
-              Compare, Save And Park.
+              Compare & Book Cheap Airport Parking Across the UK & Dublin Airport
             </Typography>
           </AnimateOnScroll>
 
@@ -143,11 +120,12 @@ function Hero() {
               variant="body1"
               sx={{
                 color: theme.palette.text.white100,
-                maxWidth: 600,
+                maxWidth: 800,
                 minHeight: 24,
+                minHeight: { xs: 74, sm: 92, md: 138 },
               }}
             >
-              Seamless Airport Parking Reservations, Your Journey Begins Here
+              Compare the best airport parking deals across the UK and Dublin Airport in seconds. Whether you need convenient meet and greet or budget-friendly park and ride, we help you find secure, reliable parking at the lowest prices. Book with confidence, enjoy transparent pricing, and start your journey stress-free.
             </Typography>
           </AnimateOnScroll>
         </Box>

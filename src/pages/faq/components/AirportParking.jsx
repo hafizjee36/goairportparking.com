@@ -19,44 +19,75 @@ export default function AirportParking() {
 
   const carParkInfo = [
     {
-      q: "What are your car park opening hours?",
-      a: `Our car park is open 24 hours a day, 7 days a week, including weekends and public holidays. Whether your flight is early morning or late at night, we're here to provide safe and convenient parking whenever you need it, ensuring flexibility for all travel schedules.`,
+      q: "What are the parking operating hours?",
+      a: `Most parking providers operate 24/7, allowing you to arrive or collect your vehicle at any time, regardless of your flight schedule.`,
     },
     {
-      q: "Is the car park secure and monitored?",
-      a: `Yes — our facility is monitored by CCTV with regular patrols by on-site staff.`,
+      q: "Are parking locations secure?",
+      a: `Yes, listed providers typically include security features such as CCTV monitoring, controlled access, and regular on-site checks.`,
     },
     {
-      q: "Do I need to leave my keys with you?",
-      a: `Most bookings are self-park; key drop may be required for valeting or peak-time operations. This will be clearly shown during booking.`,
+      q: "Do I need to leave my car keys?",
+      a: `In many cases, you can keep your keys with self-parking options. However, some services like valet or busy periods may require key handover.`,
     },
     {
-      q: "How far is the car park from the airport terminal?",
-      a: `Typically 5–10 minutes by shuttle. Exact times vary by location and traffic.`,
+      q: "How far are parking locations from the terminal?",
+      a: `Distance depends on the option selected. Off-site parking usually includes a short transfer, while closer options may be within walking distance.`,
     },
   ];
 
-  const priorToBooking = [
+  const beforeYouBook = [
     {
-      q: "How far in advance should I book my parking space?",
-      a: `We recommend booking as early as possible to secure the best rate and availability, especially during holidays.`,
+      q: "When is the best time to book airport parking?",
+      a: `Booking in advance is recommended as it often gives access to better prices and ensures availability.`,
     },
     {
-      q: "Are there any height or size restrictions for vehicles?",
-      a: `Yes — our car park can accommodate most standard cars, SUVs, and small vans. However, vehicles over 2.1 metres in height or unusually long/wide may not fit in certain spaces. Please check with our team before booking to confirm suitability and avoid any issues on arrival.`,
+      q: "Are there vehicle size or height restrictions?",
+      a: `Most standard vehicles are accepted, but larger vehicles may have limitations depending on the facility.`,
     },
     {
-      q: "What payment methods do you accept for bookings?",
-      a: `We accept major credit/debit cards and most digital wallets. Availability may vary by location.`,
+      q: "What payment methods are available?",
+      a: `Payments are usually accepted via major debit/credit cards and selected online payment methods.`,
     },
     {
-      q: "Can I choose between meet-and-greet and park-and-ride services?",
-      a: `Yes — options are shown during checkout. Meet-and-greet offers maximum convenience at the terminal, while park-and-ride is a great value choice.`,
+      q: "Can I choose different types of parking services?",
+      a: `Yes, you can select Meet & Greet, Park & Ride, or terminal parking based on your needs.`,
+    },
+  ];
+
+  const bookingAndReservation = [
+    {
+      q: "What details are required when making a booking?",
+      a: `You’ll need travel dates, vehicle details, and contact information.`,
+    },
+    {
+      q: "Can I cancel or change my booking?",
+      a: `Most bookings allow changes or cancellations, depending on provider policies.`,
+    },
+    {
+      q: "Is full payment required at the time of booking?",
+      a: `Some bookings require full payment upfront, while others offer flexible options.`,
+    },
+  ];
+
+  const servicesAndTransfers = [
+    {
+      q: "Are shuttle transfers included?",
+      a: `Many off-site parking options include shuttle transfers to and from the terminal.`,
+    },
+    {
+      q: "How often do shuttle services run?",
+      a: `Transfer frequency varies by provider but usually aligns with flight schedules.`,
     },
   ];
 
   const allFaqItems = useMemo(
-    () => [...carParkInfo, ...priorToBooking],
+    () => [
+      ...carParkInfo,
+      ...beforeYouBook,
+      ...bookingAndReservation,
+      ...servicesAndTransfers,
+    ],
     []
   );
 
@@ -92,52 +123,12 @@ export default function AirportParking() {
   const BASE = 80;
   const STEP = 90;
 
-  return (
-    <Box>
-      <AnimateOnScroll
-        type="zoom-in"
-        duration={850}
-        delay={20}
-        easingTransform={EASE_SOFT}
-        easingOpacity={EASE_SOFT}
-        threshold={THRESHOLD}
-        rootMargin={ROOT_MARGIN}
-        once
-        style={smoothStyle}
-      >
-        <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
-          Car Park Information
-        </Typography>
-      </AnimateOnScroll>
-
-      {carParkInfo.map((item, idx) => (
-        <Box key={`car-wrap-${idx}`} sx={{ mb: 1.25 }}>
-          <AnimateOnScroll
-            type="fade"
-            duration={720}
-            delay={BASE + idx * STEP}
-            easingTransform={EASE_SOFT}
-            easingOpacity={EASE_SOFT}
-            threshold={THRESHOLD}
-            rootMargin={ROOT_MARGIN}
-            once
-            style={smoothStyle}
-          >
-            <FAQItem
-              key={`car-${idx}`}
-              panel={`car-${idx}`}
-              expanded={expanded}
-              onChange={handleChange}
-              {...item}
-            />
-          </AnimateOnScroll>
-        </Box>
-      ))}
-
+  const renderSection = (title, items, prefix, offset) => (
+    <>
       <AnimateOnScroll
         type="fade"
         duration={600}
-        delay={BASE + carParkInfo.length * STEP + 60}
+        delay={offset}
         easingTransform={EASE_SOFT}
         easingOpacity={EASE_SOFT}
         threshold={THRESHOLD}
@@ -151,7 +142,7 @@ export default function AirportParking() {
       <AnimateOnScroll
         type="zoom-in"
         duration={850}
-        delay={BASE + carParkInfo.length * STEP + 100}
+        delay={offset + 40}
         easingTransform={EASE_SOFT}
         easingOpacity={EASE_SOFT}
         threshold={THRESHOLD}
@@ -160,16 +151,16 @@ export default function AirportParking() {
         style={smoothStyle}
       >
         <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
-          Prior to Booking
+          {title}
         </Typography>
       </AnimateOnScroll>
 
-      {priorToBooking.map((item, idx) => (
-        <Box key={`pre-wrap-${idx}`} sx={{ mb: 1.25 }}>
+      {items.map((item, idx) => (
+        <Box key={`${prefix}-wrap-${idx}`} sx={{ mb: 1.25 }}>
           <AnimateOnScroll
             type="fade"
             duration={720}
-            delay={BASE + carParkInfo.length * STEP + 140 + idx * STEP}
+            delay={offset + 80 + idx * STEP}
             easingTransform={EASE_SOFT}
             easingOpacity={EASE_SOFT}
             threshold={THRESHOLD}
@@ -178,8 +169,8 @@ export default function AirportParking() {
             style={smoothStyle}
           >
             <FAQItem
-              key={`pre-${idx}`}
-              panel={`pre-${idx}`}
+              key={`${prefix}-${idx}`}
+              panel={`${prefix}-${idx}`}
               expanded={expanded}
               onChange={handleChange}
               {...item}
@@ -187,6 +178,52 @@ export default function AirportParking() {
           </AnimateOnScroll>
         </Box>
       ))}
+    </>
+  );
+
+  return (
+    <Box>
+      {/* Car Park Info */}
+      <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
+        Car Park Information
+      </Typography>
+
+      {carParkInfo.map((item, idx) => (
+        <Box key={idx} sx={{ mb: 1.25 }}>
+          <FAQItem
+            panel={`car-${idx}`}
+            expanded={expanded}
+            onChange={handleChange}
+            {...item}
+          />
+        </Box>
+      ))}
+
+      {/* Other Sections */}
+      {renderSection(
+        "Before You Book",
+        beforeYouBook,
+        "pre",
+        BASE + carParkInfo.length * STEP
+      )}
+
+      {renderSection(
+        "Booking and Reservation",
+        bookingAndReservation,
+        "book",
+        BASE + (carParkInfo.length + beforeYouBook.length) * STEP
+      )}
+
+      {renderSection(
+        "Services and Transfers",
+        servicesAndTransfers,
+        "service",
+        BASE +
+          (carParkInfo.length +
+            beforeYouBook.length +
+            bookingAndReservation.length) *
+            STEP
+      )}
     </Box>
   );
 }

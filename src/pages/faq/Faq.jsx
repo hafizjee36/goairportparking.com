@@ -29,8 +29,8 @@ export default function Faq() {
   return (
     <>
       <Seo 
-        title="FAQs - Frequently Asked Questions | Go Airport Parking"
-        description="Find answers to common questions about airport parking, bookings, payments, and our services. Get help with your airport parking queries."
+        title="Airport Parking FAQs | Booking, Prices, Security & More"
+        description="Find answers to common airport parking questions. Learn about booking, pricing, security, transfers, and how to choose the right option."
         keywords={["airport parking faq", "parking questions", "booking help", "airport parking answers"]}
       />
       <HeroSection

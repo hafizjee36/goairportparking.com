@@ -10,8 +10,8 @@ export default function About() {
   return (
     <>
       <Seo 
-        title="About Us - Go Airport Parking | Your Trusted Airport Parking Partner"
-        description="Learn about Go Airport Parking, your trusted partner for affordable and secure airport parking across the UK. Discover our mission, values, and commitment to excellent customer service."
+        title="About Go Airport Parking | UK & Dublin Parking Comparison"
+        description="Learn about Go Airport Parking, a trusted platform to compare secure and affordable parking options across UK airports and Dublin with ease."
         keywords={[
           "about go airport parking",
           "airport parking company",

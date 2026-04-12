@@ -8,8 +8,8 @@ export default function Blog() {
   return (
     <>
       <Seo 
-        title="Airport Parking Blog - Tips, Guides & Travel Advice | Go Airport Parking"
-        description="Read the latest airport parking tips, travel guides, and money-saving advice. Stay updated with the best parking deals and airport travel information."
+        title="Airport Parking Blog | Tips, Guides & Travel Advice UK"
+        description="Explore expert tips, airport parking guides, and travel advice to help you plan smarter and save on your journey."
         keywords={[
           "airport parking blog",
           "travel tips",

@@ -63,8 +63,8 @@ const Contact = () => {
   return (
     <>
       <Seo 
-        title="Contact Us - Get in Touch | Go Airport Parking"
-        description="Have questions? Contact Go Airport Parking for support with bookings, parking services, or general inquiries. Fast, friendly customer service available."
+        title="Contact Go Airport Parking | Help, Support & Enquiries"
+        description="Need help with your booking or have a question? Contact Go Airport Parking for quick support, enquiries, and assistance with your parking plans."
         keywords={["contact go airport parking","customer support","parking help","get in touch"]}
       />
       <HeroSection

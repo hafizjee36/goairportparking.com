@@ -13,17 +13,17 @@ const SERVICES = [
   {
     title: "Meet & Greet",
     img: meet,
-    desc: "Meet & Greet is the fastest and most effortless way to park at the airport. Simply drive to your terminal, where a fully insured chauffeur from one of Go Airport Parking’s trusted partners will meet you, assist with your luggage, and park your vehicle for you. When you return, a quick call to the driver ensures your car is waiting right outside the terminal — for a smooth, stress-free journey home.",
+    desc: "Meet & Greet is the quickest and most convenient way to sort your parking before a flight. Simply drive to the terminal, where a professional, fully insured driver from a trusted partner will meet you, help with your luggage, and take your vehicle to a secure car park.When you return, your car is brought back to the terminal, so you can leave without delays. It’s the perfect choice for travellers who want a smooth, time-saving experience with minimum effort.",
   },
   {
     title: "Park & Ride",
     img: car,
-    desc: "Park & Ride offers a simple, great-value way to park near the airport. Travellers drive to a nearby partner car park, leave their vehicle, and take a complimentary shuttle that runs directly to the terminal. On return, the same shuttle brings you back to your car, ready to head home — a reliable and budget-friendly choice for all types of trips.",
+    desc: "Park & Ride is a practical and budget-friendly option for travellers looking to save money. Drive to a nearby secure car park, leave your vehicle, and take a free shuttle bus that runs directly to the terminal.Shuttle services operate regularly, making transfers quick and easy. On your return, the same service takes you back to your car, ready for your journey home. It’s a reliable and cost-effective solution for both short and long trips.",
   },
   {
     title: "Onsite",
     img: tower,
-    desc: "On-Site Parking provides convenience for those who prefer to keep their vehicle within the airport grounds. These car parks are managed by the airport or approved partners and offer quick access to the terminal — often just a short walk or shuttle ride away. Perfect for business travellers or anyone who values proximity and ease when catching a flight.",
+    desc: "On-site options are ideal for travellers who prefer to stay close to the terminal. These car parks are located within the airport grounds and are managed by approved operators, offering quick access either by a short walk or a brief shuttle ride.This option is especially popular with business travellers and those who value convenience, proximity, and a straightforward start to their journey.",
   },
 ];
 

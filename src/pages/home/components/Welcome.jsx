@@ -163,9 +163,7 @@ function Welcome() {
                 variant="h4"
                 sx={{ fontWeight: 800, my: 4, lineHeight: 1.15 }}
               >
-                Welcome to Go Airport Parking — One of the UK’s leading airport{" "}
-                <br />
-                and port parking comparison platform
+                Welcome to Go Airport Parking — Compare the Best Airport & Port Parking Deals in the UK
               </Typography>
             </AnimateOnScroll>
 
@@ -183,18 +181,11 @@ function Welcome() {
                 variant="body2"
                 sx={{ color: "text.secondary", lineHeight: 1.75, mb: 2 }}
               >
-                We partner with trusted, fully-approved operators to bring you a
-                wide range of parking options at unbeatable prices. Whether you
-                prefer the convenience of Meet & Greet, the value of Park &
-                Ride, or premium valet parking, our platform lets you compare,
-                book, and save in seconds. With locations covering all major UK
-                airports — including Manchester, Birmingham, Glasgow, Luton,
-                Stansted, Bristol, Leeds, Heathrow, and Southampton — as well as
-                international destinations such as Dublin, Go Airport Parking
-                connects travelers with the best deals from reliable local
-                providers. More than just parking — Go Airport is your trusted
-                travel partner, ensuring a smooth start and finish to every
-                journey.
+                Go Airport Parking is a trusted comparison platform designed to help you
+                find the best airport and port parking deals across the UK and beyond. We
+                work with carefully selected, fully approved parking providers to offer a
+                wide choice of secure and affordable options tailored to every traveller’s
+                needs.
               </Typography>
             </AnimateOnScroll>
 
@@ -210,12 +201,75 @@ function Welcome() {
             >
               <Typography
                 variant="body2"
+                sx={{ color: "text.secondary", lineHeight: 1.75, mb: 2 }}
+              >
+                From the convenience of meet and greet parking to the cost-effective park
+                and ride services and premium valet options, our platform allows you to
+                quickly compare prices, features, and locations — all in one place. In just
+                a few clicks, you can book reliable parking at competitive rates without
+                any hidden surprises.
+              </Typography>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll
+              type="slide-up"
+              duration={2150}
+              delay={420}
+              distance={24}
+              threshold={0.3}
+              rootMargin="0px 0px -15% 0px"
+              easingTransform={EASE_SOFT}
+              easingOpacity={EASE_SOFT}
+            >
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary", lineHeight: 1.75, mb: 2 }}
+              >
+                We cover all major UK airports, including Manchester, Birmingham, Glasgow,
+                Luton, Stansted, Bristol, Leeds, Heathrow, and Southampton, along with
+                international locations such as Dublin Airport. No matter where you’re
+                flying from, we make it easy to secure trusted parking close to your
+                terminal.
+              </Typography>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll
+              type="slide-up"
+              duration={2300}
+              delay={560}
+              distance={24}
+              threshold={0.3}
+              rootMargin="0px 0px -15% 0px"
+              easingTransform={EASE_SOFT}
+              easingOpacity={EASE_SOFT}
+            >
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary", lineHeight: 1.75, mb: 2 }}
+              >
+                At Go Airport Parking, we go beyond just helping you park your car. Our
+                goal is to make your entire travel experience smoother, safer, and
+                stress-free from the moment you leave home to the moment you return.
+              </Typography>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll
+              type="slide-up"
+              duration={2450}
+              delay={700}
+              distance={24}
+              threshold={0.3}
+              rootMargin="0px 0px -15% 0px"
+              easingTransform={EASE_SOFT}
+              easingOpacity={EASE_SOFT}
+            >
+              <Typography
+                variant="body2"
                 sx={{ color: "text.secondary", lineHeight: 1.75 }}
               >
-                Whether you're traveling by air or sea, Go Airport Parking LTD
-                ensures a seamless start and finish to your journey with our
-                commitment to convenience and security. Experience the
-                convenience of hassle-free parking solutions with us.
+                Whether you're travelling for business or leisure, by air or sea, you can
+                rely on Go Airport Parking for convenient, secure, and affordable parking
+                solutions every time.
               </Typography>
             </AnimateOnScroll>
           </Grid>

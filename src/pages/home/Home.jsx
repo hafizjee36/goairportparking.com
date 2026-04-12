@@ -42,8 +42,8 @@ export default function Home() {
   return (
     <>
       <Seo
-        title="Cheap Airport Parking - Compare & Save Up to 60% | Go Airport Parking"
-        description="Compare and book the cheapest airport parking deals in the UK. Find secure meet & greet, park & ride, and long stay parking at all major airports. Instant confirmation & best price guarantee."
+        title="Compare Airport Parking UK & Dublin | Cheap & Secure Deals"
+        description="Compare cheap airport parking across UK airports & Dublin. Find secure meet & greet or park & ride deals with instant booking and best prices."
         keywords={[
           "cheap airport parking",
           "airport parking deals",

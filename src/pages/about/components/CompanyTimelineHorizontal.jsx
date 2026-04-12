@@ -102,33 +102,66 @@ export default function CompanyTimelineHorizontal() {
               align="center"
               sx={{ fontWeight: 700, mb: { xs: 5, md: 7 } }}
             >
-              Why Choose Go Airport Parking
+              About Go Airport Parking
             </Typography>
             <Typography
-              variant="body2"
+              variant="body1"
               align="center"
               sx={{
                 px: 1,
-                my: 5,
+                mb: 5,
+                color: theme.palette.text.secondary,
+                lineHeight: 1.6,
+                maxWidth: 700,
+                mx: "auto",
+              }}
+            >
+              We help travellers compare trusted parking options across the UK and Dublin,
+              making it easy to find secure, affordable choices for every journey.
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                px: 1,
+                my: 1,
                 color: theme.palette.text.secondary,
                 lineHeight: 1.6,
               }}
             >
-              At Go Airport Parking, travelers get the best of both worlds — the
-              convenience of a trusted comparison platform and the assurance of
-              quality-backed parking providers. We partner with hundreds of
-              approved airport and port parking operators across the UK,
-              Ireland, and internationally, allowing you to instantly compare
-              prices, locations, and services — all in one place. Unlike typical
-              comparison sites, Go Airport also works directly with Go
-              Airport–branded partners, ensuring consistent service standards
-              and access to exclusive pricing that can’t be found elsewhere.
-              This unique network means travelers can enjoy competitive rates
-              without compromising on reliability, customer care, or ease of
-              travel. Whether you need Meet & Greet, Park & Ride, or On-Site
-              Parking, Go Airport Parking makes it simple to find, compare, and
-              book the option that suits you best — saving you time, money, and
-              hassle before every journey.
+              Go Airport Parking helps you compare and book cheap parking near UK airports and Dublin quickly and easily. As a leading parking comparison platform, we bring together a wide range of trusted and secure parking providers, so you can find the best option based on your budget and travel needs.
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                px: 1,
+                my: 1,
+                color: theme.palette.text.secondary,
+                lineHeight: 1.6,
+              }}
+            >
+              Instead of searching multiple websites, you can compare parking prices, locations, and services in one place, including popular options like Meet & Greet, Park & Ride, and on-site parking near terminals. Our platform is designed to help you find affordable and reliable parking near major UK airports such as Heathrow, Manchester, Birmingham, and Luton etc.
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                px: 1,
+                my: 1,
+                color: theme.palette.text.secondary,
+                lineHeight: 1.6,
+              }}
+            >
+              We focus on offering secure parking with trusted operators, transparent pricing, and a smooth booking process. Through our strong network of partners, you can access cheap parking deals and exclusive offers that help you save more without compromising on quality or convenience.
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                px: 1,
+                my: 1,
+                color: theme.palette.text.secondary,
+                lineHeight: 1.6,
+              }}
+            >
+              Whether you’re travelling for business or a holiday, Go Airport Parking makes it easy to find cheap, secure parking near airports, giving you a stress-free start and end to your journey.
             </Typography>
           </AnimateOnScroll>
 

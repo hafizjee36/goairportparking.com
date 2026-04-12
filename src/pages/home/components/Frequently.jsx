@@ -21,20 +21,44 @@ import theme from "../../../theme";
 
 const FAQS = [
   {
-    q: "What services do you offer?",
-    a: "We provide Meet & Greet parking and Park & Ride options across major UK airports. All services include secure parking and 24/7 support.",
+    q: "How does Go Airport Parking work?",
+    a: "Go Airport Parking allows you to compare prices from multiple trusted parking providers in one place. Simply enter your travel dates, compare available options, and book the one that suits your needs and budget.",
   },
   {
-    q: "How does the Meet & Greet Service Work?",
-    a: "Our Meet & Greet service ensures a seamless experience. A professional and insured chauffeur collects your car directly from the airport terminal and parks it at our secured facility just outside the airport.",
+    q: "What types of parking options can I compare?",
+    a: "You can compare a range of services including Meet & Greet, Park & Ride, and on-site options, allowing you to choose based on convenience, price, and location.",
   },
   {
-    q: "Where is the car parked after collection?",
-    a: "Your vehicle is taken to a secure, CCTV-monitored compound with regular patrols until you return.",
+    q: "Are the parking providers secure and trustworthy?",
+    a: "Yes, we only work with vetted and fully approved operators who meet strict safety and security standards, so you can book with confidence.",
   },
   {
-    q: "Is the parking facility secure?",
-    a: "Yes. Our partner sites are fully fenced, well-lit and monitored by CCTV with on-site staff.",
+    q: "Can I find cheap parking near major UK airports?",
+    a: "Yes, our platform helps you find affordable options near major airports including Manchester, Heathrow, Birmingham, Luton, Stansted, and more.",
+  },
+  {
+    q:"Do you offer parking at Dublin Airport as well?",
+    a:"Yes, you can also compare and book parking options at Dublin Airport, giving you access to international travel locations in one place.",
+  },
+  {
+    q:"How far in advance should I book?",
+    a:"Booking in advance is recommended to secure the best prices and availability, especially during peak travel seasons.",
+  },
+  {
+    q:"Can I cancel or change my booking?",
+    a:"Most bookings can be amended or cancelled depending on the provider’s policy. Details are clearly shown before you confirm your reservation.",
+  },
+  {
+    q:"How do I know which option is best for me?",
+    a:"You can compare features such as price, distance from the terminal, transfer times, and customer reviews to choose the option that fits your travel plans.",
+  },
+  {
+    q:"Is shuttle transport included in Park & Ride options?",
+    a:"Yes, most Park & Ride services include a free shuttle transfer to and from the terminal as part of the booking.",
+  },
+  {
+    q:"Why should I use a comparison site instead of booking directly?",
+    a:"Using a comparison platform saves you time and money by showing multiple options side by side, helping you find better deals and make an informed decision.",
   },
 ];
 
