@@ -31,7 +31,7 @@ import ManageBookingModal from "./manageBooking/ManageBookingModal";
 import { useUserRegion } from "../hooks/useUserRegion";
 
 // Base navigation links (without Manage Booking)
-const baseNavLinks = [
+const navLinks = [
   { title: "About Us", path: "/about-us" },
   { title: "Airport Parking", path: "/airport-parking", hasDropdown: true },
   { title: "Why Choose Us", path: "/why-choose-us" },
@@ -75,16 +75,16 @@ const airportOptions = airportParkingOptions;
     });
   };
 
-  const navLinks = [
-    ...baseNavLinks.slice(0, 2),
-    {
-      title: isLoggedIn ? "Dashboard" : "Manage Booking (Login)",
-      path: isLoggedIn ? "/customer-dashboard" : "/manage-booking",
-      isModal: !isLoggedIn,
-      authAction: isLoggedIn ? "dashboard" : "login",
-    },
-    ...baseNavLinks.slice(2),
-  ];
+  // const navLinks = [
+  //   ...baseNavLinks.slice(0, 2),
+  //   {
+  //     title: isLoggedIn ? "Dashboard" : "Manage Booking (Login)",
+  //     path: isLoggedIn ? "/customer-dashboard" : "/manage-booking",
+  //     isModal: !isLoggedIn,
+  //     authAction: isLoggedIn ? "dashboard" : "login",
+  //   },
+  //   ...baseNavLinks.slice(2),
+  // ];
 
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);

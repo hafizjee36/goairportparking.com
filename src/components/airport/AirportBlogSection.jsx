@@ -26,6 +26,9 @@ export default function AirportBlogSection({ airportSlug }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  airportSlug = (airportSlug).split('-')[0];
+  console.log('airportSlug: ',airportSlug);
+
   useEffect(() => {
     if (!airportSlug || typeof airportSlug !== 'string') {
       console.warn('Invalid airportSlug:', airportSlug);
@@ -41,7 +44,8 @@ export default function AirportBlogSection({ airportSlug }) {
         const data = Array.isArray(response.data) ? response.data : [];
         // Filter blogs for THIS specific airport
         const normalize = s =>(s || '').toString().trim().replace(/\s+/g, ' ').toLowerCase();
-        const filteredBlogs = data.filter(blog => blog && normalize(blog.airport_name) === airportSlug);
+        const filteredBlogs = data.filter(blog => normalize(blog.airport_name).startsWith(airportSlug.toLowerCase()));
+        // const filteredBlogs = data.filter(blog => blog && normalize(blog.airport_name) === airportSlug);
         console.log('Filtered airport blogs for', airportSlug, filteredBlogs);
         setBlogs(filteredBlogs);
       } catch (err) {

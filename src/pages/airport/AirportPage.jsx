@@ -64,7 +64,7 @@ export default function AirportPage() {
       {/* Info Section */}
       <InfoSection airportConfig={config} sectionData={sectionData} />
 
-      {/* ✅ NEW SECTION (dynamic per airport) */}
+      {/* NEW SECTION (dynamic per airport) */}
       <BookThroughSection airportConfig={config} />
 
       {/* Parking Options */}
