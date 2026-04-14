@@ -27,7 +27,7 @@ export default function AirportBlogSection({ airportSlug }) {
   const [error, setError] = useState(null);
 
   airportSlug = (airportSlug).split('-')[0];
-  console.log('airportSlug: ',airportSlug);
+  // console.log('airportSlug: ',airportSlug);
 
   useEffect(() => {
     if (!airportSlug || typeof airportSlug !== 'string') {
@@ -39,12 +39,12 @@ export default function AirportBlogSection({ airportSlug }) {
       try {
         setLoading(true);
         const response = await blogService.fetchBlogs('airport-blogs'); // or same endpoint
-        console.log('Full API Response:', response);
+        // console.log('Full API Response:', response);
         const data = Array.isArray(response.data) ? response.data : [];
         // Filter blogs for THIS specific airport
         const normalize = s =>(s || '').toString().trim().replace(/\s+/g, ' ').toLowerCase();
         const filteredBlogs = data.filter(blog => blog && normalize(blog.airport_code) === airportSlug);
-        console.log('Filtered airport blogs for', airportSlug, filteredBlogs);
+        // console.log('Filtered airport blogs for', airportSlug, filteredBlogs);
         setBlogs(filteredBlogs);
       } catch (err) {
         console.error('Error fetching airport blogs:', err);

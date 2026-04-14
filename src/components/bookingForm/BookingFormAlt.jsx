@@ -232,7 +232,7 @@ export default function BookingFormAlt({ forceMobile = false }) {
 
     // Check if we're on Manchester Airport page
     const isManchesterPage =
-      location.pathname === "/manchester-airport-parking";
+      location.pathname === "/man-airport-parking";
 
     // If we have URL params, use them (they take priority)
     if (urlParams.airport) {
@@ -317,22 +317,36 @@ export default function BookingFormAlt({ forceMobile = false }) {
 
   // Set Manchester/Birmingham/Dublin/Heathrow as default airport when on respective Airport pages
   React.useEffect(() => {
+    const isAbzPage = location.pathname === '/abz-airport-parking';
+    const isCwlPage =  location.pathname === '/cwl-airport-parking';
+    const isDovPage =  location.pathname === '/dov-airport-parking';
+    const isEmaPage =  location.pathname === '/ema-airport-parking';
+    const isEdiPage =   location.pathname === '/edi-airport-parking';
+    const isExtPage =  location.pathname === '/ext-airport-parking';
+    const isLgwPage =  location.pathname === '/lgw-airport-parking';
     const isManchesterPage =
-      location.pathname === "/manchester-airport-parking";
-    const isHeathrowPage = location.pathname === "/heathrow-airport-parking";
-    const isLeedsPage = location.pathname === "/leeds-airport-parking";
-    const isStanstedPage = location.pathname === "/stansted-airport-parking";
+      location.pathname === "/man-airport-parking";
+    const isHeathrowPage = location.pathname === "/lhr-airport-parking";
+    const isLeedsPage = location.pathname === "/lba-airport-parking";
+    const isStanstedPage = location.pathname === "/stn-airport-parking";
     const isBirminghamPage =
-      location.pathname === "/birmingham-airport-parking";
-    const isDublinPage = location.pathname === "/dublin-airport-parking";
-    const isBristolPage = location.pathname === "/bristol-airport-parking";
-    const isLutonPage = location.pathname === "/luton-airport-parking";
-    const isSouthamptonPage = location.pathname === "/southampton-port-parking";
-    const isGlasgowPage = location.pathname === "/glasgow-airport-parking";
-    const isDubaiPage = location.pathname === "/dubai-airport-parking";
-
+      location.pathname === "/bhx-airport-parking";
+    const isDublinPage = location.pathname === "/dub-airport-parking";
+    const isBristolPage = location.pathname === "/brs-airport-parking";
+    const isLutonPage = location.pathname === "/ltn-airport-parking";
+    const isSouthamptonPage = location.pathname === "/sop-port-parking";
+    const isGlasgowPage = location.pathname === "/gla-airport-parking";
+    const isDubaiPage = location.pathname === "/dxb-airport-parking";
+    
     // Only apply defaults on specific airport pages
     if (
+      !isAbzPage &&
+      !isCwlPage &&
+      !isDovPage &&
+      !isEmaPage &&
+      !isEdiPage &&
+      !isExtPage &&
+      !isLgwPage &&
       !isManchesterPage &&
       !isHeathrowPage &&
       !isLeedsPage &&
@@ -354,27 +368,41 @@ export default function BookingFormAlt({ forceMobile = false }) {
     // Need airports to resolve the correct value
     if (!airports || airports.length === 0) return;
 
-    const targetCode = isManchesterPage
-      ? "MAN"
-      : isHeathrowPage
-        ? "LHR"
-        : isLeedsPage
-          ? "LBA"
-          : isBirminghamPage
-            ? "BHX"
-            : isStanstedPage
-              ? "STN"
-              : isBristolPage
-                ? "BRS"
-                : isLutonPage
-                  ? "LTN"
-                : isSouthamptonPage
-                      ? "GBSOU"
-                  : isGlasgowPage
-                      ? "GLA"
-                    : isDubaiPage
-                      ? "DXB"
-                  : "DUB";
+    const targetCode = isAbzPage 
+      ? "ABZ" 
+        : isCwlPage 
+          ? "CWL"
+          : isDovPage 
+            ? "DOV"
+            : isEmaPage
+              ? "EMA"
+              : isEdiPage
+                ? "EDI"
+                : isExtPage 
+                  ? "EXT"
+                  : isLgwPage
+                    ? "LGW"
+                    : isManchesterPage
+                      ? "MAN"
+                      : isHeathrowPage
+                        ? "LHR"
+                        : isLeedsPage
+                          ? "LBA"
+                          : isBirminghamPage
+                            ? "BHX"
+                            : isStanstedPage
+                              ? "STN"
+                              : isBristolPage
+                                ? "BRS"
+                                : isLutonPage
+                                  ? "LTN"
+                                : isSouthamptonPage
+                                      ? "GBSOU"
+                                  : isGlasgowPage
+                                      ? "GLA"
+                                    : isDubaiPage
+                                      ? "DXB"
+                                  : "DUB";
 
     const targetCity = isManchesterPage
       ? "manchester"
@@ -400,6 +428,8 @@ export default function BookingFormAlt({ forceMobile = false }) {
 
     // If current already matches the target code, nothing to do
     const currentCode = (airport || "").toUpperCase();
+    console.log("currentCode",airport)
+    console.log("targetCode",targetCode)
     if (currentCode === targetCode) return;
 
     const matchesTarget = (apt) =>
@@ -435,17 +465,24 @@ export default function BookingFormAlt({ forceMobile = false }) {
     // 3. No airport is selected yet
     // 4. Not on a specific airport page (let the page-specific logic handle it)
     const isSpecificAirportPage = 
-      location.pathname === '/manchester-airport-parking' ||
-      location.pathname === '/heathrow-airport-parking' ||
-      location.pathname === '/leeds-airport-parking' ||
-      location.pathname === '/stansted-airport-parking' ||
-      location.pathname === '/bristol-airport-parking' ||
-      location.pathname === '/luton-airport-parking' ||
-      location.pathname === '/birmingham-airport-parking' ||
-      location.pathname === '/southampton-port-parking' ||
-      location.pathname === '/glasgow-airport-parking' ||
-      location.pathname === '/dubai-airport-parking' ||
-      location.pathname === '/dublin-airport-parking';
+      location.pathname === '/abz-airport-parking' ||
+      location.pathname === '/cwl-airport-parking' ||
+      location.pathname === '/dov-airport-parking' ||
+      location.pathname === '/ema-airport-parking' ||
+      location.pathname === '/edi-airport-parking' ||
+      location.pathname === '/ext-airport-parking' ||
+      location.pathname === '/lgw-airport-parking' ||
+      location.pathname === '/man-airport-parking' ||
+      location.pathname === '/lhr-airport-parking' ||
+      location.pathname === '/lba-airport-parking' ||
+      location.pathname === '/stn-airport-parking' ||
+      location.pathname === '/brs-airport-parking' ||
+      location.pathname === '/ltn-airport-parking' ||
+      location.pathname === '/bhx-airport-parking' ||
+      location.pathname === '/sop-airport-parking' ||
+      location.pathname === '/gla-airport-parking' ||
+      location.pathname === '/dxb-airport-parking' ||
+      location.pathname === '/dub-airport-parking';
 
     if (
       isUserFromDubai && 

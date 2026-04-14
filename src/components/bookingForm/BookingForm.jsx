@@ -256,10 +256,10 @@ export default function BookingForm() {
     ];
   
     const pathname = location.pathname.toLowerCase();
-  
+    console.log('pathname: ',pathname);
     // Find which airport matches current URL path
     const matched = airportMap.find(({ slugs }) =>
-      slugs.some(slug => pathname.includes(slug))
+      slugs.some(slugs => pathname.includes(slugs))
     );
   
     if (!matched) {
@@ -298,16 +298,23 @@ export default function BookingForm() {
     // 3. No airport is selected yet
     // 4. Not on a specific airport page (let the page-specific logic handle it)
     const isSpecificAirportPage = 
-      location.pathname === '/manchester-airport-parking' ||
-      location.pathname === '/heathrow-airport-parking' ||
-      location.pathname === '/leeds-airport-parking' ||
-      location.pathname === '/stansted-airport-parking' ||
-      location.pathname === '/bristol-airport-parking' ||
-      location.pathname === '/luton-airport-parking' ||
-      location.pathname === '/birmingham-airport-parking' ||
-      location.pathname === '/southampton-port-parking' ||
-      location.pathname === '/glasgow-airport-parking' ||
-      location.pathname === '/dubai-airport-parking';
+      location.pathname === '/abz-airport-parking' ||
+      location.pathname === '/cwl-airport-parking' ||
+      location.pathname === '/dov-airport-parking' ||
+      location.pathname === '/ema-airport-parking' ||
+      location.pathname === '/edi-airport-parking' ||
+      location.pathname === '/ext-airport-parking' ||
+      location.pathname === '/lgw-airport-parking' ||
+      location.pathname === '/man-airport-parking' ||
+      location.pathname === '/lhr-airport-parking' ||
+      location.pathname === '/lba-airport-parking' ||
+      location.pathname === '/stn-airport-parking' ||
+      location.pathname === '/brs-airport-parking' ||
+      location.pathname === '/ltn-airport-parking' ||
+      location.pathname === '/bhx-airport-parking' ||
+      location.pathname === '/sop-port-parking' ||
+      location.pathname === '/gla-airport-parking' ||
+      location.pathname === '/dxb-airport-parking';
 
     if (
       isUserFromDubai && 

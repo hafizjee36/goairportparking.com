@@ -29,8 +29,8 @@ export default function AirportPage() {
   const slug2 = rawParam ? rawParam.replace(/-parking$/, "") : null;
 
   const config = airportConfigs[slug] || airportConfigs[slug2];
-  console.log('slug: ',slug);
-  console.log('config: ',config);
+  // console.log('slug: ',slug);
+  // console.log('config: ',config);
 
   if (!config) {
     return <Box>Airport not found</Box>;
