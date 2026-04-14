@@ -236,7 +236,12 @@ export default function Navbar() {
                         keepMounted
                         MenuListProps={{
                           onMouseLeave: handleMouseLeave,
-                          sx: { py: 0 },
+                          sx: { 
+                            py: 0,
+                            maxHeight: 400,
+                            overflowY: "auto",
+                            scrollbarWidth: "thin",
+                          },
                         }}
                         TransitionComponent={Fade}
                         transitionDuration={200}
@@ -251,10 +256,25 @@ export default function Navbar() {
                         sx={{
                           "& .MuiPaper-root": {
                             mt: 0.5,
-                            minWidth: 220,
+                            minWidth: 280,
+                            maxHeight: 400,
+                            overflowY: "auto",
                             boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
                             borderRadius: 2,
-                            overflow: "visible",
+                            scrollbarWidth: "thin",
+                            scrollbarColor: "rgba(25,118,210,0.5) transparent",
+                            "&::-webkit-scrollbar": { width: 6 },
+                            "&::-webkit-scrollbar-track": { background: "transparent" },
+                            "&::-webkit-scrollbar-thumb": {
+                              backgroundColor: "rgba(25,118,210,0.5)",
+                              borderRadius: 8,
+                              border: "2px solid transparent",
+                              backgroundClip: "content-box",
+                              minHeight: 24,
+                            },
+                            "&::-webkit-scrollbar-thumb:hover": {
+                              backgroundColor: "rgba(25,118,210,0.8)",
+                            },
                             "&::before": {
                               content: '""',
                               display: "block",
