@@ -1,158 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/1.0">
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.goairportparking.com/</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/login</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/about-us</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/signup</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/why-choose-us</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/faq</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/services</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/compare-travel-money</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/faq</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/contact-us</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/contact-us</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/resend-confirmation</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/blog</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/car-hire</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/airport-parking</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/terms-condition</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/car-hire</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/privacy-policy</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/compare-travel-money</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/blog</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/terms-condition</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/airport-parking</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/privacy-policy</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/manchester-airport-parking</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/birmingham-airport-parking</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/heathrow-airport-parking</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/bristol-airport-parking</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/leeds-airport-parking</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/dubai-airport-parking</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/stansted-airport-parking</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/dublin-airport-parking</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/bristol-airport-parking</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/glasgow-airport-parking</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/luton-airport-parking</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/heathrow-airport-parking</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/birmingham-airport-parking</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/leeds-airport-parking</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/dublin-airport-parking</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/luton-airport-parking</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/about-us</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/manchester-airport-parking</loc>
   </url>
 
   <url>
-    <loc>https://www.goairportparking.com/why-choose-us</loc>
-    <lastmod>2025-10-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://goairportparking.com/southampton-port-parking</loc>
   </url>
 
+  <url>
+    <loc>https://goairportparking.com/stansted-airport-parking</loc>
+  </url>
+
+  <url>
+    <loc>https://goairportparking.com/blog/5-ways-to-save-on-airport-parking-this-summer</loc>
+  </url>
+
+  <url>
+    <loc>https://goairportparking.com/blog/best-red-eye-flight-survival-tips</loc>
+  </url>
+
+  <url>
+    <loc>https://goairportparking.com/blog/carry-on-packing-the-ultimate-checklist</loc>
+  </url>
+
+  <url>
+    <loc>https://goairportparking.com/blog/how-early-should-you-get-to-the-airport-domestic-vs-international</loc>
+  </url>
 </urlset>
