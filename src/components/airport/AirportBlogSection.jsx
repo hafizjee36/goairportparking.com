@@ -40,12 +40,10 @@ export default function AirportBlogSection({ airportSlug }) {
         setLoading(true);
         const response = await blogService.fetchBlogs('airport-blogs'); // or same endpoint
         console.log('Full API Response:', response);
-        // console.log('response.data type:', typeof response.data, Array.isArray(response.data));
         const data = Array.isArray(response.data) ? response.data : [];
         // Filter blogs for THIS specific airport
         const normalize = s =>(s || '').toString().trim().replace(/\s+/g, ' ').toLowerCase();
-        const filteredBlogs = data.filter(blog => normalize(blog.airport_name).startsWith(airportSlug.toLowerCase()));
-        // const filteredBlogs = data.filter(blog => blog && normalize(blog.airport_name) === airportSlug);
+        const filteredBlogs = data.filter(blog => blog && normalize(blog.airport_code) === airportSlug);
         console.log('Filtered airport blogs for', airportSlug, filteredBlogs);
         setBlogs(filteredBlogs);
       } catch (err) {

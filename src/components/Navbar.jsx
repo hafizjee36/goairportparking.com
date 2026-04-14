@@ -29,22 +29,18 @@ import { authenticatedApiService } from "../services/authenticatedApiService";
 import logo from "../assets/optimized/logo-1.webp";
 import ManageBookingModal from "./manageBooking/ManageBookingModal";
 import { useUserRegion } from "../hooks/useUserRegion";
+import { useAirports } from "../hooks/useAirports";
 
 // Base navigation links (without Manage Booking)
 const navLinks = [
   { title: "About Us", path: "/about-us" },
   { title: "Airport Parking", path: "/airport-parking", hasDropdown: true },
   { title: "Why Choose Us", path: "/why-choose-us" },
+  { title: "Services", path: "/services" },
   { title: "Blog", path: "/blog" },
   { title: "FAQ", path: "/faq" },
   { title: "Contact Us", path: "/contact-us" },
 ];
-
-import { getAirportList } from "../data/airportConfigs";
-
-// Airport Parking dropdown options - dynamic from config
-const airportParkingOptions = getAirportList();
-
 
 export default function Navbar() {
   const theme = useTheme();
@@ -53,6 +49,11 @@ export default function Navbar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isDubai: isUserFromDubai } = useUserRegion();
+
+  // Get airports from API - INSIDE COMPONENT
+  const { airports: apiAirports, loading: airportsLoading, error: airportsError } = useAirports();
+
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -60,20 +61,26 @@ export default function Navbar() {
   const [manageBookingModalOpen, setManageBookingModalOpen] = useState(false);
   const open = Boolean(anchorEl);
 
-  // User region detection from IP
-  const { isDubai: isUserFromDubai } = useUserRegion();
-
-// No need for mapAirportToNavOption anymore - configs have title/path ready
-const airportOptions = airportParkingOptions;
-
+  // Map API airports to navbar format (title, path) - adjust based on API shape {name, slug}
+  const airportOptions = apiAirports.map(airport => ({
+    title: `${airport.name || airport.level}${airport.slug === 'southampton-port' ? ' Port' : ' Airport'}`,
+    path: airport.path || airport.slug ? `/${airport.slug}-airport-parking` : `/${airport.value?.toLowerCase()}-airport-parking`
+  }));
 
   const getFilteredAirportOptions = () => {
-    if (isUserFromDubai) return airportOptions;
-
-    return airportOptions.filter((airport) => {
+    if (airportsLoading) return []; // Disable during loading
+    if (airportsError) {
+      console.error('Airports load error:', airportsError);
+      return []; // Or fallback static if needed
+    }
+    
+    const options = isUserFromDubai ? airportOptions : airportOptions.filter((airport) => {
       return airport.path !== "/dubai-airport-parking";
     });
+    return options;
   };
+
+
 
   // const navLinks = [
   //   ...baseNavLinks.slice(0, 2),
@@ -263,24 +270,37 @@ const airportOptions = airportParkingOptions;
                           },
                         }}
                       >
-                        {getFilteredAirportOptions().map((airport) => (
-                          <MenuItem
-                            key={airport.title}
-                            onClick={() => handleAirportClick(airport.path)}
-                            sx={{
-                              py: 1.5,
-                              px: 2,
-                              fontSize: "0.95rem",
-                              "&:hover": {
-                                backgroundColor: theme.palette.primary.main,
-                                color: "white",
-                              },
-                              transition: "all 0.2s ease",
-                            }}
-                          >
-                            {airport.title}
-                          </MenuItem>
-                        ))}
+                        {(() => {
+                          const filtered = getFilteredAirportOptions();
+                          if (airportsLoading) {
+                            return <MenuItem disabled>Loading airports...</MenuItem>;
+                          }
+                          if (airportsError) {
+                            return <MenuItem disabled>Airports unavailable</MenuItem>;
+                          }
+                          if (filtered.length === 0) {
+                            return <MenuItem disabled>No airports available</MenuItem>;
+                          }
+                          return filtered.map((airport) => (
+                            <MenuItem
+                              key={airport.title}
+                              onClick={() => handleAirportClick(airport.path)}
+                              sx={{
+                                py: 1.5,
+                                px: 2,
+                                fontSize: "0.95rem",
+                                "&:hover": {
+                                  backgroundColor: theme.palette.primary.main,
+                                  color: "white",
+                                },
+                                transition: "all 0.2s ease",
+                              }}
+                            >
+                              {airport.title}
+                            </MenuItem>
+                          ));
+                        })()}
+
                       </Menu>
                     </Box>
                   );
@@ -397,24 +417,37 @@ const airportOptions = airportParkingOptions;
                     </ListItem>
                     <Collapse in={mobileDropdownOpen} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding>
-                        {getFilteredAirportOptions().map((airport) => (
-                          <ListItem key={airport.title} disablePadding>
-                            <ListItemButton
-                              sx={{ pl: 4 }}
-                              onClick={() => handleMobileAirportClick(airport.path)}
-                            >
-                              <ListItemText
-                                primary={airport.title}
-                                sx={{
-                                  "& .MuiListItemText-primary": {
-                                    fontSize: "0.9rem",
-                                    color: theme.palette.text.secondary,
-                                  },
-                                }}
-                              />
-                            </ListItemButton>
-                          </ListItem>
-                        ))}
+                        {(() => {
+                          const filtered = getFilteredAirportOptions();
+                          if (airportsLoading) {
+                            return <ListItem key="loading"><ListItemText primary="Loading airports..." /></ListItem>;
+                          }
+                          if (airportsError) {
+                            return <ListItem key="error"><ListItemText primary="Airports unavailable" /></ListItem>;
+                          }
+                          if (filtered.length === 0) {
+                            return <ListItem key="none"><ListItemText primary="No airports available" /></ListItem>;
+                          }
+                          return filtered.map((airport) => (
+                            <ListItem key={airport.title} disablePadding>
+                              <ListItemButton
+                                sx={{ pl: 4 }}
+                                onClick={() => handleMobileAirportClick(airport.path)}
+                              >
+                                <ListItemText
+                                  primary={airport.title}
+                                  sx={{
+                                    "& .MuiListItemText-primary": {
+                                      fontSize: "0.9rem",
+                                      color: theme.palette.text.secondary,
+                                    },
+                                  }}
+                                />
+                              </ListItemButton>
+                            </ListItem>
+                          ));
+                        })()}
+
                       </List>
                     </Collapse>
                   </Box>

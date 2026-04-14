@@ -3,7 +3,7 @@
  * Extend for each airport slug.
  */
 export const airportSectionData = {
-  birmingham: {
+  bhx: {
     info: {
       text: `Finding the right parking near Birmingham Airport doesn’t need to be complicated or stressful. At Go Airport Parking LTD, we make it simple to compare a wide range of trusted parking providers, helping you choose the best option based on price, convenience, and travel needs. Our platform brings together both official and off-site parking services, giving you complete flexibility when planning your journey. Whether you are looking for the convenience of Meet & Greet, the affordability of Park & Ride, or the accessibility of terminal-based and long stay options, everything is available to compare in one place.Perfect for short city breaks, business trips, or long-haul holidays, our service helps you secure safe and cost-effective parking within minutes. With clear pricing, no hidden charges, and fully vetted providers, you can book with confidence every time.From start to finish, we focus on making your travel experience smoother, ensuring your journey begins and ends with complete peace of mind.`
     },
@@ -75,7 +75,7 @@ export const airportSectionData = {
       },
     ]
   },
-  heathrow: {
+  lhr: {
     info: {
       text: "Travelling through Heathrow Airport? Parking can often feel expensive and confusing, especially with so many different providers and locations available. That’s where comparing options before you travel can make a real difference.Instead of paying higher on-the-day prices, you can explore different parking types such as fast-access Meet & Greet services, budget-friendly Park & Ride locations, and secure long-stay facilities depending on your journey length and travel style.Every option comes with different benefits, whether you value speed, price, or convenience. By checking prices in advance, you can avoid unnecessary stress, secure a guaranteed space, and choose a parking solution that actually fits your trip."
     },
@@ -108,7 +108,7 @@ export const airportSectionData = {
       { id: "q7", question: "Why should I use a parking comparison site instead of booking directly?", answer: "A comparison site lets you quickly view multiple deals, helping you save money and choose the most suitable option." },
     ]
   },
-  bristol: {
+  brs: {
     info: {
       text: "Flying from Bristol Airport? Go Airport Parking helps you quickly compare parking near Bristol Airport and find secure, affordable options in just a few clicks. Our platform connects you with trusted providers so you can choose the best Bristol Airport parking deals based on your budget and travel plans.Whether you’re looking for the convenience of Meet & Greet, the value of Park & Ride, or reliable long-stay parking for extended trips, you can compare all options in one place. We also include both on-site and off-site parking, making it easy to find the right balance of price, security, and convenience.With regular shuttle transfers, secure parking facilities, and transparent pricing, booking in advance helps you secure the cheapest parking near Bristol Airport and guarantees your space before you travel. No hidden charges, no confusion — just simple, trusted airport parking comparison designed to make your journey smoother from start to finish."
     },
@@ -138,7 +138,7 @@ export const airportSectionData = {
             { id: "q6", question: "When should I book parking for Bristol Airport?", answer: "It is recommended to book in advance to secure lower prices and guarantee availability, especially during busy travel seasons." },
       ]
   },
-  dublin: {
+  dub: {
     info: {
       text: "Travelling through Dublin Airport? Go Airport Parking helps you quickly compare secure and affordable parking options in one place. Our platform connects you with trusted providers so you can easily choose the best option based on price, convenience, and travel needs.Whether you prefer Meet & Greet for maximum ease, Park & Ride for better value, or long-stay parking for extended trips, we make it simple to compare all available choices. You can also explore both on-site and off-site parking options with transparent pricing, reliable transfers, and strong security standards.Booking in advance helps you secure better rates and guarantees your space before you travel. With no hidden charges and a smooth booking process, your journey starts stress-free from the moment you park."
     },
@@ -170,7 +170,7 @@ export const airportSectionData = {
             { id: "q8", question: "Why use a comparison site instead of booking directly?", answer: "A comparison platform lets you view multiple options at once, helping you find better deals and save both time and money." },
       ]
   },
-  glasgow: {
+  gla: {
     info: {
       text: "Planning a trip from Glasgow Airport? Instead of paying more at the gate, you can compare different parking services in advance and choose what fits your journey best.From budget-friendly Park & Ride locations to premium Meet & Greet services and long-stay airport parking, everything is available in one place. Each option comes with different benefits depending on how early you book, how long you’re travelling, and how much convenience you need.Our comparison system helps you quickly spot better prices, understand transfer times, and pick secure parking without confusion or hidden conditions."
     },
@@ -202,7 +202,7 @@ export const airportSectionData = {
         { id: "q", question: "Can I modify my booking after payment?", answer: "Most bookings can be changed or cancelled depending on the provider’s policy, which is shown before final confirmation." },
       ]
   },
-  leeds: {
+  lba: {
     info: {
       text: "Travelling from Leeds Bradford Airport? Instead of choosing the first parking option you see, comparing different providers can help you find better value and a setup that suits your journey.Go Airport Parking is a comparison platform that brings together a range of parking services, allowing you to review options based on price, distance, and convenience. Whether you're planning ahead or booking closer to your travel date, comparing helps you avoid overpaying and gives you more flexibility.From quick drop-off style services to lower-cost off-site options and longer stay solutions, you can explore what works best for your trip without being limited to a single provider."
     },
@@ -234,7 +234,7 @@ export const airportSectionData = {
         { id: "8", question: "Do parking prices change depending on when I book?", answer: "Yes, prices can increase closer to your travel date, so booking early is usually more cost-effective." },
       ]
   },
-  luton: {
+  ltn: {
     info: {
       text: "Travelling from London Luton Airport? Parking doesn’t have to be something you sort out at the last minute. By comparing options ahead of time, you can often find better prices and avoid unnecessary delays on the day of travel.Go Airport Parking helps you explore a mix of providers offering different types of parking, from quick drop-off style services to lower-cost off-site spaces and longer stay options. Each comes with its own balance of price, distance, and convenience.Instead of sticking to one choice, you can review multiple options side by side and pick what suits your journey best. Booking early also helps secure availability, especially during busy travel periods."
     },
@@ -266,7 +266,7 @@ export const airportSectionData = {
         { id: "q8", question: "Why compare parking instead of booking directly?", answer: "Comparing helps you see different price points and features, making it easier to choose the best option." },
       ]
   },
-  manchester: {
+  man: {
     info: {
       text: "Getting ready to travel from Manchester Airport? Parking is one of those things that can either be sorted in advance or become a last-minute hassle.Instead of sticking to one provider, comparing different parking options gives you more control over cost, distance, and convenience. Some travellers prefer quick access close to the terminal, while others are happy to trade a short transfer for better value.With Go Airport Parking, you can view multiple options side by side, making it easier to decide what works best for your journey. Planning ahead not only helps avoid higher prices but also ensures your space is secured before the day of travel."
     },
@@ -298,7 +298,7 @@ export const airportSectionData = {
         { id: "q8", question: "Why not just book directly with one provider?", answer: "Comparing gives you a wider view of prices and features, helping you make a more informed choice." },
       ]
   },
-  'southampton-port': {
+  sop: {
     info: {
       text: "Planning a cruise from Port of Southampton? Parking is one of the first things to organise before you set off, especially when trips often last several days or longer.Instead of relying on a single option, comparing different parking providers allows you to see how location, pricing, and transfer arrangements vary. Some travellers prefer to stay close to the terminal, while others look for better value slightly further away.Go Airport Parking helps bring these options together, making it easier to choose a setup that matches your cruise schedule, luggage needs, and overall travel plans — all before you even arrive at the port."
     },
@@ -362,7 +362,7 @@ export const airportSectionData = {
         },
       ]
   },
-  stansted: {
+  stn: {
     info: {
       text: "Heading through London Stansted Airport? Parking is one of the easiest things to sort in advance — yet it’s often left until the last minute.By comparing different providers ahead of time, you can see how prices, locations, and transfer times vary, making it easier to choose what actually works for your trip. Some options prioritise convenience, while others focus on keeping costs low.Go Airport Parking brings these choices together, so instead of relying on a single option, you can review a range of services and pick the one that matches your schedule, budget, and travel style."
     },
@@ -426,32 +426,213 @@ export const airportSectionData = {
         },
       ]
   },
-  dubai: {
+  dxb: {
     info: {
       text: "Finding the right parking at Dubai Airport shouldn't add stress to your journey. At Go Airport Parking LTD Dubai Comparison, we make it easy to compare prices, services, and locations of both official and off-site providers. Whether you prefer the ease of Meet & Greet, the value of Park & Ride, or the convenience of Terminal and Long Stay car parks, we've got you covered. Perfect for quick weekend trips or long-haul getaways, our platform helps you find secure, cost-effective parking in just a few clicks. With full transparency, no hidden charges, and peace of mind built-in, your smooth journey starts from the moment you park."
     },
     terminalParking: {
-        subtitle: "Bristol terminal parking offers quick access:",
-        features: [
-          "Multi-storey car park near terminal",
-          "5 minute walk to check-in",
-          "24/7 CCTV security",
-          "Height limit 2.0m"
-        ]
-      },
-      pricing: {
-        data: [
-          { service: "Meet & Greet", price: "£50–£90/day", details: "Terminal valet" },
-          { service: "Terminal Parking", price: "£25–£60/day", details: "Short walk" },
-          { service: "Long Stay", price: "£45–£75/week", details: "Shuttle included" },
-          { service: "Park & Ride", price: "£35–£65/week", details: "Coach transfer" }
-        ]
-      },
-      faq: [
-        { id: "q1", question: "How far is Park & Ride from Dubai terminal?", answer: "10-15 minute shuttle every 15 mins." },
-        { id: "q2", question: "Is parking secure?", answer: "Park Mark approved with CCTV and patrols." }
+      subtitle: "Dubai terminal parking offers quick access:",
+      features: [
+        "Multi-storey car park near terminal",
+        "5 minute walk to check-in",
+        "24/7 CCTV security",
+        "Height limit 2.0m"
       ]
+    },
+    pricing: {
+      data: [
+        { service: "Meet & Greet", price: "£50–£90/day", details: "Terminal valet" },
+        { service: "Terminal Parking", price: "£25–£60/day", details: "Short walk" },
+        { service: "Long Stay", price: "£45–£75/week", details: "Shuttle included" }
+      ]
+    },
+    faq: [
+      { id: "q1", question: "How far is Park & Ride from Dubai terminal?", answer: "10-15 minute shuttle every 15 mins." },
+      { id: "q2", question: "Is parking secure?", answer: "Park Mark approved with CCTV and patrols." }
+    ]
+  },
+  abz: {
+    info: {
+      text: "Finding the right parking at Aberdeen Airport shouldn't add stress to your journey. At Go Airport Parking LTD Dubai Comparison, we make it easy to compare prices, services, and locations of both official and off-site providers. Whether you prefer the ease of Meet & Greet, the value of Park & Ride, or the convenience of Terminal and Long Stay car parks, we've got you covered. Perfect for quick weekend trips or long-haul getaways, our platform helps you find secure, cost-effective parking in just a few clicks. With full transparency, no hidden charges, and peace of mind built-in, your smooth journey starts from the moment you park."
+    },
+    terminalParking: {
+      subtitle: "Aberdeen terminal parking offers quick access:",
+      features: [
+        "Multi-storey car park near terminal",
+        "5 minute walk to check-in",
+        "24/7 CCTV security",
+        "Height limit 2.0m"
+      ]
+    },
+    pricing: {
+      data: [
+        { service: "Meet & Greet", price: "£50–£90/day", details: "Terminal valet" },
+        { service: "Terminal Parking", price: "£25–£60/day", details: "Short walk" },
+        { service: "Long Stay", price: "£45–£75/week", details: "Shuttle included" },
+        { service: "Park & Ride", price: "£35–£65/week", details: "Coach transfer" }
+      ]
+    },
+    faq: [
+      { id: "q1", question: "How far is Park & Ride from Aberdeen terminal?", answer: "10-15 minute shuttle every 15 mins." },
+      { id: "q2", question: "Is parking secure?", answer: "Park Mark approved with CCTV and patrols." }
+    ]
+  },
+  cwl: {
+    info: {
+      text: "Finding the right parking at Cardiff Airport shouldn't add stress to your journey. At Go Airport Parking LTD Cardiff Comparison, we make it easy to compare prices, services, and locations of both official and off-site providers. Whether you prefer the ease of Meet & Greet, the value of Park & Ride, or the convenience of Terminal and Long Stay car parks, we've got you covered. Perfect for quick weekend trips or long-haul getaways, our platform helps you find secure, cost-effective parking in just a few clicks. With full transparency, no hidden charges, and peace of mind built-in, your smooth journey starts from the moment you park."
+    },
+    terminalParking: {
+      subtitle: "Cardiff terminal parking offers quick access:",
+      features: [
+        "Multi-storey car park near terminal",
+        "5 minute walk to check-in",
+        "24/7 CCTV security",
+        "Height limit 2.0m"
+      ]
+    },
+    pricing: {
+      data: [
+        { service: "Meet & Greet", price: "£50–£90/day", details: "Terminal valet" },
+        { service: "Terminal Parking", price: "£25–£60/day", details: "Short walk" },
+        { service: "Long Stay", price: "£45–£75/week", details: "Shuttle included" },
+        { service: "Park & Ride", price: "£35–£65/week", details: "Coach transfer" }
+      ]
+    },
+    faq: [
+      { id: "q1", question: "How far is Park & Ride from Aberdeen terminal?", answer: "10-15 minute shuttle every 15 mins." },
+      { id: "q2", question: "Is parking secure?", answer: "Park Mark approved with CCTV and patrols." }
+    ]
+  },
+  dov: {
+    info: {
+      text: "Finding the right parking at Dover Airport shouldn't add stress to your journey. At Go Airport Parking LTD Dover Comparison, we make it easy to compare prices, services, and locations of both official and off-site providers. Whether you prefer the ease of Meet & Greet, the value of Park & Ride, or the convenience of Terminal and Long Stay car parks, we've got you covered. Perfect for quick weekend trips or long-haul getaways, our platform helps you find secure, cost-effective parking in just a few clicks. With full transparency, no hidden charges, and peace of mind built-in, your smooth journey starts from the moment you park."
+    },
+    terminalParking: {
+      subtitle: "Dover terminal parking offers quick access:",
+      features: [
+        "Multi-storey car park near terminal",
+        "5 minute walk to check-in",
+        "24/7 CCTV security",
+        "Height limit 2.0m"
+      ]
+    },
+    pricing: {
+      data: [
+        { service: "Meet & Greet", price: "£50–£90/day", details: "Terminal valet" },
+        { service: "Terminal Parking", price: "£25–£60/day", details: "Short walk" },
+        { service: "Long Stay", price: "£45–£75/week", details: "Shuttle included" },
+        { service: "Park & Ride", price: "£35–£65/week", details: "Coach transfer" }
+      ]
+    },
+    faq: [
+      { id: "q1", question: "How far is Park & Ride from Aberdeen terminal?", answer: "10-15 minute shuttle every 15 mins." },
+      { id: "q2", question: "Is parking secure?", answer: "Park Mark approved with CCTV and patrols." }
+    ]
+  },
+  ema: {
+    info: {
+      text: "Finding the right parking at East Midlands Airport shouldn't add stress to your journey. At Go Airport Parking LTD East Midlands Comparison, we make it easy to compare prices, services, and locations of both official and off-site providers. Whether you prefer the ease of Meet & Greet, the value of Park & Ride, or the convenience of Terminal and Long Stay car parks, we've got you covered. Perfect for quick weekend trips or long-haul getaways, our platform helps you find secure, cost-effective parking in just a few clicks. With full transparency, no hidden charges, and peace of mind built-in, your smooth journey starts from the moment you park."
+    },
+    terminalParking: {
+      subtitle: "East Midlands terminal parking offers quick access:",
+      features: [
+        "Multi-storey car park near terminal",
+        "5 minute walk to check-in",
+        "24/7 CCTV security",
+        "Height limit 2.0m"
+      ]
+    },
+    pricing: {
+      data: [
+        { service: "Meet & Greet", price: "£50–£90/day", details: "Terminal valet" },
+        { service: "Terminal Parking", price: "£25–£60/day", details: "Short walk" },
+        { service: "Long Stay", price: "£45–£75/week", details: "Shuttle included" },
+        { service: "Park & Ride", price: "£35–£65/week", details: "Coach transfer" }
+      ]
+    },
+    faq: [
+      { id: "q1", question: "How far is Park & Ride from  terminal?", answer: "10-15 minute shuttle every 15 mins." },
+      { id: "q2", question: "Is parking secure?", answer: "Park Mark approved with CCTV and patrols." }
+    ]
+  },
+  edi: {
+    info: {
+      text: "Finding the right parking at Edinburgh Airport shouldn't add stress to your journey. At Go Airport Parking LTD Edinburgh Comparison, we make it easy to compare prices, services, and locations of both official and off-site providers. Whether you prefer the ease of Meet & Greet, the value of Park & Ride, or the convenience of Terminal and Long Stay car parks, we've got you covered. Perfect for quick weekend trips or long-haul getaways, our platform helps you find secure, cost-effective parking in just a few clicks. With full transparency, no hidden charges, and peace of mind built-in, your smooth journey starts from the moment you park."
+    },
+    terminalParking: {
+      subtitle: "Edinburgh terminal parking offers quick access:",
+      features: [
+        "Multi-storey car park near terminal",
+        "5 minute walk to check-in",
+        "24/7 CCTV security",
+        "Height limit 2.0m"
+      ]
+    },
+    pricing: {
+      data: [
+        { service: "Meet & Greet", price: "£50–£90/day", details: "Terminal valet" },
+        { service: "Terminal Parking", price: "£25–£60/day", details: "Short walk" },
+        { service: "Long Stay", price: "£45–£75/week", details: "Shuttle included" },
+        { service: "Park & Ride", price: "£35–£65/week", details: "Coach transfer" }
+      ]
+    },
+    faq: [
+      { id: "q1", question: "How far is Park & Ride from Edinburgh terminal?", answer: "10-15 minute shuttle every 15 mins." },
+      { id: "q2", question: "Is parking secure?", answer: "Park Mark approved with CCTV and patrols." }
+    ]
+  },
+  ext: {
+    info: {
+      text: "Finding the right parking at Exeter Airport shouldn't add stress to your journey. At Go Airport Parking LTD Exeter Comparison, we make it easy to compare prices, services, and locations of both official and off-site providers. Whether you prefer the ease of Meet & Greet, the value of Park & Ride, or the convenience of Terminal and Long Stay car parks, we've got you covered. Perfect for quick weekend trips or long-haul getaways, our platform helps you find secure, cost-effective parking in just a few clicks. With full transparency, no hidden charges, and peace of mind built-in, your smooth journey starts from the moment you park."
+    },
+    terminalParking: {
+      subtitle: "Exeter terminal parking offers quick access:",
+      features: [
+        "Multi-storey car park near terminal",
+        "5 minute walk to check-in",
+        "24/7 CCTV security",
+        "Height limit 2.0m"
+      ]
+    },
+    pricing: {
+      data: [
+        { service: "Meet & Greet", price: "£50–£90/day", details: "Terminal valet" },
+        { service: "Terminal Parking", price: "£25–£60/day", details: "Short walk" },
+        { service: "Long Stay", price: "£45–£75/week", details: "Shuttle included" },
+        { service: "Park & Ride", price: "£35–£65/week", details: "Coach transfer" }
+      ]
+    },
+    faq: [
+      { id: "q1", question: "How far is Park & Ride from Exeter terminal?", answer: "10-15 minute shuttle every 15 mins." },
+      { id: "q2", question: "Is parking secure?", answer: "Park Mark approved with CCTV and patrols." }
+    ]
+  },
+  lgw: {
+    info: {
+      text: "Finding the right parking at Gatwick Airport shouldn't add stress to your journey. At Go Airport Parking LTD Gatwick Comparison, we make it easy to compare prices, services, and locations of both official and off-site providers. Whether you prefer the ease of Meet & Greet, the value of Park & Ride, or the convenience of Terminal and Long Stay car parks, we've got you covered. Perfect for quick weekend trips or long-haul getaways, our platform helps you find secure, cost-effective parking in just a few clicks. With full transparency, no hidden charges, and peace of mind built-in, your smooth journey starts from the moment you park."
+    },
+    terminalParking: {
+      subtitle: "Gatwick terminal parking offers quick access:",
+      features: [
+        "Multi-storey car park near terminal",
+        "5 minute walk to check-in",
+        "24/7 CCTV security",
+        "Height limit 2.0m"
+      ]
+    },
+    pricing: {
+      data: [
+        { service: "Meet & Greet", price: "£50–£90/day", details: "Terminal valet" },
+        { service: "Terminal Parking", price: "£25–£60/day", details: "Short walk" },
+        { service: "Long Stay", price: "£45–£75/week", details: "Shuttle included" },
+        { service: "Park & Ride", price: "£35–£65/week", details: "Coach transfer" }
+      ]
+    },
+    faq: [
+      { id: "q1", question: "How far is Park & Ride from Gatwick terminal?", answer: "10-15 minute shuttle every 15 mins." },
+      { id: "q2", question: "Is parking secure?", answer: "Park Mark approved with CCTV and patrols." }
+    ]
   }
 };
 
-export const getSectionData = (slug) => airportSectionData[slug] || null;
+export const getSectionData = (code) => airportSectionData[code] || null;

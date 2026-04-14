@@ -1,3 +1,4 @@
+import { Coffee } from '@mui/icons-material';
 import { airportCode } from '../assets/data.js';
 
 /**
@@ -8,16 +9,16 @@ import { airportCode } from '../assets/data.js';
 import { getSectionData } from './airportSectionData.js';
 
 export const airportConfigs = {
-  birmingham: {
-    slug: 'birmingham',
-    name: 'Birmingham',
-    code: 'BHX',
-    seoTitle: 'Birmingham Airport Parking | Compare Cheap & Secure Deals',
-    seoDescription: 'Compare cheap parking near Birmingham Airport. Find secure Meet & Greet, Park & Ride and on-site options with the best prices and instant booking.',
-    seoKeywords: ['birmingham airport parking', 'birmingham airport meet and greet', 'meet & greet birmingham airport', 'birmingham airport long stay parking', 'birmingham airport park and ride', 'birmingham airport parking deals', 'birmingham airport parking prices'],
+  abz: {
+    slug: 'aberdeen',
+    name: 'Aberdeen',
+    code: 'ABZ',
+    seoTitle: 'Aberdeen Airport Parking | Compare Cheap & Secure Deals',
+    seoDescription: 'Compare trusted parking options near Aberdeen Airport and book secure, affordable deals in minutes with complete peace of mind.',
+    seoKeywords: ['Aberdeen airport parking', 'Aberdeen airport meet and greet', 'meet & greet Aberdeen airport', 'Aberdeen airport long stay parking', 'Aberdeen airport park and ride', 'Aberdeen airport parking deals', 'Aberdeen airport parking prices'],
     heroImage: '/assets/AirportsImages/hero-image.webp',
-    path: '/birmingham-airport-parking',
-    parkingOptionsTitle: 'Parking Options at Birmingham Airport',
+    path: '/Aberdeen-airport-parking',
+    parkingOptionsTitle: 'Parking Options at Aberdeen Airport',
     parkingOptionsDescription: 'We compare a wide range of parking options across the UK to suit every travel need, budget, and journey type, helping you easily find the best value and convenience in one place.',
     parkingCard1: {
       title: "Meet & Greet",
@@ -25,7 +26,7 @@ export const airportConfigs = {
     },
     parkingCard2: {
       title: "Terminal / Short Stay Parking",
-      description: ""
+      description: "Located close to the terminal, this option offers quick walking access to check-in and departures. Best suited for short trips, business visits, or pick-ups and drop-offs where maximum convenience near Bristol Airport is a priority."
     },
     parkingCard3: {
       title: "Long Stay Parking",
@@ -71,7 +72,70 @@ export const airportConfigs = {
       ],
     },
   },
-  bristol: {
+  bhx: {
+    slug: 'birmingham',
+    name: 'Birmingham',
+    code: 'BHX',
+    seoTitle: 'Birmingham Airport Parking | Compare Cheap & Secure Deals',
+    seoDescription: 'Compare trusted parking options near Birmingham Airport and book secure, affordable deals in minutes with complete peace of mind.',
+    seoKeywords: ['birmingham airport parking', 'birmingham airport meet and greet', 'meet & greet birmingham airport', 'birmingham airport long stay parking', 'birmingham airport park and ride', 'birmingham airport parking deals', 'birmingham airport parking prices'],
+    heroImage: '/assets/AirportsImages/hero-image.webp',
+    path: '/birmingham-airport-parking',
+    parkingOptionsTitle: 'Parking Options at Birmingham Airport',
+    parkingOptionsDescription: 'We compare a wide range of parking options across the UK to suit every travel need, budget, and journey type, helping you easily find the best value and convenience in one place.',
+    parkingCard1: {
+      title: "Meet & Greet",
+      description: "The most convenient option for a hassle-free experience. Drive straight to the terminal where a professional driver will collect your vehicle and park it securely for you. Perfect for families, business travellers, or anyone who wants to save time and avoid walking or transfers. "
+    },
+    parkingCard2: {
+      title: "Terminal / Short Stay Parking",
+      description: "Located close to the terminal, this option offers quick walking access to check-in and departures. Best suited for short trips, business visits, or pick-ups and drop-offs where maximum convenience near Bristol Airport is a priority."
+    },
+    parkingCard3: {
+      title: "Long Stay Parking",
+      description: "Ideal for longer trips and extended holidays, Long Stay parking offers a secure and affordable option for travellers. These car parks are usually located slightly further from the terminal but are well connected with regular shuttle bus services, ensuring smooth and easy transfers."
+    },
+    parkingCard4: {
+      title: "Park & Ride",
+      description: "A popular budget-friendly choice for travellers looking to save money. Simply park your vehicle at a secure off-site location and use a complimentary shuttle service that takes you directly to the terminal. It’s a convenient and cost-effective option for all types of journeys."
+    },
+    bookThroughSection: {
+      title: "Why Book Through Go Airport Parking?",
+      items: [
+        {
+          title: `Compare multiple trusted providers in one place`,
+          description:
+            `Get access to a wide range of parking options across major UK airports in one search. `,
+        },
+        {
+          title: `Find cheaper deals than booking directly`,
+          description:
+            `Save money by comparing the best parking prices from different providers instantly.`,
+        },
+        {
+          title: `Secure and vetted parking partners only`,
+          description:
+            `All listed providers are carefully checked to ensure safe and reliable parking near airports. `,
+        },
+        {
+          title: `Fast, simple online booking process`,
+          description:
+            `Book your preferred parking option in just a few clicks with a smooth online system.`,
+        },
+        {
+          title: `Options for all budgets and travel types`,
+          description:
+            `From budget parking to premium Meet & Greet services, we cover every travel need. `,
+        },
+        {
+          title: `Coverage for major UK airports including Birmingham`,
+          description:
+            `Find parking deals near Birmingham, Heathrow, Manchester, Luton, and other major UK airports. `,
+        },
+      ],
+    },
+  },
+  brs: {
     slug: 'bristol',
     name: 'Bristol',
     code: 'BRS',
@@ -134,7 +198,7 @@ export const airportConfigs = {
       ],
     },
   },
-  dubai: {
+  dxb: {
     slug: 'dubai',
     name: 'Dubai',
     code: 'DXB',
@@ -197,7 +261,7 @@ export const airportConfigs = {
       ],
     },
   },
-  dublin: {
+  dub: {
     slug: 'dublin',
     name: 'Dublin',
     code: 'DUB',
@@ -255,7 +319,7 @@ export const airportConfigs = {
       ],
     },
   },
-  glasgow: {
+  gla: {
     slug: 'glasgow',
     name: 'Glasgow',
     code: 'GLA',
@@ -313,7 +377,7 @@ export const airportConfigs = {
       ],
     },
   },
-  heathrow: {
+  lhr: {
     slug: 'heathrow',
     name: 'Heathrow',
     code: 'LHR',
@@ -371,7 +435,7 @@ export const airportConfigs = {
       ],
     },
   },
-  leeds: {
+  lba: {
     slug: 'leeds',
     name: 'Leeds Bradford',
     code: 'LBA',
@@ -429,7 +493,7 @@ export const airportConfigs = {
       ],
     },
   },
-  luton: {
+  ltn: {
     slug: 'luton',
     name: 'Luton',
     code: 'LTN',
@@ -487,7 +551,7 @@ export const airportConfigs = {
       ],
     },
   },
-  manchester: {
+  man: {
     slug: 'manchester',
     name: 'Manchester',
     code: 'MAN',
@@ -545,7 +609,7 @@ export const airportConfigs = {
       ],
     },
   },
-  'southampton-port': {
+  sop: {
     sectionData: getSectionData('southampton-port'),
     slug: 'southampton-port',
     name: 'Southampton',
@@ -604,7 +668,7 @@ export const airportConfigs = {
       ],
     },
   },
-  stansted: {
+  stn: {
     slug: 'stansted',
     name: 'Stansted',
     code: 'STN',
@@ -613,9 +677,363 @@ export const airportConfigs = {
     seoKeywords: ['stansted airport parking', 'stn parking', 'stansted meet and greet', 'stansted long stay'],
     heroImage: '/assets/AirportsImages/hero-image.webp',
     path: '/stansted-airport-parking',
-    sectionData: getSectionData('stansted'),
+    sectionData: getSectionData('stn'),
     parkingOptionsTitle: 'Parking Options at Stansted Airport',
     parkingOptionsDescription: 'There are several types of parking available near Stansted Airport, each offering a different balance of price and convenience.',
+    parkingCard1: {
+      title: "Meet & Greet",
+      description: "A straightforward option for travellers who want to minimise effort. You arrive at the terminal, hand over your vehicle, and continue directly to departures."
+    },
+    parkingCard2: {
+      title: "Terminal / Short Stay Parking",
+      description: "Designed for quick access, this option keeps you closer to the terminal, making it useful for short trips or tight schedules."
+    },
+    parkingCard3: {
+      title: "Long Stay Parking",
+      description: "A suitable option for longer trips where overall cost matters more than proximity. These locations are usually further out but often include transfer services."
+    },
+    parkingCard4: {
+      title: "Park & Ride",
+      description: "A lower-cost option where you park at a nearby facility and take a shuttle to the terminal. It’s a practical choice if you’re happy to allow extra transfer time."
+    },
+    bookThroughSection: {
+      title: "Why Compare with Go Airport Parking",
+      items: [
+        {
+          title: `View Multiple Options at Once`,
+          description:
+            `Compare different parking providers without switching between multiple websites.`,
+        },
+        {
+          title: `Focused on Reliable Choices`,
+          description:
+            `We include providers that meet expected standards for safety and service.`,
+        },
+        {
+          title: `Simple, Upfront Pricing`,
+          description:
+            `Costs are clearly displayed, including important details like transfers and booking terms.`,
+        },
+        {
+          title: `Learn Before You Book`,
+          description:
+            `Use real customer feedback to understand each option before making a decision.`,
+        },
+        {
+          title: `Plan Ahead with Confidence`,
+          description:
+            `Booking early helps avoid last-minute issues and gives you more choice.`,
+        },
+      ],
+    },
+  },
+  cwl: {
+    slug: 'cardiff',
+    name: 'Cardiff',
+    code: 'cwl',
+    seoTitle: 'Cardiff Airport Parking Comparison | Find Deals & Book Online',
+    seoDescription: 'Compare parking near Cardiff Airport, explore different providers, and book a secure option that matches your travel plans and budget.',
+    seoKeywords: ['Cardiff airport parking', 'stn parking', 'Cardiff meet and greet', 'Cardiff long stay'],
+    heroImage: '/assets/AirportsImages/hero-image.webp',
+    path: '/cardiff-airport-parking',
+    sectionData: getSectionData('cwl'),
+    parkingOptionsTitle: 'Parking Options at Cardiff Airport',
+    parkingOptionsDescription: 'There are several types of parking available near Cardiff Airport, each offering a different balance of price and convenience.',
+    parkingCard1: {
+      title: "Meet & Greet",
+      description: "A straightforward option for travellers who want to minimise effort. You arrive at the terminal, hand over your vehicle, and continue directly to departures."
+    },
+    parkingCard2: {
+      title: "Terminal / Short Stay Parking",
+      description: "Designed for quick access, this option keeps you closer to the terminal, making it useful for short trips or tight schedules."
+    },
+    parkingCard3: {
+      title: "Long Stay Parking",
+      description: "A suitable option for longer trips where overall cost matters more than proximity. These locations are usually further out but often include transfer services."
+    },
+    parkingCard4: {
+      title: "Park & Ride",
+      description: "A lower-cost option where you park at a nearby facility and take a shuttle to the terminal. It’s a practical choice if you’re happy to allow extra transfer time."
+    },
+    bookThroughSection: {
+      title: "Why Compare with Go Airport Parking",
+      items: [
+        {
+          title: `View Multiple Options at Once`,
+          description:
+            `Compare different parking providers without switching between multiple websites.`,
+        },
+        {
+          title: `Focused on Reliable Choices`,
+          description:
+            `We include providers that meet expected standards for safety and service.`,
+        },
+        {
+          title: `Simple, Upfront Pricing`,
+          description:
+            `Costs are clearly displayed, including important details like transfers and booking terms.`,
+        },
+        {
+          title: `Learn Before You Book`,
+          description:
+            `Use real customer feedback to understand each option before making a decision.`,
+        },
+        {
+          title: `Plan Ahead with Confidence`,
+          description:
+            `Booking early helps avoid last-minute issues and gives you more choice.`,
+        },
+      ],
+    },
+  },
+  dov: {
+    slug: 'dover',
+    name: 'Dover',
+    code: 'dov',
+    seoTitle: 'Dover Airport Parking Comparison | Find Deals & Book Online',
+    seoDescription: 'Compare parking near Cardiff Airport, explore different providers, and book a secure option that matches your travel plans and budget.',
+    seoKeywords: ['Dover airport parking', 'stn parking', 'Dover meet and greet', 'Dover long stay'],
+    heroImage: '/assets/AirportsImages/hero-image.webp',
+    path: '/dover-airport-parking',
+    sectionData: getSectionData('dov'),
+    parkingOptionsTitle: 'Parking Options at Dover Airport',
+    parkingOptionsDescription: 'There are several types of parking available near Dover Airport, each offering a different balance of price and convenience.',
+    parkingCard1: {
+      title: "Meet & Greet",
+      description: "A straightforward option for travellers who want to minimise effort. You arrive at the terminal, hand over your vehicle, and continue directly to departures."
+    },
+    parkingCard2: {
+      title: "Terminal / Short Stay Parking",
+      description: "Designed for quick access, this option keeps you closer to the terminal, making it useful for short trips or tight schedules."
+    },
+    parkingCard3: {
+      title: "Long Stay Parking",
+      description: "A suitable option for longer trips where overall cost matters more than proximity. These locations are usually further out but often include transfer services."
+    },
+    parkingCard4: {
+      title: "Park & Ride",
+      description: "A lower-cost option where you park at a nearby facility and take a shuttle to the terminal. It’s a practical choice if you’re happy to allow extra transfer time."
+    },
+    bookThroughSection: {
+      title: "Why Compare with Go Airport Parking",
+      items: [
+        {
+          title: `View Multiple Options at Once`,
+          description:
+            `Compare different parking providers without switching between multiple websites.`,
+        },
+        {
+          title: `Focused on Reliable Choices`,
+          description:
+            `We include providers that meet expected standards for safety and service.`,
+        },
+        {
+          title: `Simple, Upfront Pricing`,
+          description:
+            `Costs are clearly displayed, including important details like transfers and booking terms.`,
+        },
+        {
+          title: `Learn Before You Book`,
+          description:
+            `Use real customer feedback to understand each option before making a decision.`,
+        },
+        {
+          title: `Plan Ahead with Confidence`,
+          description:
+            `Booking early helps avoid last-minute issues and gives you more choice.`,
+        },
+      ],
+    },
+  },
+  ema: {
+    slug: 'east-midlands',
+    name: 'East Midlands',
+    code: 'ema',
+    seoTitle: 'East Midlands Airport Parking Comparison | Find Deals & Book Online',
+    seoDescription: 'Compare parking near Cardiff Airport, explore different providers, and book a secure option that matches your travel plans and budget.',
+    seoKeywords: ['East Midlands airport parking', 'stn parking', 'East Midlands meet and greet', 'East Midlands long stay'],
+    heroImage: '/assets/AirportsImages/hero-image.webp',
+    path: '/ema-airport-parking',
+    sectionData: getSectionData('ema'),
+    parkingOptionsTitle: 'Parking Options at East Midlands Airport',
+    parkingOptionsDescription: 'There are several types of parking available near East Midlands Airport, each offering a different balance of price and convenience.',
+    parkingCard1: {
+      title: "Meet & Greet",
+      description: "A straightforward option for travellers who want to minimise effort. You arrive at the terminal, hand over your vehicle, and continue directly to departures."
+    },
+    parkingCard2: {
+      title: "Terminal / Short Stay Parking",
+      description: "Designed for quick access, this option keeps you closer to the terminal, making it useful for short trips or tight schedules."
+    },
+    parkingCard3: {
+      title: "Long Stay Parking",
+      description: "A suitable option for longer trips where overall cost matters more than proximity. These locations are usually further out but often include transfer services."
+    },
+    parkingCard4: {
+      title: "Park & Ride",
+      description: "A lower-cost option where you park at a nearby facility and take a shuttle to the terminal. It’s a practical choice if you’re happy to allow extra transfer time."
+    },
+    bookThroughSection: {
+      title: "Why Compare with Go Airport Parking",
+      items: [
+        {
+          title: `View Multiple Options at Once`,
+          description:
+            `Compare different parking providers without switching between multiple websites.`,
+        },
+        {
+          title: `Focused on Reliable Choices`,
+          description:
+            `We include providers that meet expected standards for safety and service.`,
+        },
+        {
+          title: `Simple, Upfront Pricing`,
+          description:
+            `Costs are clearly displayed, including important details like transfers and booking terms.`,
+        },
+        {
+          title: `Learn Before You Book`,
+          description:
+            `Use real customer feedback to understand each option before making a decision.`,
+        },
+        {
+          title: `Plan Ahead with Confidence`,
+          description:
+            `Booking early helps avoid last-minute issues and gives you more choice.`,
+        },
+      ],
+    },
+  },
+  edi: {
+    slug: 'edi',
+    name: 'Edinburgh',
+    code: 'edi',
+    seoTitle: 'Edinburgh Airport Parking Comparison | Find Deals & Book Online',
+    seoDescription: 'Compare parking near Cardiff Airport, explore different providers, and book a secure option that matches your travel plans and budget.',
+    seoKeywords: ['Edinburgh airport parking', 'stn parking', 'Edinburgh meet and greet', 'Edinburgh long stay'],
+    heroImage: '/assets/AirportsImages/hero-image.webp',
+    path: '/ema-airport-parking',
+    sectionData: getSectionData('edi'),
+    parkingOptionsTitle: 'Parking Options at Edinburgh Airport',
+    parkingOptionsDescription: 'There are several types of parking available near Edinburgh Airport, each offering a different balance of price and convenience.',
+    parkingCard1: {
+      title: "Meet & Greet",
+      description: "A straightforward option for travellers who want to minimise effort. You arrive at the terminal, hand over your vehicle, and continue directly to departures."
+    },
+    parkingCard2: {
+      title: "Terminal / Short Stay Parking",
+      description: "Designed for quick access, this option keeps you closer to the terminal, making it useful for short trips or tight schedules."
+    },
+    parkingCard3: {
+      title: "Long Stay Parking",
+      description: "A suitable option for longer trips where overall cost matters more than proximity. These locations are usually further out but often include transfer services."
+    },
+    parkingCard4: {
+      title: "Park & Ride",
+      description: "A lower-cost option where you park at a nearby facility and take a shuttle to the terminal. It’s a practical choice if you’re happy to allow extra transfer time."
+    },
+    bookThroughSection: {
+      title: "Why Compare with Go Airport Parking",
+      items: [
+        {
+          title: `View Multiple Options at Once`,
+          description:
+            `Compare different parking providers without switching between multiple websites.`,
+        },
+        {
+          title: `Focused on Reliable Choices`,
+          description:
+            `We include providers that meet expected standards for safety and service.`,
+        },
+        {
+          title: `Simple, Upfront Pricing`,
+          description:
+            `Costs are clearly displayed, including important details like transfers and booking terms.`,
+        },
+        {
+          title: `Learn Before You Book`,
+          description:
+            `Use real customer feedback to understand each option before making a decision.`,
+        },
+        {
+          title: `Plan Ahead with Confidence`,
+          description:
+            `Booking early helps avoid last-minute issues and gives you more choice.`,
+        },
+      ],
+    },
+  },
+  ext: {
+    slug: 'exeter',
+    name: 'Exeter',
+    code: 'ext',
+    seoTitle: 'Exeter Airport Parking Comparison | Find Deals & Book Online',
+    seoDescription: 'Compare parking near Cardiff Airport, explore different providers, and book a secure option that matches your travel plans and budget.',
+    seoKeywords: ['Exeter airport parking', 'stn parking', 'Exeter meet and greet', 'Exeter long stay'],
+    heroImage: '/assets/AirportsImages/hero-image.webp',
+    path: '/exeter-airport-parking',
+    sectionData: getSectionData('ext'),
+    parkingOptionsTitle: 'Parking Options at Exeter Airport',
+    parkingOptionsDescription: 'There are several types of parking available near Exeter Airport, each offering a different balance of price and convenience.',
+    parkingCard1: {
+      title: "Meet & Greet",
+      description: "A straightforward option for travellers who want to minimise effort. You arrive at the terminal, hand over your vehicle, and continue directly to departures."
+    },
+    parkingCard2: {
+      title: "Terminal / Short Stay Parking",
+      description: "Designed for quick access, this option keeps you closer to the terminal, making it useful for short trips or tight schedules."
+    },
+    parkingCard3: {
+      title: "Long Stay Parking",
+      description: "A suitable option for longer trips where overall cost matters more than proximity. These locations are usually further out but often include transfer services."
+    },
+    parkingCard4: {
+      title: "Park & Ride",
+      description: "A lower-cost option where you park at a nearby facility and take a shuttle to the terminal. It’s a practical choice if you’re happy to allow extra transfer time."
+    },
+    bookThroughSection: {
+      title: "Why Compare with Go Airport Parking",
+      items: [
+        {
+          title: `View Multiple Options at Once`,
+          description:
+            `Compare different parking providers without switching between multiple websites.`,
+        },
+        {
+          title: `Focused on Reliable Choices`,
+          description:
+            `We include providers that meet expected standards for safety and service.`,
+        },
+        {
+          title: `Simple, Upfront Pricing`,
+          description:
+            `Costs are clearly displayed, including important details like transfers and booking terms.`,
+        },
+        {
+          title: `Learn Before You Book`,
+          description:
+            `Use real customer feedback to understand each option before making a decision.`,
+        },
+        {
+          title: `Plan Ahead with Confidence`,
+          description:
+            `Booking early helps avoid last-minute issues and gives you more choice.`,
+        },
+      ],
+    },
+  },
+  lgw: {
+    slug: 'gatwick',
+    name: 'Gatwick',
+    code: 'lgw',
+    seoTitle: 'Gatwick Airport Parking Comparison | Find Deals & Book Online',
+    seoDescription: 'Compare parking near Cardiff Airport, explore different providers, and book a secure option that matches your travel plans and budget.',
+    seoKeywords: ['Gatwick airport parking', 'stn parking', 'Gatwick meet and greet', 'Gatwick long stay'],
+    heroImage: '/assets/AirportsImages/hero-image.webp',
+    path: '/gatwick-airport-parking',
+    sectionData: getSectionData('lgw'),
+    parkingOptionsTitle: 'Parking Options at Gatwick Airport',
+    parkingOptionsDescription: 'There are several types of parking available near Exeter Airport, each offering a different balance of price and convenience.',
     parkingCard1: {
       title: "Meet & Greet",
       description: "A straightforward option for travellers who want to minimise effort. You arrive at the terminal, hand over your vehicle, and continue directly to departures."
@@ -665,10 +1083,15 @@ export const airportConfigs = {
   }
 };
 
-export const getAirportConfig = (slug) => airportConfigs[slug] || null;
+export const getAirportConfig = (code) => airportConfigs[code] || null;
 
+/**
+ * DEPRECATED: getAirportList() - Replaced by useAirports API hook in Navbar.
+ * Keep for backward compatibility in other components (AirportPage etc.)
+ */
 export const getAirportList = () => Object.values(airportConfigs).map(config => ({
-  title: config.name + (config.slug === 'southampton-port' ? ' Port' : ' Airport'),
+  title: config.name + ((config.code === 'sop' || config.code === 'dov') ? ' Port' : ' Airport'),
+
   path: config.path
 }));
 

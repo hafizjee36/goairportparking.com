@@ -38,6 +38,7 @@ const AirportPage = lazy(() => import('../pages/airport/AirportPage'));
 const CustomerDashboard = lazy(() => import('../pages/manageBooking/CustomerDashboard'));
 const About = lazy(() => import('../pages/about/About'));
 const WhyChooseUs = lazy(() => import('../pages/whyChooseUs/WhyChooseUs'));
+const Services = lazy(() => import('../pages/services/Services'));
 const MyBookings = lazy(() => import('../pages/MyBookings'));
 const BookingSuccess = lazy(() => import('../pages/success/BookingSuccess'));
 const BookingCancel = lazy(() => import('../pages/success/BookingCancel'));
@@ -83,6 +84,7 @@ const routes = [
   { path: '/customer-dashboard', element: withSuspense(CustomerDashboard) },
   { path: '/about-us', element: withSuspense(About) },
   { path: '/why-choose-us', element: withSuspense(WhyChooseUs) },
+  { path: '/services', element: withSuspense(Services) },
   { path: '/my-bookings', element: withSuspense(MyBookings) },
   { path: '/review', element: withSuspense(Review) },
   { path: '*', element: <Navigate to="/" replace /> },

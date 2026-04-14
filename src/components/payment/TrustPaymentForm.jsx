@@ -219,7 +219,7 @@ const TrustPaymentForm = ({
           <input type="hidden" name="ruleidentifier" value="STR-3" />
           <input type="hidden" name="ruleidentifier" value="STR-4" />
           <input type="hidden" name="ruleidentifier" value="STR-5" />
-          <input type="hidden" name="merchantemail" value="merchant@email.com" />
+          <input type="hidden" name="merchantemail" value="info@goairportparking.com" />
           <input type="hidden" name="ruleidentifier" value="STR-6" />
           <input type="hidden" name="successfulurlredirect" value={buildCallbackUrl()} />
           <input type="hidden" name="ruleidentifier" value="STR-7" />

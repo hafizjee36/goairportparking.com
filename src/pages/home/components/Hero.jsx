@@ -121,7 +121,6 @@ function Hero() {
               sx={{
                 color: theme.palette.text.white100,
                 maxWidth: 800,
-                minHeight: 24,
                 minHeight: { xs: 74, sm: 92, md: 138 },
               }}
             >
