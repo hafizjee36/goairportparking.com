@@ -52,7 +52,7 @@ export const contactData = [
   },
   {
     id: 5,
-    text: "Go Airport Parking LTD",
+    text: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC",
     icon: (
       <BusinessIcon sx={{ color: theme.palette.primary.main, fontSize: 22 }} />
     ),

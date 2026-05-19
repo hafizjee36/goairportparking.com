@@ -72,7 +72,7 @@ export default function ManchesterInfoSection() {
                 color: "primary.main",
               }}
             >
-              Go Airport Parking LTD Manchester Comparison
+              CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC Manchester Comparison
             </Typography>
             , we make it easy to compare both{" "}
             <Typography component="span" sx={{ fontWeight: 600 }}>

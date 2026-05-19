@@ -71,7 +71,7 @@ export default function LeedsInfoSection() {
                 color: "primary.main",
               }}
             >
-             With Go Airport Parking LTD Leeds Bradford Comparison,
+             With CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC Leeds Bradford Comparison,
             </Typography>
            arranging secure and affordable parking has never been easier. Whether you’re looking for the speed of Meet & Greet, the value of Park & Ride, or long-stay options for extended trips, we compare the best deals from trusted providers. Choose between on-site and off-site parking, all with reliable transfers, transparent pricing, and top-rated security features. Book early to lock in the best rates and guarantee your space before you travel. No hidden costs, no stress — just smooth, straightforward parking that ensures your journey starts the right way.
           </Typography>

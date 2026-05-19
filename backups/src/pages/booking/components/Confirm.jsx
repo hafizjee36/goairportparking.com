@@ -165,7 +165,7 @@ const Confirm = ({
                   cursor: !isTermsEnabled ? "not-allowed" : "pointer",
                 }}
               >
-                Go Airport Parking LTD Terms & Conditions
+                CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC Terms & Conditions
               </Link>
               {selectedProduct?.company?.name && (
                 <>

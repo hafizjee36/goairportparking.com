@@ -167,7 +167,7 @@ export default function Footer() {
                   <Box
                     component="img"
                     src={logo}
-                    alt="Go Airport Parking LTD"
+                    alt="CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC"
                     sx={{ height: 100, width: "auto" }}
                   />
                 </Box>
@@ -180,7 +180,7 @@ export default function Footer() {
                     color: theme.palette.text.white80,
                   }}
                 >
-                  Go Airport Parking LTD is an independent airport-parking comparison platform, helping travellers find and compare secure parking options across England and Europe with real-time availability, transparent pricing, and 24/7 customer support
+                  CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC is an independent airport-parking comparison platform, helping travellers find and compare secure parking options across England and Europe with real-time availability, transparent pricing, and 24/7 customer support
                 </Typography>
               </Box>
             </Grid>

@@ -32,7 +32,7 @@ export default function PrivacyPolicy() {
     { type: "h2", text: "GDPR Statement" },
     {
       type: "p",
-      text: "Go Airport Parking LTD has built its business on customer trust and places a high importance on information security within our company.",
+      text: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC has built its business on customer trust and places a high importance on information security within our company.",
     },
     {
       type: "p",
@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
     },
     {
       type: "p",
-      text: "Go Airport Parking LTD will comply with the GDPR as a processor and controller of data. We are working with our suppliers and partner organisations to ensure they can also meet these obligations. As we work towards best practice and compliance, and our efforts are concentrated in these key areas:",
+      text: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC will comply with the GDPR as a processor and controller of data. We are working with our suppliers and partner organisations to ensure they can also meet these obligations. As we work towards best practice and compliance, and our efforts are concentrated in these key areas:",
     },
     {
       type: "ul",
@@ -53,12 +53,12 @@ export default function PrivacyPolicy() {
     },
     {
       type: "p",
-      text: "Go Airport Parking LTD is totally committed to GDPR compliance.",
+      text: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC is totally committed to GDPR compliance.",
     },
 
     {
       type: "h2",
-      text: "What personal information does Go Airport Parking LTD ask for?",
+      text: "What personal information does CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC ask for?",
     },
     {
       type: "p",
@@ -67,7 +67,7 @@ export default function PrivacyPolicy() {
 
     {
       type: "h2",
-      text: "How does Go Airport Parking LTD use your information?",
+      text: "How does CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC use your information?",
     },
     {
       type: "ul",
@@ -78,13 +78,13 @@ export default function PrivacyPolicy() {
         "We might use your 'telephone number' or 'e-mail address' in the unlikely event that we need to contact you urgently about your booking",
         "For travel card applications we will send your Name, Email Address, Address, Contact Number and Date of Birth to our selected travel card provider. We also receive your Email Address back from the provider when you complete your application, this allows us to manage the process",
         "If you have subscribed to receive direct marketing from us, we may also use this information to let you know about any special offers/promotions we think would be of interest to you",
-        "We may also use your IP (Internet Protocol) address to diagnose problems with our server and administer the site - monitoring visitor traffic patterns and site usage to help us develop and improve the Go Airport Parking LTD website further",
+        "We may also use your IP (Internet Protocol) address to diagnose problems with our server and administer the site - monitoring visitor traffic patterns and site usage to help us develop and improve the CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC website further",
       ],
     },
 
     {
       type: "h2",
-      text: "How does Go Airport Parking LTD protect customer information?",
+      text: "How does CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC protect customer information?",
     },
     {
       type: "p",
@@ -93,20 +93,20 @@ export default function PrivacyPolicy() {
 
     {
       type: "h2",
-      text: "Will Go Airport Parking LTD disclose any of this personal information to third parties?",
+      text: "Will CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC disclose any of this personal information to third parties?",
     },
     {
       type: "p",
-      text: "Go Airport Parking LTD will only disclose your details to our suppliers for the fulfilment of your booked services or travel card application. We will only pass the information required to fulfil that service by the supplier. We will never pass on your details to other companies for marketing purposes. We will never disclose credit/debit card information unless the law requires us to do so. If we are required to disclose any personal information by any applicable law, regulation or legal process we will only disclose the minimum information required to perform the booking function or manage our legal obligations.",
+      text: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC will only disclose your details to our suppliers for the fulfilment of your booked services or travel card application. We will only pass the information required to fulfil that service by the supplier. We will never pass on your details to other companies for marketing purposes. We will never disclose credit/debit card information unless the law requires us to do so. If we are required to disclose any personal information by any applicable law, regulation or legal process we will only disclose the minimum information required to perform the booking function or manage our legal obligations.",
     },
 
     {
       type: "h2",
-      text: "Will Go Airport Parking LTD use the information I give for direct marketing?",
+      text: "Will CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC use the information I give for direct marketing?",
     },
     {
       type: "p",
-      text: "Go Airport Parking LTD will only use your information for direct marketing activities, such as offers and product updates if you have given us your permission for us to do so. If you do not want any contact with us, apart from that which is necessary for us to give you our normal level of service, then you can unsubscribe at any time.",
+      text: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC will only use your information for direct marketing activities, such as offers and product updates if you have given us your permission for us to do so. If you do not want any contact with us, apart from that which is necessary for us to give you our normal level of service, then you can unsubscribe at any time.",
     },
 
     { type: "h2", text: "The Website" },
@@ -186,7 +186,7 @@ export default function PrivacyPolicy() {
     <>
       <HeroSection
         title="Privacy Policy"
-        subtitle="How Go Airport Parking LTD collects, uses, and protects your data."
+        subtitle="How CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC collects, uses, and protects your data."
         image={privacyImg}
       />
 

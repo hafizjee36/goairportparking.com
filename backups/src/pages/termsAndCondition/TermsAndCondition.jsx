@@ -28,15 +28,15 @@ export default function TermsAndCondition() {
       bullets: [
         {
           heading: "Confirmation Voucher",
-          body: "Go Airport Parking LTD. will make every reasonable effort to email your confirmation voucher to the address provided. If you do not receive it, you must contact us immediately. Failure to attend without cancellation, or cancellations within 24 hours of the booking date, will result in no refund.",
+          body: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC. will make every reasonable effort to email your confirmation voucher to the address provided. If you do not receive it, you must contact us immediately. Failure to attend without cancellation, or cancellations within 24 hours of the booking date, will result in no refund.",
         },
         {
           heading: "Payment Policy",
-          body: "By booking, you authorize Go Airport Parking LTD. to charge your card for the full amount. You are responsible for ensuring your payment details are correct and up to date. Payment disputes must be reported within 24 hours of the transaction.",
+          body: "By booking, you authorize CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC. to charge your card for the full amount. You are responsible for ensuring your payment details are correct and up to date. Payment disputes must be reported within 24 hours of the transaction.",
         },
         {
           heading: "Agency Role",
-          body: "Go Airport Parking LTD. acts as an agent for car parks and is not responsible for operating the car parks. We accept liability for proven processing errors or negligence, provided claims are submitted before the vehicle leaves the car park.",
+          body: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC. acts as an agent for car parks and is not responsible for operating the car parks. We accept liability for proven processing errors or negligence, provided claims are submitted before the vehicle leaves the car park.",
         },
         {
           heading: "Car Park Responsibility",
@@ -69,7 +69,7 @@ export default function TermsAndCondition() {
         },
         {
           heading: "Chargebacks and Payment Disputes",
-          body: "If you initiate a chargeback with your card issuer (Visa/Mastercard), you must also notify Go Airport Parking LTD. immediately. Failure to do so may delay resolution.",
+          body: "If you initiate a chargeback with your card issuer (Visa/Mastercard), you must also notify CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC. immediately. Failure to do so may delay resolution.",
         },
       ],
     },
@@ -78,7 +78,7 @@ export default function TermsAndCondition() {
       bullets: [
         {
           heading: "Role as Booking Agent",
-          body: "Go Airport Parking LTD. operates solely as a booking agent and does not own, operate, or control the services offered. You are bound by both our terms and the service provider’s terms. Your contract for service delivery is with the provider.",
+          body: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC. operates solely as a booking agent and does not own, operate, or control the services offered. You are bound by both our terms and the service provider’s terms. Your contract for service delivery is with the provider.",
         },
         {
           heading: "Limited Liability",
@@ -153,8 +153,8 @@ export default function TermsAndCondition() {
   return (
     <>
       <HeroSection
-        title="Terms & Conditions – Go Airport Parking LTD"
-        subtitle="These Terms & Conditions govern all bookings made with Go Airport Parking LTD. By booking with us, you agree to the following terms."
+        title="Terms & Conditions – CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC"
+        subtitle="These Terms & Conditions govern all bookings made with CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC. By booking with us, you agree to the following terms."
         image={tnc}
       />
 

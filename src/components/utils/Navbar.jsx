@@ -171,7 +171,7 @@ const airportOptions = airportParkingOptions;
               <Box
                 component="img"
                 src={logo}
-                alt="Go Airport Parking LTD"
+                alt="CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC"
                 width="180"
                 height="50"
                 loading="eager"

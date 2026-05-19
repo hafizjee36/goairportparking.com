@@ -153,7 +153,7 @@ export default function TermsAndCondition() {
   return (
     <>
       <HeroSection
-        title="Terms & Conditions – Go Airport Parking LTD"
+        title="Terms & Conditions – CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC"
         subtitle="These Terms & Conditions govern all bookings made with CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC  By booking with us, you agree to the following terms."
         image={tnc}
       />

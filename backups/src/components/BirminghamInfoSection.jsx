@@ -71,7 +71,7 @@ export default function BirminghamInfoSection() {
                 color: "primary.main",
               }}
             >
-              Go Airport Parking LTD Birmingham Comparison
+              CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC Birmingham Comparison
             </Typography>
             , we make it easy to compare prices, services, and locations of both official and off-site providers. Whether you prefer the ease of Meet & Greet, the value of Park & Ride, or the convenience of Terminal and Long Stay car parks, we’ve got you covered. Perfect for quick weekend trips or long-haul getaways, our platform helps you find secure, cost-effective parking in just a few clicks. With full transparency, no hidden charges, and peace of mind built-in, your smooth journey starts from the moment you park.
           </Typography>

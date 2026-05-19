@@ -10,7 +10,7 @@ export default function DefaultSeo() {
       // DEFAULT META
       // =============================
 
-      if (!document.title || document.title === "Go Airport Parking LTD") {
+      if (!document.title || document.title === "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC") {
         document.title =
           "Go Airport Parking - Compare & Book Airport Parking Deals";
       }

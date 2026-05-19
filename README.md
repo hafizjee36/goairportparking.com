@@ -1,6 +1,6 @@
-# Go Airport Parking LTD App - React Frontend
+# CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC App - React Frontend
 
-A React frontend application for the Go Airport Parking LTD booking system. This app is built with Vite and integrates with Stripe for secure payment processing.
+A React frontend application for the CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC booking system. This app is built with Vite and integrates with Stripe for secure payment processing.
 
 ## Features
 

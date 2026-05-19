@@ -71,7 +71,7 @@ export default function GlasgowInfoSection() {
                 color: "primary.main",
               }}
             >
-              Go Airport Parking LTD Glasgow Comparison,
+              CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC Glasgow Comparison,
             </Typography>
             , booking secure and affordable parking is fast and easy. Whether you need the convenience of Meet & Greet, the flexibility of Park & Ride, or long-stay parking for extended trips, we compare the best deals from trusted providers. Both on-site and off-site options are available, with transparent pricing, regular shuttle transfers, and reliable security. By booking early, you guarantee your space and secure the lowest rates. No hidden fees, no last-minute stress — just smooth, straightforward parking that helps your journey get off to the best possible start.
           </Typography>
