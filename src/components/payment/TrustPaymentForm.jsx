@@ -138,7 +138,6 @@ const TrustPaymentForm = ({
         totalAmount: String(totalAmount),
         bookingReference: multimode || syncResult.multiModeReference || '',
         referenceNo: referenceNo || syncResult.referenceNo || '',
-        referenceNo: referenceNo || syncResult.referenceNo || '',
         paymentMethod: 'TrustPayment',
       };
       localStorage.setItem('booking_data', JSON.stringify(sessionData));

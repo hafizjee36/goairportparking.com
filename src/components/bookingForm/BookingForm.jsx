@@ -46,6 +46,7 @@ import CustomButton from "../reusable/CustomButton";
 import theme from "../../theme";
 import ErrorMessage from "../reusable/ErrorMessage"; 
 import { Height } from "@mui/icons-material";
+import { filterAirportsByRegion } from "../../utils/airportUtils";
 
 // IMPROVED: Field Wrapper Component
 function FieldWrapper({ children, error, hasAttemptedSubmit, sx = {} }) {
@@ -71,23 +72,7 @@ export default function BookingForm() {
   const { region: userRegion, isDubai: isUserFromDubai, loading: regionLoading } = useUserRegion();
 
   const filteredAirports = React.useMemo(() => {
-    if (!airports || airports.length === 0) return [];
-    
-    // Helper function to check if airport is Dubai
-    const isDubaiAirport = (apt) => {
-      return (apt.level && apt.level.toLowerCase().includes('dubai')) ||
-        (apt.value && apt.value.toLowerCase() === 'dxb') ||
-        (apt.name && apt.name.toLowerCase().includes('dubai')) ||
-        (apt.code && apt.code.toLowerCase() === 'dxb');
-    };
-    
-    // If user is NOT from Dubai, exclude Dubai airport
-    if (!isUserFromDubai) {
-      return airports.filter(apt => !isDubaiAirport(apt));
-    }
-    
-    // If user is from Dubai, show all airports including Dubai
-    return airports;
+    return filterAirportsByRegion(airports, isUserFromDubai);
   }, [airports, isUserFromDubai]);
 
 

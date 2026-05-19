@@ -20,6 +20,7 @@ import StripePay from "../../components/payment/StripePay";
 import TrustPaymentForm from "../../components/payment/TrustPaymentForm";
 // import TrustPaymentPay from "../../components/payment/TrustPaymentPay";
 import NetworkInternationalPay from "../../components/payment/NetworkInternationalPay";
+import TotalPayForm from "../../components/payment/TotalPayForm";
 import {
   RadioGroup,
   FormControlLabel,
@@ -244,11 +245,9 @@ useEffect(() => {
     totalsBreakdown.total ||
     baseProduct.price + baseProduct.bookingFee + basketTotal;
   const [step, setStep] = useState(1);
-  const initialGateway = getAirport === 'DXB' ? 'networkinternational' : (selectedParking?.api_tag === 'a2z' ? 'stripe' : 'trustpayment');
-  const [selectedGateway, setSelectedGateway] = useState(initialGateway); // 'stripe', 'trustpayment'
-  console.log('baseProduct: ',baseProduct)
-  console.log('basketTotal: ',basketTotal)
-  console.log('orderTotal: ',orderTotal)
+  const initialGateway = getAirport === 'DXB' ? 'totalpay' : (selectedParking?.api_tag === 'a2z' ? 'stripe' : 'totalpay');
+  const [selectedGateway, setSelectedGateway] = useState(initialGateway); // 'stripe', 'trustpayment', 'networkinternational', 'totalpay'
+  
   useEffect(() => {
     if (step === 2) {
       window.scrollTo({
@@ -448,6 +447,7 @@ useEffect(() => {
                           personalComplete
                         );
                         if (!personalComplete) {
+
                           console.log(
                             "❌ Validation failed - missing required personal details"
                           );
@@ -475,6 +475,43 @@ useEffect(() => {
                       syncStatus={syncStatus}
                     />
                     </>
+                  ) : selectedGateway === 'totalpay' ? (
+                    <TotalPayForm
+                      personalData={personalData}
+                      vehicleData={vehicles}
+                      bookingOptions={bookingOptions}
+                      selectedProduct={selectedProduct || selectedParking}
+                      searchData={searchData}
+                      totalAmount={correctPricing.total}
+                      correctPricing={correctPricing}
+                      airport={getAirport}
+                      onValidate={() => {
+                        dispatch(setHasAttemptedSubmit(true));
+                        const requiredPersonalFields = [
+                          "firstName",
+                          "lastName",
+                          "email",
+                          "phone",
+                        ];
+                        const personalComplete = requiredPersonalFields.every(
+                          (field) => personalData[field]?.trim()
+                        );
+                        return personalComplete;
+                      }}
+                      onPaymentSuccess={(result) => {
+                        console.log("✅ TotalPay payment initiated:", result);
+                        dispatch(setPaymentSuccess(result));
+                      }}
+                      onPaymentError={(error) => {
+                        console.error("❌ TotalPay payment failed:", error);
+                        dispatch(setPaymentError(error.message || "Payment failed"));
+                      }}
+                      onBookingSync={triggerSync}
+                      multiModeReference={multimode}
+                      referenceNo={referenceNo}
+                      supplierCost={correctPricing.supplierCost || 0}
+                      syncStatus={syncStatus}
+                    />
                   ) : selectedGateway === 'networkinternational' ? (
                     <NetworkInternationalPay
                       personalData={personalData}

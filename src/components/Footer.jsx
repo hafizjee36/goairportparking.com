@@ -120,7 +120,7 @@ export default function Footer() {
           color: theme.palette.background.paper,
         }}
       >
-       Go Airport Parking LTD
+      CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC
       </Typography>
       <Typography
         sx={{
@@ -131,7 +131,7 @@ export default function Footer() {
       >
         Company number:&nbsp;
         <Box component="span" sx={{ color: theme.palette.primary.main }}>
-         16748588
+         1494313
         </Box>
       </Typography>
     </Box>
@@ -250,7 +250,7 @@ export default function Footer() {
                           }}
                         />
                       }
-                      text="71-75 Shelton Street, Covent Garden, London, United Kingdom, WC2H 9JQ"
+                      text="AL GURG BUILDING (KARAMA), Al Karama, Office M1-67, Dubai, United Arab Emirates"
                     />
                   </a>
                 </Grid>

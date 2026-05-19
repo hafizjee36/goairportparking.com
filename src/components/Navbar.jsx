@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   AppBar,
   Toolbar,
@@ -30,6 +30,7 @@ import logo from "../assets/optimized/logo-1.webp";
 import ManageBookingModal from "./manageBooking/ManageBookingModal";
 import { useUserRegion } from "../hooks/useUserRegion";
 import { useAirports } from "../hooks/useAirports";
+import { filterAirportsByRegion } from "../utils/airportUtils";
 
 // Base navigation links (without Manage Booking)
 const navLinks = [
@@ -61,24 +62,20 @@ export default function Navbar() {
   const [manageBookingModalOpen, setManageBookingModalOpen] = useState(false);
   const open = Boolean(anchorEl);
 
-  // Map API airports to navbar format (title, path) - adjust based on API shape {name, slug}
-  const airportOptions = apiAirports.map(airport => ({
-    title: `${airport.name || airport.level}${airport.slug === 'southampton-port' ? ' Port' : ' Airport'}`,
-    path: airport.path || airport.slug ? `/${airport.slug}-airport-parking` : `/${airport.value?.toLowerCase()}-airport-parking`
-  }));
-
-  const getFilteredAirportOptions = () => {
-    if (airportsLoading) return []; // Disable during loading
+  const filteredAirportOptions = useMemo(() => {
+    if (airportsLoading) return [];
     if (airportsError) {
       console.error('Airports load error:', airportsError);
-      return []; // Or fallback static if needed
+      return [];
     }
-    
-    const options = isUserFromDubai ? airportOptions : airportOptions.filter((airport) => {
-      return airport.path !== "/dubai-airport-parking";
-    });
-    return options;
-  };
+
+    const allowedAirports = filterAirportsByRegion(apiAirports, isUserFromDubai);
+    return allowedAirports.map((airport) => ({
+      title: `${airport.name || airport.level}${airport.slug === 'southampton-port' ? ' Port' : ' Airport'}`,
+      path: airport.path || airport.slug ? `/${airport.slug}-airport-parking` : `/${airport.value?.toLowerCase()}-airport-parking`,
+    }));
+  }, [apiAirports, airportsLoading, airportsError, isUserFromDubai]);
+
 
 
 
@@ -291,17 +288,16 @@ export default function Navbar() {
                         }}
                       >
                         {(() => {
-                          const filtered = getFilteredAirportOptions();
                           if (airportsLoading) {
                             return <MenuItem disabled>Loading airports...</MenuItem>;
                           }
                           if (airportsError) {
                             return <MenuItem disabled>Airports unavailable</MenuItem>;
                           }
-                          if (filtered.length === 0) {
+                          if (filteredAirportOptions.length === 0) {
                             return <MenuItem disabled>No airports available</MenuItem>;
                           }
-                          return filtered.map((airport) => (
+                          return filteredAirportOptions.map((airport) => (
                             <MenuItem
                               key={airport.title}
                               onClick={() => handleAirportClick(airport.path)}
@@ -438,17 +434,16 @@ export default function Navbar() {
                     <Collapse in={mobileDropdownOpen} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding>
                         {(() => {
-                          const filtered = getFilteredAirportOptions();
                           if (airportsLoading) {
                             return <ListItem key="loading"><ListItemText primary="Loading airports..." /></ListItem>;
                           }
                           if (airportsError) {
                             return <ListItem key="error"><ListItemText primary="Airports unavailable" /></ListItem>;
                           }
-                          if (filtered.length === 0) {
+                          if (filteredAirportOptions.length === 0) {
                             return <ListItem key="none"><ListItemText primary="No airports available" /></ListItem>;
                           }
-                          return filtered.map((airport) => (
+                          return filteredAirportOptions.map((airport) => (
                             <ListItem key={airport.title} disablePadding>
                               <ListItemButton
                                 sx={{ pl: 4 }}

@@ -50,6 +50,7 @@ import {
 import { useAirports } from "../../hooks/useAirports";
 // ✅ User region detection hook
 import { useUserRegion } from "../../hooks/useUserRegion";
+import { filterAirportsByRegion } from "../../utils/airportUtils";
 import { fetchProducts } from "../../services/productsService";
 import CustomButton from "../reusable/CustomButton";
 
@@ -73,23 +74,7 @@ export default function BookingFormAlt({ forceMobile = false }) {
 
   // ✅ Filter airports based on user region - hide Dubai when user is NOT from Dubai
   const filteredAirports = React.useMemo(() => {
-    if (!airports || airports.length === 0) return [];
-    
-    // Helper function to check if airport is Dubai
-    const isDubaiAirport = (apt) => {
-      return (apt.level && apt.level.toLowerCase().includes('dubai')) ||
-        (apt.value && apt.value.toLowerCase() === 'dxb') ||
-        (apt.name && apt.name.toLowerCase().includes('dubai')) ||
-        (apt.code && apt.code.toLowerCase() === 'dxb');
-    };
-    
-    // If user is NOT from Dubai, exclude Dubai airport
-    if (!isUserFromDubai) {
-      return airports.filter(apt => !isDubaiAirport(apt));
-    }
-    
-    // If user is from Dubai, show all airports including Dubai
-    return airports;
+    return filterAirportsByRegion(airports, isUserFromDubai);
   }, [airports, isUserFromDubai]);
 
   /* ---- Config ---- */

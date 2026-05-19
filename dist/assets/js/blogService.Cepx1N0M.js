@@ -1,0 +1,1 @@
+import{l,k as t}from"./index.jFZxQKRg.js";const c={fetchBlogs:async(o="blogs")=>{try{return await l("GET",`/blogs?key=${t}`,null,{},o)}catch(r){throw console.error("❌ fetchBlogs failed:",r),r}},fetchBlog:async(o,r="blogs")=>{try{return await l("GET",`/blogs/${o}?key=${t}`,null,{},r)}catch(e){throw console.error("❌ fetchBlog failed:",e),e}}};export{c as b};

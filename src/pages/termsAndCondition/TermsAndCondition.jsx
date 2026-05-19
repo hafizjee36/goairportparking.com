@@ -28,15 +28,15 @@ export default function TermsAndCondition() {
       bullets: [
         {
           heading: "Confirmation Voucher",
-          body: "Go Airport Parking LTD. will make every reasonable effort to email your confirmation voucher to the address provided. If you do not receive it, you must contact us immediately. Failure to attend without cancellation, or cancellations within 24 hours of the booking date, will result in no refund.",
+          body: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC  will make every reasonable effort to email your confirmation voucher to the address provided. If you do not receive it, you must contact us immediately. Failure to attend without cancellation, or cancellations within 24 hours of the booking date, will result in no refund.",
         },
         {
           heading: "Payment Policy",
-          body: "By booking, you authorize Go Airport Parking LTD. to charge your card for the full amount. You are responsible for ensuring your payment details are correct and up to date. Payment disputes must be reported within 24 hours of the transaction.",
+          body: "By booking, you authorize CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC  to charge your card for the full amount. You are responsible for ensuring your payment details are correct and up to date. Payment disputes must be reported within 24 hours of the transaction.",
         },
         {
           heading: "Agency Role",
-          body: "Go Airport Parking LTD. acts as an agent for car parks and is not responsible for operating the car parks. We accept liability for proven processing errors or negligence, provided claims are submitted before the vehicle leaves the car park.",
+          body: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC  acts as an agent for car parks and is not responsible for operating the car parks. We accept liability for proven processing errors or negligence, provided claims are submitted before the vehicle leaves the car park.",
         },
         {
           heading: "Car Park Responsibility",
@@ -69,7 +69,7 @@ export default function TermsAndCondition() {
         },
         {
           heading: "Chargebacks and Payment Disputes",
-          body: "If you initiate a chargeback with your card issuer (Visa/Mastercard), you must also notify Go Airport Parking LTD. immediately. Failure to do so may delay resolution.",
+          body: "If you initiate a chargeback with your card issuer (Visa/Mastercard), you must also notify CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC  immediately. Failure to do so may delay resolution.",
         },
       ],
     },
@@ -78,7 +78,7 @@ export default function TermsAndCondition() {
       bullets: [
         {
           heading: "Role as Booking Agent",
-          body: "Go Airport Parking LTD. operates solely as a booking agent and does not own, operate, or control the services offered. You are bound by both our terms and the service provider’s terms. Your contract for service delivery is with the provider.",
+          body: "CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC  operates solely as a booking agent and does not own, operate, or control the services offered. You are bound by both our terms and the service provider’s terms. Your contract for service delivery is with the provider.",
         },
         {
           heading: "Limited Liability",
@@ -154,7 +154,7 @@ export default function TermsAndCondition() {
     <>
       <HeroSection
         title="Terms & Conditions – Go Airport Parking LTD"
-        subtitle="These Terms & Conditions govern all bookings made with Go Airport Parking LTD. By booking with us, you agree to the following terms."
+        subtitle="These Terms & Conditions govern all bookings made with CLOUDAINAIRE MANAGEMENT CONSULTANCY LLC  By booking with us, you agree to the following terms."
         image={tnc}
       />
 
@@ -189,30 +189,7 @@ export default function TermsAndCondition() {
             style={smoothStyle}
           >
             <Typography variant="subtitle2" color="text.secondary">
-              These Terms and Conditions govern your use of goairportparking.com
-              (the “Website”). By using this Website, you agree to be bound
-              fully by these Terms and Conditions, which include the terms of
-              the relevant service providers, cancellation policies, and our
-              stated liabilities. The Website offers a variety of parking
-              options, ranging from premium to budget-friendly. However, our
-              primary focus is on providing low-cost services. To maintain
-              competitive pricing, Customers must understand and accept that our
-              Terms and Conditions are structured to keep costs affordable and
-              within defined limits. The Website functions solely as a booking
-              agent for service providers listed on the platform. It does not
-              itself operate or provide car parking services. Before purchasing,
-              you must carefully read and understand all information regarding
-              the selected service provider, including their specific terms. Any
-              questions or concerns about the service must be raised before
-              committing to a booking. If any part of these Terms is found to be
-              unenforceable, the remaining provisions shall continue to apply in
-              full. The Website reserves the right to amend these Terms at any
-              time. However, once a booking is made, the Terms that apply are
-              those in effect on the Website at the time of booking. We
-              recommend reviewing these Terms before confirming your
-              reservation. For pre-booking queries, please contact us at
-              support@goairportparking.com or call between 08:00 and 00:00
-              (daily, excluding bank holidays).
+              These Terms and Conditions govern your use of goairportparking.com (the “Website”). By using this Website, you agree to be bound fully by these Terms and Conditions, which include the terms of the relevant service providers, cancellation policies, and our stated liabilities. The Website offers a variety of parking options, ranging from premium to budget-friendly. However, our primary focus is on providing low-cost services. To maintain competitive pricing, Customers must understand and accept that our Terms and Conditions are structured to keep costs affordable and within defined limits. The Website functions solely as a booking agent for service providers listed on the platform. It does not itself operate or provide car parking services. Before purchasing, you must carefully read and understand all information regarding the selected service provider, including their specific terms. Any questions or concerns about the service must be raised before committing to a booking. If any part of these Terms is found to be unenforceable, the remaining provisions shall continue to apply in full. The Website reserves the right to amend these Terms at any time. However, once a booking is made, the Terms that apply are those in effect on the Website at the time of booking. We recommend reviewing these Terms before confirming your reservation. For pre-booking queries, please contact us at <a href="mailto:support@goairportparking.com">support@goairportparking.com</a> or call between 08:00 and 00:00 (daily, excluding bank holidays).
             </Typography>
           </AnimateOnScroll>
 

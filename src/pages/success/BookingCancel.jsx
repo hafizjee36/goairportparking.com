@@ -48,21 +48,25 @@ const BookingCancel = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
+  const raw = localStorage.getItem('trustpayment_session') ?? localStorage.getItem('totalpay_session');
+  const session = raw ? JSON.parse(raw) : null;
+  console.log('totalpay/trustpayment session:', session);
+
   // Get URL parameters
-  const bookingReference = searchParams.get('bookingReference') || searchParams.get('multi_mode_reference_no');
-  const referenceNo = searchParams.get('reference_no');
-  const transactionId = searchParams.get('transactionID') || searchParams.get('ref');
-  const customerName = searchParams.get('name');
-  const customerEmail = searchParams.get('email');
-  const customerMobile = searchParams.get('mobile');
-  const airport = searchParams.get('airport');
-  const service = searchParams.get('service');
+  const bookingReference = searchParams.get('bookingReference') || searchParams.get('multi_mode_reference_no') || session?.bookingReference;
+  const referenceNo = searchParams.get('reference_no') || session?.referenceNo;
+  const transactionId = searchParams.get('transactionID') || searchParams.get('ref') || session?.transactionId;
+  const customerName = searchParams.get('name') || session?.name;
+  const customerEmail = searchParams.get('email') || session?.email;
+  const customerMobile = searchParams.get('mobile') || session?.mobile;
+  const airport = searchParams.get('airport') || session?.airport;
+  const service = searchParams.get('service') || session?.service;
 
   // Get booking dates and times
-  const entryDate = searchParams.get('entryDate');
-  const entryTime = searchParams.get('entryTime');
-  const exitDate = searchParams.get('exitDate');
-  const exitTime = searchParams.get('exitTime');
+  const entryDate = searchParams.get('entryDate') || session?.entryDate;
+  const entryTime = searchParams.get('entryTime') || session?.entryTime;
+  const exitDate = searchParams.get('exitDate') || session?.exitDate;
+  const exitTime = searchParams.get('exitTime') || session?.exitTime;
 
   // Get charge breakdown (may not be available for cancelled payments)
   const supplierCost = parseFloat(searchParams.get('suppliercost') || '0');

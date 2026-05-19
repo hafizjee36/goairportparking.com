@@ -59,19 +59,20 @@ const BookingSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
   // On your success page:
-  const session = JSON.parse(localStorage.getItem('trustpayment_session'));
-  console.log('trustpaymetn session: ',session)
+  const raw = localStorage.getItem('trustpayment_session') ?? localStorage.getItem('totalpay_session');
+  const session = raw ? JSON.parse(raw) : null;
+  console.log('totalpay/trustpayment session:', session);
 
   const bookingReference =
     searchParams.get('bookingReference') ||
-    searchParams.get('multi_mode_reference_no');
-  const referenceNo = searchParams.get('reference_no');
+    searchParams.get('multi_mode_reference_no') || session.bookingReference;
+  const referenceNo = searchParams.get('reference_no') || session.referenceNo;
   const transactionId =
-    searchParams.get('transactionID') || searchParams.get('ref');
+    searchParams.get('transactionID') || searchParams.get('ref') || searchParams.get('trans_id');
   const paymentIntent =
-    searchParams.get('payment_intent') || searchParams.get('ref');
-  const paymentMethod = searchParams.get('paymentMethod');
-  const totalAmount = searchParams.get('totalamount');
+    searchParams.get('payment_intent') || searchParams.get('ref') || searchParams.get('payment_id');
+  const paymentMethod = searchParams.get('paymentMethod') || session.paymentMethod;
+  const totalAmount = searchParams.get('totalamount') || session.totalAmount;
   const customerName = searchParams.get('name') || session.name;
   const customerEmail = searchParams.get('email') || session.email;
   const customerMobile = searchParams.get('mobile') || session.mobile;
@@ -138,7 +139,7 @@ const BookingSuccess = () => {
     }
 
     // EXTENDED: TrustPayment + all payment methods session keys
-    const allSessionKeys = ['trustpayment_session', 'booking_data', 'worldpay_session', 'stripe_session'];
+    const allSessionKeys = ['trustpayment_session' ,'totalpay_session', 'booking_data', 'worldpay_session', 'stripe_session'];
     let parsedData = null;
     let loadedKey = null;
 
